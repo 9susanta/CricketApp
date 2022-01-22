@@ -1,0 +1,4 @@
+<select class="{{cssClass}}" [formControl]="ngControl.control">
+    <option value="0" selected>--Select--</option>
+    <option *ngFor="let item of matchTypes" value="{{item.Id}}">{{item.name}}</option>
+</select>

@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+   margin: 1px;
+  }
+  .p-menubar {
+    border-radius: 0px;
+}
+.grid {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

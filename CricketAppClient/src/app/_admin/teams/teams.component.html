@@ -1,0 +1,62 @@
+
+<div class="row mt-3">
+   <h6>TEAMS</h6>
+</div>
+<div class="row mt-2">
+    <div class="col-4">
+        <div class="card shadow">
+          <div class="card-body">
+            <form [formGroup]="teamForm" (ngSubmit)="OnSubmit()">
+              <div class="mb-3">
+                <label for="inputTeam" class="form-label">TEAM NAME</label>
+                <input type="text" formControlName="teamName" class="form-control" id="inputTeam">
+              </div>
+              <div class="mb-3">
+                <label for="ddltypes" class="form-label">TEAM TYPE</label>
+                <app-type-dropdown [cssClass]="'form-control'" [formControl]='teamForm.controls["teamTypeId"]'></app-type-dropdown>
+              </div>
+              <div class="mb-3 float-end">
+              <button type="submit" class="btn btn-success">{{buttonText}}</button>
+              <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-7 offset-1">
+        <div class="row">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>Type</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of teams;let i = index;">
+                <td>{{(i+1)*pageNumber}}</td>
+                <td>{{item.teamName}}</td>
+                <td>{{item.teamTypes}}</td>
+                <td><button type="button" (click)="OnEdit(item)" class="btn btn-link">Edit</button>  
+                  <button type="button" class="btn btn-link" (click)="OnDelete(item.teamId)">Delete</button> 
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-center" *ngIf="pagination">
+          <pagination 
+              [boundaryLinks]="true" 
+              [totalItems]="pagination.totalItems"
+              [itemsPerPage]="pagination.itemsPerPage"
+              [(ngModel)]="pagination.currentPage"
+              (pageChanged)="pageChanged($event)"
+              previousText="&lsaquo;" 
+              nextText="&rsaquo;" 
+              firstText="&laquo;" 
+              lastText="&raquo;">
+          </pagination>
+      </div>
+</div>

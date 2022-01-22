@@ -1,0 +1,79 @@
+
+<div class="row mt-3">
+    <h6>Series</h6>
+ </div>
+ <div class="row mt-2">
+     <div class="col-4">
+         <div class="card shadow">
+           <div class="card-body">
+             <form [formGroup]="seriesForm" (ngSubmit)="OnSubmit()">
+               <div class="mb-3">
+                 <label for="inputSeries" class="form-label">SERIES NAME</label>
+                 <input type="text" formControlName="SeriesName" class="form-control" id="inputSeries">
+               </div>
+               <div class="mb-3">
+                 <label for="inputseriesType" class="form-label">SERIES TYPE</label>
+                 <app-type-dropdown [cssClass]="'form-control'" id="inputseriesType" [formControl]='seriesForm.controls["SeriesTypeId"]'></app-type-dropdown>
+               </div>
+               <div class="mb-3">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="radio1" name="StatusName" formControlName="StatusName" value="Schedule">Schedule
+                    <label class="form-check-label" for="radio1"></label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="radio2" name="StatusName" formControlName="StatusName" value="Completed">Completed
+                    <label class="form-check-label" for="radio2"></label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="radio3" name="StatusName" formControlName="StatusName" value="Cancelled">Cancelled
+                    <label class="form-check-label" for="radio3"></label>
+                  </div>
+              </div>
+               <div class="mb-3 float-end">
+               <button type="submit" class="btn btn-success">{{buttonText}}</button>
+               <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
+               </div>
+             </form>
+           </div>
+         </div>
+       </div>
+       <div class="col-7 offset-1">
+         <div class="row">
+           <table class="table table-striped">
+             <thead>
+               <tr>
+                 <th>#</th>
+                 <th>Team</th>
+                 <th>Type</th>
+                 <th>Status</th>
+                 <th>Action</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr *ngFor="let item of teams;let i = index;">
+                 <td>{{(i+1)*pageNumber}}</td>
+                 <td>{{item.seriesName}}</td>
+                 <td>{{item.seriesTypes}}</td>
+                 <td>{{item.statusName}}</td>
+                 <td><button type="button" (click)="OnEdit(item)" class="btn btn-link">Edit</button>  
+                   <button type="button" class="btn btn-link" (click)="OnDelete(item.seriesId)">Delete</button> 
+                 </td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+         <div class="d-flex justify-content-center" *ngIf="pagination">
+           <pagination 
+               [boundaryLinks]="true" 
+               [totalItems]="pagination.totalItems"
+               [itemsPerPage]="pagination.itemsPerPage"
+               [(ngModel)]="pagination.currentPage"
+               (pageChanged)="pageChanged($event)"
+               previousText="&lsaquo;" 
+               nextText="&rsaquo;" 
+               firstText="&laquo;" 
+               lastText="&raquo;">
+           </pagination>
+       </div>
+ </div>
+ 

@@ -1,4 +1,5 @@
-﻿using CricketApp.Entity;
+﻿using CricketApp._helpers;
+using CricketApp.Entity;
 using CricketApp.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -25,6 +26,7 @@ namespace CricketApp.Data
                 if (!isExist)
                 {
                     tblTeamTypes.TeamId = await NextId();
+                    tblTeamTypes.IsDeleated = false;
                     await _tblTeams.InsertOneAsync(tblTeamTypes);
 
                     return 1;
@@ -46,11 +48,11 @@ namespace CricketApp.Data
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<tblTeams>> GetTeamsList()
+        public async Task<PagedList<tblTeams>> GetTeamsList(TeamParam teamParam)
         {
             var teams = await _tblTeams.Find(x=>x.IsDeleated==false).ToListAsync();
 
-            return teams;
+            return PagedList<tblTeams>.CreateAsyc(teams.AsQueryable(), teamParam.PageNumber, teamParam.PageSize);
         }
 
         public async Task<bool> Update(int objectId, tblTeams tblTeams)

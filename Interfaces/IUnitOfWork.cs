@@ -9,5 +9,6 @@ namespace CricketApp.Interfaces
     {
         ItblTeamsRepository TeamsRepository { get; }
         ISeriesRepository SeriesRepository { get; }
+        IPlayersRepository PlayersRepository { get; }
     }
 }

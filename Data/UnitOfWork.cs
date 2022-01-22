@@ -19,5 +19,7 @@ namespace CricketApp.Data
         public ItblTeamsRepository TeamsRepository => new tblTeamsRepository(_mongodb);
 
         public ISeriesRepository SeriesRepository => new SeriesRepository(_mongodb);
+
+        public IPlayersRepository PlayersRepository => new PlayersRepository(_mongodb);
     }
 }
