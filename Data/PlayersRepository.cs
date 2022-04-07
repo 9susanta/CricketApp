@@ -12,16 +12,18 @@ namespace CricketApp.Data
     public class PlayersRepository : IPlayersRepository
     {
         private readonly IMongoCollection<tblPlayers> _tblPlayers;
+        private readonly IMongoCollection<tblTeams> _tblTeams;
         public PlayersRepository(IMongoDatabase _mongoDatabase)
         {
             _tblPlayers = _mongoDatabase.GetCollection<tblPlayers>(nameof(tblPlayers));
+            _tblTeams= _mongoDatabase.GetCollection<tblTeams>(nameof(tblTeams));
 
         }
         public async Task<int> Create(tblPlayers tblPlayers)
         {
             try
             {
-                var isExist = await IsExist(tblPlayers.FirstName,tblPlayers.LastName, tblPlayers.InternationalTeam.Value);
+                var isExist = await IsExist(tblPlayers.Name);
                 if (!isExist)
                 {
                     tblPlayers.PlayersId = await NextId();
@@ -66,18 +68,35 @@ namespace CricketApp.Data
             throw new NotImplementedException();
         }
 
-        public async Task<PagedList<tblPlayers>> GetPlayersList(playerParam seriesParam)
+        public async Task<PagedList<PlayerDto>> GetPlayersList(playerParam seriesParam)
         {
-            var player = await _tblPlayers.Find(x => x.IsDeleated == false).ToListAsync();
+            var _player = await _tblPlayers.Find(x => x.IsDeleated == false).ToListAsync();
 
-            return PagedList<tblPlayers>.CreateAsyc(player.AsQueryable(), seriesParam.PageNumber, seriesParam.PageSize); ;
+            var _teams = _tblTeams.Find(x => x.IsDeleated == false).ToList();
+
+            var players = from pl in _player
+                          join tm in _teams
+                          on pl.InternationalTeam equals tm.TeamId into tmp_team
+                          from tmp_tem in tmp_team.DefaultIfEmpty()
+                          select new PlayerDto 
+                          { 
+                              PlayersId=pl.PlayersId, 
+                              Name=pl.Name,
+                              InternationalTeam=pl.InternationalTeam,
+                              IsActive=pl.IsActive,
+                              IsDeleated=pl.IsDeleated,
+                              IsLocalPlayer=pl.IsLocalPlayer,
+                              TeamName = tmp_tem?.TeamName
+                          };
+
+            return PagedList<PlayerDto>.CreateAsyc(players.AsQueryable(), seriesParam.PageNumber, seriesParam.PageSize); ;
         }
 
-        public async Task<bool> IsExist(string FirstName,string LastName, int InternationalTeam)
+        public async Task<bool> IsExist(string Name)
         {
             try
             {
-                var res = await _tblPlayers.FindAsync(x => x.FirstName == FirstName&&x.LastName== LastName && x.InternationalTeam == InternationalTeam);
+                var res = await _tblPlayers.FindAsync(x => x.Name == Name);
                 return res.Any();
             }
             catch (Exception ex)
@@ -112,12 +131,12 @@ namespace CricketApp.Data
             {
                 var filter = Builders<tblPlayers>.Filter.Eq(c => c.PlayersId, objectId);
                 var update = Builders<tblPlayers>.Update
-                 .Set(c => c.FirstName, tblPlayers.FirstName)
-                 .Set(c => c.LastName, tblPlayers.LastName)
+                 .Set(c => c.Name, tblPlayers.Name)
                  .Set(c => c.JerseyName, tblPlayers.JerseyName)
                  .Set(c => c.JerseyNo, tblPlayers.JerseyNo)
+                 .Set(c=>c.IsLocalPlayer,tblPlayers.IsLocalPlayer)
                  .Set(c => c.InternationalTeam, tblPlayers.InternationalTeam)
-                 .Set(c=>c.DomesticTeam,tblPlayers.DomesticTeam)
+                 .Set(c=>c.IsActive,tblPlayers.IsActive)
                  .Set(c => c.LastUpdated, DateTime.Now);
                  
                 var result = await _tblPlayers.UpdateOneAsync(filter, update);

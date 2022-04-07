@@ -1,0 +1,48 @@
+<div class="row mt-3">
+    <h6>PLAYERS</h6>
+ </div>
+ <div class="row mt-2">
+     <div class="col-4">
+        <app-addplayer [EditItem]="player" (OutputItemEvent)="outputFunction($event)"></app-addplayer>
+     </div>
+       <div class="col-8">
+         <div class="row">
+           <table class="table">
+             <thead>
+               <tr>
+                 <th>#</th>
+                 <th>Player Name</th>
+                 <th>Player Type</th>
+                 <th>Teams/Country</th>
+                 <th>Is Active</th>
+                 <th>Action</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr *ngFor="let item of players;let i = index;">
+                 <td>{{(i+1)*pageNumber}}</td>
+                 <td>{{item.name}}</td>
+                 <td>{{item.isLocalPlayer==true?'Local':'International'}}</td>
+                 <td>{{item.teamName}}</td>
+                 <td>{{item.isActive==true?'Active':'In Active'}}</td>
+                 <td><button type="button" (click)="OnEdit(item)" class="btn btn-link">Edit</button>  
+                   <button type="button" class="btn btn-link" (click)="OnDelete(item.playersId)">Delete</button> 
+                 </td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+         <div class="d-flex justify-content-center" *ngIf="pagination">
+           <pagination 
+               [boundaryLinks]="true" 
+               [totalItems]="pagination.totalItems"
+               [itemsPerPage]="pagination.itemsPerPage"
+               [(ngModel)]="pagination.currentPage"
+               (pageChanged)="pageChanged($event)"
+               previousText="&lsaquo;" 
+               nextText="&rsaquo;" 
+               firstText="&laquo;" 
+               lastText="&raquo;">
+           </pagination>
+       </div>
+ </div>

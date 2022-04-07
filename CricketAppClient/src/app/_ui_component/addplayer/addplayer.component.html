@@ -1,0 +1,38 @@
+<div class="card shadow">
+    <div class="card-body">
+      <form [formGroup]="playerForm" (ngSubmit)="OnSubmit()">
+        <div class="mb-3">
+          <label for="inputName" class="form-label">Player Name</label>
+          <input type="text" formControlName="Name" class="form-control" id="inputName">
+        </div>
+       <div class="mb-3">
+           <div class="form-check">
+             <input type="radio" class="form-check-input" id="radio1" (click)="OnCheck($event)" name="IsLocalPlayer" formControlName="IsLocalPlayer" value="false">International/Domestic Player
+             <label class="form-check-label" for="radio1"></label>
+           </div>
+           <div class="form-check">
+             <input type="radio" class="form-check-input" id="radio2" (click)="OnCheck($event)" name="IsLocalPlayer" formControlName="IsLocalPlayer" value="true">Local Player
+             <label class="form-check-label" for="radio1"></label>
+           </div>
+       </div>
+       <div class="mb-3" *ngIf="IsInternational">
+         <label for="inputationalTeam" class="form-label">International Team/Country</label>
+         <select formControlName="InternationalTeam" class="form-control" id="inputationalTeam">
+            <option *ngFor="let team of teams" [value]="team.teamId">
+                {{team.teamName}}
+              </option>
+         </select>
+       </div>
+        <div class="mb-3">
+           <div class="form-check">
+             <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" formControlName="IsActive">Is Active
+             <label class="form-check-label" for="IsActive"></label>
+           </div>
+       </div>
+        <div class="mb-3 float-end">
+           <button type="submit" class="btn btn-success">{{buttonText}}</button>
+           <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>

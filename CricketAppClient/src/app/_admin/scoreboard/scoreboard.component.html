@@ -1,0 +1,31 @@
+<div id="scoreboard" class="row center">
+    <p class="alert alert-info small text-center p-0 mt-2 mb-0">🛈 Scoreboard</p>
+</div>
+
+<div id="events" class="container center">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" onclick="sendEvent(event)">
+                <div class="col-4 py-1 border btn btn-primary" data-event="0">0</div>
+                <div class="col-4 py-1 border btn btn-primary" data-event="1">1</div>
+                <div class="col-4 py-1 border btn btn-primary" data-event="2">2</div>
+
+                <div class="col-4 py-1 border btn btn-primary" data-event="3">3</div>
+                <div class="col-4 py-1 border btn btn-primary" data-event="4">4</div>
+                <div class="col-4 py-1 border btn btn-primary" data-event="6">6</div>
+
+                <div class="col-4 py-1 border btn btn-dark" data-event="Wd">Wide</div>
+                <div class="col-4 py-1 border btn btn-dark" data-event="N">No-Ball</div>
+                <div class="col-4 py-1 border btn btn-danger" data-event="W">Wicket</div>
+
+                <div class="col-4 py-1 border btn btn-secondary" data-event="Re">Re-Ball</div>
+                <div class="offset-4 col-4 py-1 border btn btn-success" data-event="Ro">Rotate</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="alert alert-secondary text-center" id="ballHistory">
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 
 <div class="row mt-3">
-    <h6>Series</h6>
+    <h6>SERIES</h6>
  </div>
  <div class="row mt-2">
      <div class="col-4">
@@ -37,9 +37,9 @@
            </div>
          </div>
        </div>
-       <div class="col-7 offset-1">
+       <div class="col-8">
          <div class="row">
-           <table class="table table-striped">
+           <table class="table">
              <thead>
                <tr>
                  <th>#</th>
@@ -50,7 +50,7 @@
                </tr>
              </thead>
              <tbody>
-               <tr *ngFor="let item of teams;let i = index;">
+               <tr *ngFor="let item of serieses;let i = index;">
                  <td>{{(i+1)*pageNumber}}</td>
                  <td>{{item.seriesName}}</td>
                  <td>{{item.seriesTypes}}</td>

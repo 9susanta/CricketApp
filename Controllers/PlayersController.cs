@@ -47,7 +47,7 @@ namespace CricketApp.Controllers
         [HttpDelete("delete-player")]
         public async Task<ActionResult> DeletePlayer([FromQuery] int id)
         {
-            var teams = await _unitOfWork.TeamsRepository.Delete(id);
+            var teams = await _unitOfWork.PlayersRepository.Delete(id);
 
             return Ok(teams);
         }

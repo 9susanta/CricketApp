@@ -11,10 +11,10 @@ namespace CricketApp.Interfaces
     {
         Task<tblPlayers> GetPlayers(int objectId);
         Task<int> Create(tblPlayers tblPlayers);
-        Task<PagedList<tblPlayers>> GetPlayersList(playerParam seriesParam);
+        Task<PagedList<PlayerDto>> GetPlayersList(playerParam seriesParam);
         Task<bool> Update(int objectId, tblPlayers tblPlayers);
         Task<bool> Delete(int objectId);
-        Task<bool> IsExist(string FirstName, string LastName, int InternationalTeam);
+        Task<bool> IsExist(string Name);
         Task<int> NextId();
     }
 }

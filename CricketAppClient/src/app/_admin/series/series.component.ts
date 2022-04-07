@@ -16,7 +16,7 @@ export class SeriesComponent implements OnInit {
 
   pageNumber:number=1;
   pageSize:number=20;
-  teams:team[]=[];
+  serieses:series[]=[];
   pagination!: Pagination;
   series!:series;
   buttonText:string="Add";
@@ -39,7 +39,7 @@ export class SeriesComponent implements OnInit {
   }
   loadSeries() {
     this.seriesService.getSeries(this.pageNumber,this.pageSize).subscribe(response => {
-      this.teams = response.result;
+      this.serieses = response.result;
       this.pagination = response.pagination;
     })
   }

@@ -1,0 +1,61 @@
+<div id="matchDetails" class="pt-3 pb-2">
+    <div class="row center">
+        <div class="input-group mb-3" [ngClass]="isdisabled==true?'ctrl-disable':''">
+            <input type="text" id="personName" [(ngModel)]="personName" placeholder="Player Name" class="form-control">
+            <div class="input-group-append">
+                <span class="input-group-text btn btn-primary" (click)="addPerson()">Add</span>
+            </div>
+        </div>
+        <p class="alert alert-secondary small text-center p-0">🛈 Drag and drop players between teams</p>
+    </div>
+
+    <div class="row center" [ngClass]="isdisabled==true?'ctrl-disable':''">
+        <div [ngClass]="{'col-sm-6 team':true, 'select':'A'==selectedTeam}" id="teamA" [style.background-image]="'url(/assets/img/teamA.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam('A')">
+            <ng-container *ngFor="let item of teamA">
+                <app-playerui [name]="item"></app-playerui>
+            </ng-container>
+        </div>
+        <div [ngClass]="{'col-sm-6 team':true, 'select':'B'==selectedTeam}" id="teamB" [style.background-image]="'url(/assets/img/teamB.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam('B')">
+            <ng-container *ngFor="let item of teamB">
+                <app-playerui [name]="item"></app-playerui>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="row center text-center mt-2">
+        <label for="totalOvers" class="form-label"><span class="badge bg-primary">Total Overs: <span id="overs">{{selectedOver}}</span></span></label>
+        <input type="range" name="totalOvers" #rng id="totalOvers" class="form-range" min="1" max="100" value="{{selectedOver}}" (change)="setTotalOvers(rng.value)">
+    </div>
+
+    <div class="text-center p-2 my-2" [ngClass]="isdisabled==true?'ctrl-disable':''">
+        <button class="btn me-4" [ngClass]="tossWin=='teamA'?'btn-dark':'btn-secondary'" (click)="toss('teamA')">🏏 Team A</button>
+        <button class="btn btn-success" disabled>← Toss →</button>
+        <button class="btn ms-4" [ngClass]="tossWin=='teamB'?'btn-dark':'btn-secondary'" (click)="toss('teamB')">🏏 Team B</button>
+    </div>
+    <div class="text-center mt-4 p-2" [ngClass]="isdisabled==false?'ctrl-disable':''">
+        <button class="btn btn-info" (click)="startMatch()"> ➡️ Start Match</button>
+    </div>
+    
+     <!-- Modal -->
+     <div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="question">🪙 Toss</h5>
+            </div>
+            <div class="modal-body" id="selections">
+                <div class="text-center p-2 my-2">
+                   <p>{{tossWin=="teamA"?"Team A":"Team B"}} won the 🪙 toss ! what they have decided ?</p>
+                </div>
+                <div class="text-center p-2 my-2">
+                    <button class="btn me-4" [ngClass]="tossDecide=='Batting'?'btn-danger':'btn-secondary'" (click)="tossDecider('Batting')">🏏 Batting</button>
+                    <button class="btn ms-4" [ngClass]="tossDecide=='Bowling'?'btn-danger':'btn-secondary'" (click)="tossDecider('Bowling')">🥎 Bowling</button>
+                </div>
+            </div>
+            <div class="text-center py-3">
+            <button type="button" id="confirm" class="btn btn-success" (click)="funconfirm()">Confirm</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

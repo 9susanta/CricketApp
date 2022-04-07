@@ -1,0 +1,58 @@
+ <div class="row mt-2">
+    <div class="col-3">
+      <h6>Squad Selection</h6>    
+      <div class="mb-3">
+        <label for="inputSeries" class="form-label">Series</label>
+        <input [typeahead]="serieses" typeaheadOptionField="seriesName" 
+        [isAnimated]="true" [(ngModel)]="seriesId" class="form-control" id="inputSeries"/>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex justify-content-center">
+            <div class="mb-3">
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" (change)="radioOnChange($event)" id="radio1" [(ngModel)]="isLocal" checked="true" name="StatusName" [value]='false'>International/State
+                <label class="form-check-label" for="radio1"></label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" (change)="radioOnChange($event)" id="radio2" [(ngModel)]="isLocal" name="StatusName" [value]='true'>Local
+                <label class="form-check-label" for="radio2"></label>
+              </div>
+           </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="!isLocal">
+        <div class="mb-3">
+          <label for="inputTeams" class="form-label">Country/Teams</label>
+          <input [typeahead]="teams" typeaheadOptionField="teamName" 
+          [isAnimated]="true" [(ngModel)]="teamid" class="form-control" id="inputTeams"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mb-3">
+          <label for="inputPlayer" class="form-label">Players Name</label>
+          <input [typeahead]="players" typeaheadOptionField="name" [isAnimated]="true" [(ngModel)]="playerId" class="form-control" id="inputPlayer"/>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-12">
+               <ul>
+                 <li *ngFor="let plyer of players">
+                   {{plyer.name}}
+                 </li>
+               </ul>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="mb-3 float-end">
+            <button type="submit" class="btn btn-success">Add/Update</button>
+           <button type="reset" class="btn btn-danger ms-1">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

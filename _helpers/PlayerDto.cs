@@ -1,18 +1,12 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CricketApp.Entity
+namespace CricketApp._helpers
 {
-    public class tblPlayers
+    public class PlayerDto
     {
-        public tblPlayers()
-        {
-            this.Created = DateTime.Now;
-        }
-        [BsonId]
         public int PlayersId { get; set; }
         public string Name { get; set; }
         public string JerseyNo { get; set; }
@@ -25,5 +19,6 @@ namespace CricketApp.Entity
         public bool? IsDeleated { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? LastUpdated { get; set; }
+        public string TeamName { get; set; }
     }
 }
