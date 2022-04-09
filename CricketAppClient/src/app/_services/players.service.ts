@@ -28,8 +28,7 @@ export class PlayersService {
   }
 
   updatePlayer(model:any)
-  { 
-    debugger;
+  {
     return this.http.put(this.baseUrl+'Players/update-player/'+model.playersId,model).pipe(map((team:any)=>{
       return team;
     }));

@@ -1,7 +1,10 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { matchplayer } from 'src/app/models/matchplayer';
+import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
 import { players } from 'src/app/models/players';
+import { MatchplayerService } from 'src/app/_services/matchplayer.service';
 
 @Component({
   selector: 'app-add-match-players',
@@ -12,15 +15,33 @@ export class AddMatchPlayersComponent implements OnInit {
 
   personName:string='';
   persons:string[] = []
-  teamA:string[]=[];
-  teamB:string[]=[];
-  selectedTeam:string='A';
+  teamA:matchplayerdetails[]=[];
+  teamB:matchplayerdetails[]=[];
   selectedOver:number=4;
   tossWin:string='';
   tossDecide:string='';
   isdisabled:boolean=false;
- 
-  constructor(private router: Router) {}
+  teamAName:string="Team A";
+  teamBName:string="Team B";
+  selectedTeam:string=this.teamAName;
+  match_player:matchplayer=
+  {
+      matchDetailsId:0, 
+      matchId:0, 
+      teamAId:0, 
+      teamAName:this.teamAName, 
+      teamBId:0, 
+      teamBName:this.teamBName, 
+      totalOvers:this.selectedOver, 
+      tossWinTeamId:0, 
+      tossWinTeamName:this.tossWin, 
+      tossDecideName:this.tossDecide, 
+      tossBatting:'',  
+      teamAPlayers:'',
+      teamBPlayers:'' 
+  };
+  
+  constructor(private router: Router,private matchplayer:MatchplayerService) {}
  
   @ViewChild(ModalDirective, { static: false }) modal?: ModalDirective;
   ngOnInit(): void {
@@ -36,13 +57,15 @@ export class AddMatchPlayersComponent implements OnInit {
     const name = this.personName.trim();
     if (name && !this.persons.includes(name)) {
       this.persons.push(name);
-      if(this.selectedTeam=="A")
+      if(this.selectedTeam==this.teamAName)
       {
-        this.teamA.push(name);
+        let player:matchplayerdetails={name:name};
+        this.teamA.push(player);
       }
-      else if(this.selectedTeam=="B")
+      else if(this.selectedTeam==this.teamBName)
       {
-        this.teamB.push(name);
+        let player:matchplayerdetails={name:name};
+        this.teamB.push(player);
       }
     }
     else{
@@ -86,7 +109,17 @@ export class AddMatchPlayersComponent implements OnInit {
   }
   startMatch()
   {
-     this.router.navigate(['scoreboard']);
+    this.match_player.totalOvers=this.selectedOver;
+    this.match_player.tossWinTeamName=this.tossWin;
+    this.match_player.tossDecideName=this.tossDecide;
+    this.match_player.tossBatting=this.tossDecide=="Batting"?"1":"2";
+    this.match_player.teamAPlayers=JSON.stringify(this.teamA);
+    this.match_player.teamBPlayers=JSON.stringify(this.teamB)
+
+    this.matchplayer.startMatch(this.match_player).subscribe(response => {
+      debugger;
+      this.router.navigate(['scoreboard']);
+    });
   }
   allowDrop(ev:any) {
    // ev.preventDefault();

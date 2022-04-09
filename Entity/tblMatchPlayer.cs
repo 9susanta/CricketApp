@@ -15,8 +15,9 @@ namespace CricketApp.Entity
         [BsonId]
         public int matchPlayerId { get; set; }
         public int matchDetailsId { get; set; }
-        public int teamAId { get; set; }
-        public string teamAName { get; set; }
+        public int matchId { get; set; }
+        public int teamId { get; set; }
+        public string teamName { get; set; }
         public int playerId { get; set; }
         public string playerName { get; set; }
         public DateTime? created { get; set; }

@@ -14,6 +14,7 @@ namespace CricketApp.Entity
         }
         [BsonId]
         public int matchDetailsId { get; set; }
+        public int matchId { get; set; }
         public int teamAId { get; set; }
         public string teamAName { get; set; }
         public int teamBId { get; set; }
@@ -22,7 +23,9 @@ namespace CricketApp.Entity
         public int tossWinTeamId { get; set; }
         public string tossWinTeamName { get; set; }
         public string tossDecideName { get; set; }
-        public string battingTeamName { get; set; }
+        public string tossBatting { get; set; }
+        public string teamAPlayers { get; set; }
+        public string teamBPlayers { get; set; }
         public DateTime? created { get; set; }
         public DateTime? lastUpdated { get; set; }
     }

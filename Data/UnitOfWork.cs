@@ -23,5 +23,7 @@ namespace CricketApp.Data
         public IPlayersRepository PlayersRepository => new PlayersRepository(_mongodb);
 
         public ISquadRepository SquadRepository => new SquadRepository(_mongodb);
+
+        public IStartMatchRepository StartMatchRepository => new StartMatchRepository(_mongodb);
     }
 }

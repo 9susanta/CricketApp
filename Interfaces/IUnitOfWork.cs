@@ -11,5 +11,6 @@ namespace CricketApp.Interfaces
         ISeriesRepository SeriesRepository { get; }
         IPlayersRepository PlayersRepository { get; }
         ISquadRepository SquadRepository { get; }
+        IStartMatchRepository StartMatchRepository { get; }
     }
 }

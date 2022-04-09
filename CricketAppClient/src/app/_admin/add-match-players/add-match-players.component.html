@@ -10,12 +10,12 @@
     </div>
 
     <div class="row center" [ngClass]="isdisabled==true?'ctrl-disable':''">
-        <div [ngClass]="{'col-sm-6 team':true, 'select':'A'==selectedTeam}" id="teamA" [style.background-image]="'url(/assets/img/teamA.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam('A')">
+        <div [ngClass]="{'col-sm-6 team':true, 'select':teamAName==selectedTeam}" id="teamA" [style.background-image]="'url(/assets/img/teamA.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam(teamAName)">
             <ng-container *ngFor="let item of teamA">
                 <app-playerui [name]="item"></app-playerui>
             </ng-container>
         </div>
-        <div [ngClass]="{'col-sm-6 team':true, 'select':'B'==selectedTeam}" id="teamB" [style.background-image]="'url(/assets/img/teamB.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam('B')">
+        <div [ngClass]="{'col-sm-6 team':true, 'select':teamBName==selectedTeam}" id="teamB" [style.background-image]="'url(/assets/img/teamB.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam(teamBName)">
             <ng-container *ngFor="let item of teamB">
                 <app-playerui [name]="item"></app-playerui>
             </ng-container>
@@ -28,9 +28,9 @@
     </div>
 
     <div class="text-center p-2 my-2" [ngClass]="isdisabled==true?'ctrl-disable':''">
-        <button class="btn me-4" [ngClass]="tossWin=='teamA'?'btn-dark':'btn-secondary'" (click)="toss('teamA')">🏏 Team A</button>
+        <button class="btn me-4" [ngClass]="tossWin==teamAName?'btn-dark':'btn-secondary'" (click)="toss(teamAName)">🏏 {{teamAName}}</button>
         <button class="btn btn-success" disabled>← Toss →</button>
-        <button class="btn ms-4" [ngClass]="tossWin=='teamB'?'btn-dark':'btn-secondary'" (click)="toss('teamB')">🏏 Team B</button>
+        <button class="btn ms-4" [ngClass]="tossWin==teamBName?'btn-dark':'btn-secondary'" (click)="toss(teamAName)">🏏 {{teamBName}}</button>
     </div>
     <div class="text-center mt-4 p-2" [ngClass]="isdisabled==false?'ctrl-disable':''">
         <button class="btn btn-info" (click)="startMatch()"> ➡️ Start Match</button>
@@ -45,7 +45,7 @@
             </div>
             <div class="modal-body" id="selections">
                 <div class="text-center p-2 my-2">
-                   <p>{{tossWin=="teamA"?"Team A":"Team B"}} won the 🪙 toss ! what they have decided ?</p>
+                   <p>{{tossWin==teamAName?teamAName:teamBName}} won the 🪙 toss ! what they have decided ?</p>
                 </div>
                 <div class="text-center p-2 my-2">
                     <button class="btn me-4" [ngClass]="tossDecide=='Batting'?'btn-danger':'btn-secondary'" (click)="tossDecider('Batting')">🏏 Batting</button>
