@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
 
 @Component({
   selector: 'app-playerui',
@@ -8,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PlayeruiComponent implements OnInit {
   
   constructor() { }
-  @Input() name:string='';
+  @Input() player:matchplayerdetails={};
   ngOnInit(): void {
   }
 

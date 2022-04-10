@@ -1,4 +1,5 @@
 ﻿using CricketApp._helpers;
+using CricketApp.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CricketApp.Interfaces
     public interface IStartMatchRepository
     {
         Task<int> updateMatchTeamDetails(matchStartDto _matchStartDto);
-        matchStartDto getMatchTeamDetails(int matchDetailsId);
+        Task<tblMatchDetails> getMatchTeamDetails(int matchDetailsId);
         Task<int> NextId();
     }
 }

@@ -12,12 +12,12 @@
     <div class="row center" [ngClass]="isdisabled==true?'ctrl-disable':''">
         <div [ngClass]="{'col-sm-6 team':true, 'select':teamAName==selectedTeam}" id="teamA" [style.background-image]="'url(/assets/img/teamA.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam(teamAName)">
             <ng-container *ngFor="let item of teamA">
-                <app-playerui [name]="item"></app-playerui>
+                <app-playerui [player]="item"></app-playerui>
             </ng-container>
         </div>
         <div [ngClass]="{'col-sm-6 team':true, 'select':teamBName==selectedTeam}" id="teamB" [style.background-image]="'url(/assets/img/teamB.png)'" [style.background-size]="'40%'" (drop)="drop(this)" (dragover)="allowDrop(this)" (click)="selectTeam(teamBName)">
             <ng-container *ngFor="let item of teamB">
-                <app-playerui [name]="item"></app-playerui>
+                <app-playerui [player]="item"></app-playerui>
             </ng-container>
         </div>
     </div>
@@ -36,8 +36,8 @@
         <button class="btn btn-info" (click)="startMatch()"> ➡️ Start Match</button>
     </div>
     
-     <!-- Modal -->
-     <div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <!-- Modal -->
+    <div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">

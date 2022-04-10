@@ -26,6 +26,7 @@ import { AddMatchPlayersComponent } from './_admin/add-match-players/add-match-p
 import { StartMatchComponent } from './_admin/start-match/start-match.component';
 import { PlayeruiComponent } from './_ui_component/playerui/playerui.component';
 import { ScoreboardComponent } from './_admin/scoreboard/scoreboard.component';
+import { SetplayerComponent } from './_ui_component/setplayer/setplayer.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ScoreboardComponent } from './_admin/scoreboard/scoreboard.component';
     AddMatchPlayersComponent,
     StartMatchComponent,
     PlayeruiComponent,
-    ScoreboardComponent
+    ScoreboardComponent,
+    SetplayerComponent
   ],
   schemas: [
   ],

@@ -1,7 +1,60 @@
-<div id="scoreboard" class="row center">
+<div id="title" class="row center">
     <p class="alert alert-info small text-center p-0 mt-2 mb-0">🛈 Scoreboard</p>
 </div>
-
+<div id="scoreboard">
+    <p class="alert alert-danger small text-start p-0 mt-2 mb-0"> 🏏 Batting Team</p>
+    <div class="row">
+        <div class="col">
+            <table class="table table-borderless">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Batter</th>
+                        <td scope="col">R</td>
+                        <td scope="col">4s</td>
+                        <td scope="col">6s</td>
+                        <td scope="col">SR</td>
+                      </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sachin Tendulkar</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p class="alert alert-danger small text-start p-0 mt-2 mb-0"> 🥎 Bowling Team</p>
+    <div class="row">
+        <div class="col">
+            <table class="table table-borderless">
+                <thead class="table-light">
+                 <tr>
+                    <th scope="col">Bowler</th>
+                    <td scope="col">O</td>
+                    <td scope="col">M</td>
+                    <td scope="col">R</td>
+                    <td scope="col">W</td>
+                    <td scope="col">Eco.</td>
+                  </tr>
+                </thead>
+                <tbody>
+                 <tr>
+                    <td>Irfan Pathan</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 <div id="events" class="container center">
     <div class="row">
         <div class="col-sm">
@@ -28,4 +81,21 @@
         <div class="alert alert-secondary text-center" id="ballHistory">
         </div>
     </div>
+    
+    <div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="question">{{modalmessage}}</h5>
+            </div>
+            <div class="modal-body" id="selections">
+                  <app-setplayer [player]="playersSet"></app-setplayer> 
+            </div>
+            <div class="text-center py-3">
+            <button type="button" id="confirm" class="btn btn-success" (click)="onConfirm(modalName)">Confirm</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
 </div>

@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'series', component: SeriesComponent },
   { path: 'squad', component:SquadComponent},
   { path: 'addmatchplayers', component:AddMatchPlayersComponent},
-  { path: 'scoreboard', component:ScoreboardComponent}
+  { path: 'scoreboard/:id', component:ScoreboardComponent}
 ];
 
 @NgModule({

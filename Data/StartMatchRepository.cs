@@ -17,31 +17,13 @@ namespace CricketApp.Data
         public StartMatchRepository(IMongoDatabase _mongoDatabase)
         {
             _tblMatchDetails = _mongoDatabase.GetCollection<tblMatchDetails>(nameof(tblMatchDetails));
-            _tblMatchPlayer = _mongoDatabase.GetCollection<tblMatchPlayer>(nameof(tblMatchPlayer));
 
         }
-        public matchStartDto getMatchTeamDetails(int matchDetailsId)
+        public async Task<tblMatchDetails> getMatchTeamDetails(int matchDetailsId)
         {
-            var matchDetails = from tmd in _tblMatchDetails.AsQueryable()
-                               join tmp in _tblMatchPlayer.AsQueryable()
-                               on tmd.matchDetailsId equals tmp.matchDetailsId
-                               where tmp.matchDetailsId == matchDetailsId
-                               select new matchStartDto
-                               {
-                                   matchDetailsId=tmd.matchDetailsId,
-                                   matchId=tmd.matchId,
-                                   teamAId=tmd.teamAId,
-                                   teamBId=tmd.teamBId,
-                                   teamAName=tmd.teamAName,
-                                   teamBName=tmd.teamBName,
-                                   tossBatting=tmd.tossBatting,
-                                   tossDecideName=tmd.tossDecideName,
-                                   tossWinTeamId=tmd.tossWinTeamId,
-                                   tossWinTeamName=tmd.tossWinTeamName,
-                                   totalOvers=tmd.totalOvers,
-                                   matchPlayerDetails = tmp
-                          };
-            return matchDetails.FirstOrDefault();
+            var matchDetails = await _tblMatchDetails.Find(x => x.matchDetailsId == matchDetailsId).FirstOrDefaultAsync();
+            
+            return matchDetails;
         }
 
         public async Task<int> NextId()

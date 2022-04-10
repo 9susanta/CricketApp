@@ -24,10 +24,11 @@ export class AddMatchPlayersComponent implements OnInit {
   teamAName:string="Team A";
   teamBName:string="Team B";
   selectedTeam:string=this.teamAName;
+  matchId:number=1;
   match_player:matchplayer=
   {
       matchDetailsId:0, 
-      matchId:0, 
+      matchId:this.matchId, 
       teamAId:0, 
       teamAName:this.teamAName, 
       teamBId:0, 
@@ -59,12 +60,12 @@ export class AddMatchPlayersComponent implements OnInit {
       this.persons.push(name);
       if(this.selectedTeam==this.teamAName)
       {
-        let player:matchplayerdetails={name:name};
+        let player:matchplayerdetails={playerId:0,name:name};
         this.teamA.push(player);
       }
       else if(this.selectedTeam==this.teamBName)
       {
-        let player:matchplayerdetails={name:name};
+        let player:matchplayerdetails={playerId:0,name:name};
         this.teamB.push(player);
       }
     }
@@ -117,8 +118,7 @@ export class AddMatchPlayersComponent implements OnInit {
     this.match_player.teamBPlayers=JSON.stringify(this.teamB)
 
     this.matchplayer.startMatch(this.match_player).subscribe(response => {
-      debugger;
-      this.router.navigate(['scoreboard']);
+      this.router.navigate(['scoreboard',this.matchId]);
     });
   }
   allowDrop(ev:any) {

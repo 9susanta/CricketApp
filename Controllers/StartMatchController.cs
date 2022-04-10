@@ -2,6 +2,7 @@
 using CricketApp.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,13 +36,14 @@ namespace CricketApp.Controllers
             return Ok();
         }
         [HttpGet("get-matchdetails")]
-        public ActionResult GetMatchDetails(int? matchDetailsId)
+        public async Task<ActionResult> GetMatchDetails(int? matchDetailsId)
         {
             if (matchDetailsId != null)
             {
                 try
                 {
-                   return Ok(_unitOfWork.StartMatchRepository.getMatchTeamDetails(matchDetailsId.Value));
+                   var item = await _unitOfWork.StartMatchRepository.getMatchTeamDetails(matchDetailsId.Value);
+                   return Ok(JsonConvert.SerializeObject(item));
                 }
                 catch (Exception ex)
                 {

@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { matchplayer } from '../models/matchplayer';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,6 @@ export class MatchplayerService {
   {
     let queryParams = new HttpParams();
     queryParams = queryParams.append("matchDetailsId",modal);
-    return this.http.get(this.baseUrl+'StartMatch/get-matchdetails',{params:queryParams});
+    return this.http.get<matchplayer>(this.baseUrl+'StartMatch/get-matchdetails',{params:queryParams});
   }
 }
