@@ -10,6 +10,7 @@
                     <tr>
                         <th scope="col">Batter</th>
                         <td scope="col">R</td>
+                        <td scope="col">B</td>
                         <td scope="col">4s</td>
                         <td scope="col">6s</td>
                         <td scope="col">SR</td>
@@ -17,12 +18,21 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Sachin Tendulkar</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                      </tr>
+                        <td>{{strikerDetails.name==""?"":strikerDetails.name+"*"}}</td>
+                        <td>{{strikerDetails.runs_score}}</td>
+                        <td>{{strikerDetails.balls_faced}}</td>
+                        <td>{{strikerDetails.fours}}</td>
+                        <td>{{strikerDetails.sixes}}</td>
+                        <td>{{strikerDetails.strike_rate}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{nonStrikerDetails.name}}</td>
+                        <td>{{nonStrikerDetails.runs_score}}</td>
+                        <td>{{nonStrikerDetails.balls_faced}}</td>
+                        <td>{{nonStrikerDetails.fours}}</td>
+                        <td>{{nonStrikerDetails.sixes}}</td>
+                        <td>{{nonStrikerDetails.strike_rate}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -43,12 +53,12 @@
                 </thead>
                 <tbody>
                  <tr>
-                    <td>Irfan Pathan</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{bowlerDetails.name}}</td>
+                    <td>{{bowlerDetails.overs_bowl_display}}</td>
+                    <td>{{bowlerDetails.maiden_over}}</td>
+                    <td>{{bowlerDetails.runs_given}}</td>
+                    <td>{{bowlerDetails.wickets_taken}}</td>
+                    <td>{{bowlerDetails.economy}}</td>
                   </tr>
                 </tbody>
             </table>
@@ -58,21 +68,28 @@
 <div id="events" class="container center">
     <div class="row">
         <div class="col-sm">
-            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" onclick="sendEvent(event)">
-                <div class="col-4 py-1 border btn btn-primary" data-event="0">0</div>
-                <div class="col-4 py-1 border btn btn-primary" data-event="1">1</div>
-                <div class="col-4 py-1 border btn btn-primary" data-event="2">2</div>
+            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;">
+                <div class="col-3 py-1 border btn btn-primary" data-event="0" (click)="eventClick('0')">0</div>
+                <div class="col-3 py-1 border btn btn-primary" data-event="1" (click)="eventClick('1')">1</div>
+                <div class="col-3 py-1 border btn btn-primary" data-event="2" (click)="eventClick('2')">2</div>
+                <div class="col-3 py-1 border btn btn-primary" data-event="3" (click)="eventClick('3')">3</div>
+                
+                <div class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('4')">4</div>
+                <div class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('5')">5</div>
+                <div class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('6')">6</div>
+                <div class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('7')">7</div>
 
-                <div class="col-4 py-1 border btn btn-primary" data-event="3">3</div>
-                <div class="col-4 py-1 border btn btn-primary" data-event="4">4</div>
-                <div class="col-4 py-1 border btn btn-primary" data-event="6">6</div>
+                <div class="col-3 py-1 border btn btn-dark" data-event="Wd" (click)="eventClick('Wd')">Wide</div>
+                <div class="col-3 py-1 border btn btn-dark" data-event="N" (click)="eventClick('N')">No-Ball</div>
+                <div class="col-3 py-1 border btn btn-dark" data-event="Lb" (click)="eventClick('Lb')">Leg Bye</div>
+                <div class="col-3 py-1 border btn btn-dark" data-event="B" (click)="eventClick('B')">Bye</div>
 
-                <div class="col-4 py-1 border btn btn-dark" data-event="Wd">Wide</div>
-                <div class="col-4 py-1 border btn btn-dark" data-event="N">No-Ball</div>
-                <div class="col-4 py-1 border btn btn-danger" data-event="W">Wicket</div>
+                <div class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
+                <div class="offset-4 col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
 
-                <div class="col-4 py-1 border btn btn-secondary" data-event="Re">Re-Ball</div>
-                <div class="offset-4 col-4 py-1 border btn btn-success" data-event="Ro">Rotate</div>
+                <div class="col-4 py-1 border btn btn-secondary" data-event="Re" (click)="eventClick('Re')">Re-Ball</div>
+                <div class="col-4 py-1 border btn btn-dark" data-event="Un" (click)="eventClick('Un')">Undo</div>
+                <div class="col-4 py-1 border btn btn-success" data-event="Ro" (click)="eventClick('Ro')">Rotate</div>
             </div>
         </div>
     </div>
@@ -89,7 +106,7 @@
             <h5 class="modal-title" id="question">{{modalmessage}}</h5>
             </div>
             <div class="modal-body" id="selections">
-                  <app-setplayer [player]="playersSet"></app-setplayer> 
+                  <app-setplayer (sendPlayer)="readPlayer($event)" [player]="playersSet"></app-setplayer> 
             </div>
             <div class="text-center py-3">
             <button type="button" id="confirm" class="btn btn-success" (click)="onConfirm(modalName)">Confirm</button>

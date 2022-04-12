@@ -64,6 +64,8 @@ namespace CricketApp.Data
                 _matchDetails.tossBatting = matchStartDto.tossBatting;
                 _matchDetails.teamAPlayers= matchStartDto.teamAPlayers;
                 _matchDetails.teamBPlayers = matchStartDto.teamBPlayers;
+                _matchDetails.teamABattingNoAtToss = matchStartDto.teamABattingNoAtToss;
+                _matchDetails.teamBBattingNoAtToss = matchStartDto.teamBBattingNoAtToss;
                 _tblMatchDetails.InsertOne(_matchDetails);
             }
             else
@@ -82,7 +84,10 @@ namespace CricketApp.Data
                  .Set(c => c.tossBatting, matchStartDto.tossBatting)
                  .Set(c => c.teamAPlayers, matchStartDto.teamAPlayers)
                  .Set(c => c.teamBPlayers, matchStartDto.teamBPlayers)
-                 .Set(c => c.lastUpdated, DateTime.Now);
+                 .Set(c => c.lastUpdated, DateTime.Now)
+                 .Set(c=>c.teamABattingNoAtToss,matchStartDto.teamABattingNoAtToss)
+                 .Set(c => c.teamBBattingNoAtToss, matchStartDto.teamBBattingNoAtToss);
+
                 var result = await _tblMatchDetails.UpdateOneAsync(filter, update);
 
             }

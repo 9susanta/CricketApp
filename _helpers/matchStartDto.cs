@@ -22,5 +22,7 @@ namespace CricketApp._helpers
         public DateTime? lastUpdated { get; set; }
         public string teamAPlayers { get; set; }
         public string teamBPlayers { get; set; }
+        public int teamABattingNoAtToss { get; set; }
+        public int teamBBattingNoAtToss { get; set; }
     }
 }

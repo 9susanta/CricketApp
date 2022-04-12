@@ -26,6 +26,8 @@ namespace CricketApp.Entity
         public string tossBatting { get; set; }
         public string teamAPlayers { get; set; }
         public string teamBPlayers { get; set; }
+        public int teamABattingNoAtToss { get; set; }
+        public int teamBBattingNoAtToss { get; set; }
         public DateTime? created { get; set; }
         public DateTime? lastUpdated { get; set; }
     }

@@ -9,7 +9,7 @@ import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
 export class PlayeruiComponent implements OnInit {
   
   constructor() { }
-  @Input() player:matchplayerdetails={};
+  @Input() player:matchplayerdetails=new matchplayerdetails();
   ngOnInit(): void {
   }
 

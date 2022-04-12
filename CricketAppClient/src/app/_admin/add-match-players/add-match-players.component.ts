@@ -39,7 +39,9 @@ export class AddMatchPlayersComponent implements OnInit {
       tossDecideName:this.tossDecide, 
       tossBatting:'',  
       teamAPlayers:'',
-      teamBPlayers:'' 
+      teamBPlayers:'',
+      teamABattingNoAtToss:0,
+      teamBBattingNoAtToss:0,
   };
   
   constructor(private router: Router,private matchplayer:MatchplayerService) {}
@@ -60,12 +62,16 @@ export class AddMatchPlayersComponent implements OnInit {
       this.persons.push(name);
       if(this.selectedTeam==this.teamAName)
       {
-        let player:matchplayerdetails={playerId:0,name:name};
+        let player=new matchplayerdetails();
+        player.playerId=0;
+        player.name=name;
         this.teamA.push(player);
       }
       else if(this.selectedTeam==this.teamBName)
       {
-        let player:matchplayerdetails={playerId:0,name:name};
+        let player=new matchplayerdetails();
+        player.playerId=0;
+        player.name=name;
         this.teamB.push(player);
       }
     }
@@ -113,6 +119,8 @@ export class AddMatchPlayersComponent implements OnInit {
     this.match_player.totalOvers=this.selectedOver;
     this.match_player.tossWinTeamName=this.tossWin;
     this.match_player.tossDecideName=this.tossDecide;
+    this.match_player.teamABattingNoAtToss=this.tossWin==this.teamAName?(this.tossDecide=="Batting"?1:2):(this.tossDecide!="Batting"?1:2);
+    this.match_player.teamBBattingNoAtToss=this.tossWin==this.teamBName?(this.tossDecide=="Batting"?1:2):(this.tossDecide!="Batting"?1:2);
     this.match_player.tossBatting=this.tossDecide=="Batting"?"1":"2";
     this.match_player.teamAPlayers=JSON.stringify(this.teamA);
     this.match_player.teamBPlayers=JSON.stringify(this.teamB)

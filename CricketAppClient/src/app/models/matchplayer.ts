@@ -11,8 +11,8 @@ export interface matchplayer
       tossWinTeamName?:string, 
       tossDecideName?:string, 
       tossBatting?:string,
-      teamABattingNo:number;
-      teamBBattingNo:number,  
+      teamABattingNoAtToss?:number;
+      teamBBattingNoAtToss?:number,  
       teamAPlayers?:string,
       teamBPlayers?:string
 }
