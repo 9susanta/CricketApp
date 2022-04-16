@@ -6,6 +6,7 @@
     user-select: none;
     font-size: large;
     font-family: monospace;
+    padding:0.3rem 1rem;
 }
 
 .list-group input[type="radio"] {

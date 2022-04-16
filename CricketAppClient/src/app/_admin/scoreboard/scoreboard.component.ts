@@ -13,10 +13,6 @@ import { MatchplayerService } from 'src/app/_services/matchplayer.service';
   styleUrls: ['./scoreboard.component.css']
 })
 export class ScoreboardComponent implements OnInit {
-
-  cartItemCount$ = new BehaviorSubject(-1);
-
-
   id:number=0;
   match_player:matchplayer={};
   teamAPlayers:matchplayerdetails[]=[];
@@ -220,14 +216,16 @@ export class ScoreboardComponent implements OnInit {
 
       // If it was run out, then get the runs made and update the scores
       let runs:number=+await this.extraRunModal("Runs made if Run-Out ?","Choose a option !");
-      //const runs = this.extra_run;
+  
+      this.runmademodal?.hide(); 
+
       this.battingTeamDetails.total += runs;
       this.runScore(runs);
       this.ballBowled(event, runs);
 
       // Show additional runs made in history and add runs to bowler, if any
       if (runs) {
-        event = event+runs;
+        //event = event+runs;
       }
 
       // If it is not one-man batting
@@ -255,7 +253,7 @@ export class ScoreboardComponent implements OnInit {
       }
     }
     // In case runs was scored
-    else if (!["N", "Wd", "Re"].includes(event)) {
+    else if (!["N", "Wd", "Re","Lb","B","P","Un"].includes(event)) {
       this.runScore(event);
       this.ballBowled(event);
 
@@ -270,7 +268,8 @@ export class ScoreboardComponent implements OnInit {
     else if (event != "Re") {
       // Additional runs made in that ball
       const runs=+await this.extraRunModal("Additional runs made ?","Choose a option !");
-
+      this.runmademodal?.hide(); 
+      
       // Add ball and runs to bowler
       this.ballBowled(event, runs);
 
@@ -279,7 +278,12 @@ export class ScoreboardComponent implements OnInit {
         if (event == "N") {
           this.runScore(runs, false);
         }
-
+        else if(["Lb","B"].includes(event))
+        {
+          // Add ball faced to striker
+          this.runScore(0, true);
+          this.battingTeamDetails.overs+=1;
+        }
         // Rotate strike if odd run
         if (runs % 2 == 1) {
           this.rotatePlayer();
@@ -290,10 +294,12 @@ export class ScoreboardComponent implements OnInit {
     if (this.battingTeamDetails.overs > 0 &&
       this.battingTeamDetails.overs % 6 == 0) 
       {
-      this.chooseBowler();
-      this.rotatePlayer();
-      this.last_bowlerDetails= this.bowlerDetails;
-      this.bowlerDetails=new matchplayerdetails();
+        this.chooseBowler();
+        
+        this.rotatePlayer();
+
+        this.last_bowlerDetails= this.bowlerDetails;
+        this.bowlerDetails=new matchplayerdetails();
      }
   }
   // Bowling [extraRuns in case of Wd,N,W]
@@ -306,7 +312,18 @@ export class ScoreboardComponent implements OnInit {
       this.bowlerDetails.overs_bowl += 1;
       this.bowlerDetails.wickets_taken += 1;
       this.bowlerDetails.runs_given += extraRuns;
-    } else {
+    }
+    else if(["Lb", "B"].includes(event))
+    {
+      this.bowlerDetails.overs_bowl += 1;
+      this.bowlerDetails.runs_given += extraRuns;
+    }
+    else if(event=="P"||event=="Un")
+    {
+
+    }
+    else 
+    {
       // Hit for runs
       this.bowlerDetails.overs_bowl += 1;
       this.bowlerDetails.runs_given += event;
@@ -334,7 +351,8 @@ export class ScoreboardComponent implements OnInit {
     if (event == "W") {
       // Wicket
       this.strikerDetails.out = true;
-    } else {
+    } 
+    else {
       // Score runs
       this.strikerDetails.runs_score += event;
 
@@ -367,11 +385,16 @@ export class ScoreboardComponent implements OnInit {
       checkedRadio.checked=false;
     }
     return new Promise<string>((resolve, reject) => {
-      this.elRef.nativeElement.querySelector(targetBtnId).addEventListener('click',() => {
+      let confirm=this.elRef.nativeElement.querySelector(targetBtnId)
+      let temp = confirm.cloneNode(true);
+      confirm.parentNode.replaceChild(temp, confirm);
+      confirm = temp;
+      temp=undefined;
+
+      confirm.addEventListener('click',() => {
         const selectedItem = this.elRef.nativeElement.querySelector(checkBoxsId) as HTMLInputElement;
-        console.log(selectedItem+"----");
+        console.log(selectedItem);
         if (selectedItem) {
-          this.elRef.nativeElement.querySelector(targetBtnId).removeEventListener('click',() => {},false);
           resolve((selectedItem.value)); // Return selected player
         }
         else{
