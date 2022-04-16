@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { matchplayer } from 'src/app/models/matchplayer';
 import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
 import { teamdetails } from 'src/app/models/teamdetails';
@@ -13,6 +14,9 @@ import { MatchplayerService } from 'src/app/_services/matchplayer.service';
 })
 export class ScoreboardComponent implements OnInit {
 
+  cartItemCount$ = new BehaviorSubject(-1);
+
+
   id:number=0;
   match_player:matchplayer={};
   teamAPlayers:matchplayerdetails[]=[];
@@ -24,6 +28,7 @@ export class ScoreboardComponent implements OnInit {
   strikerDetails:matchplayerdetails=new matchplayerdetails();
   nonStrikerDetails:matchplayerdetails=new matchplayerdetails();
   bowlerDetails:matchplayerdetails=new matchplayerdetails();
+  last_bowlerDetails:matchplayerdetails=new matchplayerdetails();
 
   battingTeamDetails:teamdetails=new teamdetails();
   bowlingTeamDetails:teamdetails=new teamdetails();
@@ -31,24 +36,35 @@ export class ScoreboardComponent implements OnInit {
   battingTeam:string = "";
   bowlingTeam:string = "";
 
-   striker:string="";
-   nonStriker:string = "";
-   bowler:string = "";
+  striker:string="";
+  nonStriker:string = "";
+  bowler:string = "";
+
+  extraRun:number[]=[0,1,2,3,4,5,6];
+  extra_run:number=0;
 
   modalmessage:string="";
   modalName:string="";
   playersSet:matchplayerdetails[]=[];
 
+  runmodalmessage:string="";
+   
+  target_run:number=0;
+  over:number=0;
+
   selectedPlayerName:string="";
 
   matchStatus:string="countinue";
 
-  @ViewChild(ModalDirective, { static: false }) modal?: ModalDirective;
-  constructor(private route: ActivatedRoute,private matchplayer:MatchplayerService) { }
+  @ViewChild('parentModal', { static: false }) modal?: ModalDirective;
+  @ViewChild('runmademodal', { static: false }) runmademodal?: ModalDirective
+
   
-  ngOnInit(): void {
+  constructor(private route: ActivatedRoute,private matchplayer:MatchplayerService,private elRef:ElementRef) { }
+
+   ngOnInit() {
     let id = this.route.snapshot.paramMap.get("id");
-    this.matchplayer.getMatch(id).subscribe(response => {
+    this.matchplayer.getMatch(id).subscribe(async response => {
       this.match_player=response;
       let playerTeamA:string=this.match_player.teamAPlayers!;
       this.teamAPlayers=JSON.parse(playerTeamA)
@@ -98,11 +114,16 @@ export class ScoreboardComponent implements OnInit {
           this.currentBowlingTeam.push(player);
         } 
       }
-      this.chooseStriker();
-    }); 
+       await this.chooseStriker();
+       await this.chooseNonStriker();
+       await this.chooseBowler();
+    });
   }
-  showModal() {
-    this.modal?.show();
+  async showModal(errmsg:string) {
+    setTimeout(()=>{
+      this.modal?.show();
+    },300);
+    return await this.getConfirmation('#confirm','input[name="options"]:checked',errmsg);
   }
   hideModal()
   {
@@ -112,7 +133,7 @@ export class ScoreboardComponent implements OnInit {
   {
     this.selectedPlayerName=playerName;
   }
-  chooseStriker()
+  async chooseStriker()
   {
     this.modalmessage="🏏 Choose Striker ?";
     this.modalName="striker";
@@ -122,9 +143,21 @@ export class ScoreboardComponent implements OnInit {
     {
       this.playersSet=currentBattingTeam;
     }
-    this.showModal();
+    let playername= await this.showModal("Select a player !");
+
+    if(playername!="")
+    {
+      this.striker=playername;
+      let player= this.currentBattingTeam.find(item => item.name === playername);
+      if(player)
+      {
+       player.isStriker = true;
+       this.strikerDetails=player;
+       this.hideModal();
+      }
+    }
   }
-  chooseNonStriker()
+  async chooseNonStriker()
   {
     this.modalmessage="🏏 Choose Non-Striker ?";
     this.modalName="nonstriker";
@@ -134,9 +167,22 @@ export class ScoreboardComponent implements OnInit {
     {
       this.playersSet=currentBattingTeam;
     }
-    this.showModal();
+    let playername=await this.showModal("Select a player !");
+    
+    if(playername!="")
+    {
+     
+      this.nonStriker=playername;
+      let player = this.currentBattingTeam.find(item => item.name === playername);
+      if(player)
+      { 
+        this.hideModal();
+        player.isNonStriker = true;
+        this.nonStrikerDetails=player;
+      }
+    }
   }
-  chooseBowler()
+  async chooseBowler()
   {
     this.modalmessage=" 🥎 Choose Bowler ?";
     this.modalName="bowler";
@@ -146,70 +192,67 @@ export class ScoreboardComponent implements OnInit {
     {
       this.playersSet=currentBowlingTeam;
     }
-    this.showModal();
+    let playername=await this.showModal("Select a player");
+    if(playername!="")
+    {
+      this.bowler=playername;
+      let player = this.currentBowlingTeam.find(item => item.name === playername);
+      if(player)
+      {
+        player.isCurrentBowler = true;
+        this.bowlerDetails=player;
+        this.hideModal();
+      }
+     
+    }
   }
-  onConfirm(modalName:string)
-  {
-      if(modalName=="striker")
-      {
-        if(this.selectedPlayerName!="")
-        {
-          this.hideModal();
-          this.striker=this.selectedPlayerName;
-          let player= this.currentBattingTeam.find(item => item.name === this.selectedPlayerName);
-          if(player)
-          {
-            player.isStriker = true;
-            this.strikerDetails=player;
-          } 
-          this.chooseNonStriker();
-        }
-        else{
-          alert("Choose striker !")
-        }
-      }
-      else if(modalName=="nonstriker")
-      {
-        if(this.selectedPlayerName!="")
-        {
-          this.hideModal();
-          this.nonStriker=this.selectedPlayerName;
-          let player = this.currentBattingTeam.find(item => item.name === this.selectedPlayerName);
-          if(player)
-          {
-            player.isNonStriker = true;
-            this.nonStrikerDetails=player;
-          }
-          this.chooseBowler();
-        }
-        else{
-          alert("Choose non-striker !")
-        }
-      }
-      else if(modalName=="bowler")
-      {
-        if(this.selectedPlayerName!="")
-        {
-          this.bowler=this.selectedPlayerName;
-          let player = this.currentBowlingTeam.find(item => item.name === this.selectedPlayerName);
-          if(player)
-          {
-            player.isCurrentBowler = true;
-            this.bowlerDetails=player;
-          }
-          this.hideModal();
-        }
-        else{
-          alert("Choose a bowler !")
-        }
-      }
-  }
-  eventClick(event:any)
+  async eventClick(event:any)
   {
     event = isNaN(+event) ? event : +event; // Convert runs to numbers
     // In case we need to rotate strike
     if (event == "Ro") {
       this.rotatePlayer();
+    }
+     // In case of wicket
+     else if (event == "W") {
+      this.battingTeamDetails.wickets += 1;
+      this.battingTeamDetails.overs += 1;
+
+      // If it was run out, then get the runs made and update the scores
+      let runs:number=+await this.extraRunModal("Runs made if Run-Out ?","Choose a option !");
+      //const runs = this.extra_run;
+      this.battingTeamDetails.total += runs;
+      this.runScore(runs);
+      this.ballBowled(event, runs);
+
+      // Show additional runs made in history and add runs to bowler, if any
+      if (runs) {
+        event = event+runs;
+      }
+
+      // If it is not one-man batting
+      if (this.nonStrikerDetails.name!="") {
+        this.modalmessage="Who got Out ?";
+        this.modalName="wicket";
+        this.playersSet=[];
+        this.playersSet.push(this.strikerDetails,this.nonStrikerDetails)
+        let wicket=await this.showModal("Select a player !");
+        
+
+        // If striker was out
+        if (wicket == this.strikerDetails.name) {
+          this.runScore("W", false); // Let him out
+          this.chooseStriker(); 
+          // If non-striker was out
+        } else if (wicket == this.nonStrikerDetails.name) {
+          this.runScore("W", false,true); // Let him out
+          this.chooseNonStriker(); // Get new player to non-strike
+        }
+
+        // If it was one-man batting, then batting team is all out
+      } else {
+        this.runScore("W", false);
+      }
     }
     // In case runs was scored
     else if (!["N", "Wd", "Re"].includes(event)) {
@@ -224,12 +267,34 @@ export class ScoreboardComponent implements OnInit {
         this.rotatePlayer();
       }
     }
+    else if (event != "Re") {
+      // Additional runs made in that ball
+      const runs=+await this.extraRunModal("Additional runs made ?","Choose a option !");
+
+      // Add ball and runs to bowler
+      this.ballBowled(event, runs);
+
+      if (runs) {
+        // Add runs to striker if N
+        if (event == "N") {
+          this.runScore(runs, false);
+        }
+
+        // Rotate strike if odd run
+        if (runs % 2 == 1) {
+          this.rotatePlayer();
+        }
+      }
+      this.battingTeamDetails.total += 1 + runs;
+    }
     if (this.battingTeamDetails.overs > 0 &&
       this.battingTeamDetails.overs % 6 == 0) 
       {
       this.chooseBowler();
       this.rotatePlayer();
-    }
+      this.last_bowlerDetails= this.bowlerDetails;
+      this.bowlerDetails=new matchplayerdetails();
+     }
   }
   // Bowling [extraRuns in case of Wd,N,W]
   ballBowled(event:any, extraRuns = 0) {
@@ -251,11 +316,19 @@ export class ScoreboardComponent implements OnInit {
     // Convert balls to overs
   }
   // Batting [countBall = false if Wd,W,N]
-  runScore(event:any,countBall = true)
+  runScore(event:any,countBall = true,isStrikeBatter=true)
   {
+    if(isStrikeBatter==false)
+    {
+      if (event == "W") {
+       // Wicket
+       this.nonStrikerDetails.out = true;
+      }
+      return;
+    }
     // Update faced ball only if specified
     if (countBall) {
-      this.strikerDetails.balls_faced += 1;
+        this.strikerDetails.balls_faced += 1;
     }
 
     if (event == "W") {
@@ -276,5 +349,35 @@ export class ScoreboardComponent implements OnInit {
   rotatePlayer()
   {
     [this.strikerDetails, this.nonStrikerDetails] = [this.nonStrikerDetails, this.strikerDetails];
+  }
+  async extraRunModal(message:string,errmsg:string)
+  {
+    this.runmodalmessage=message;
+    this.runmademodal?.show();
+    return await this.getConfirmation('#rumconfirm','input[name="optionsrun"]:checked',errmsg);
+  }
+  onRunConfirm()
+  {
+    this.runmademodal?.hide();    
+  }
+  async getConfirmation(targetBtnId:string,checkBoxsId:string,errmsg:string):Promise<string> {
+    const checkedRadio = this.elRef.nativeElement.querySelector(checkBoxsId) as HTMLInputElement;
+    if(checkedRadio)
+    {
+      checkedRadio.checked=false;
+    }
+    return new Promise<string>((resolve, reject) => {
+      this.elRef.nativeElement.querySelector(targetBtnId).addEventListener('click',() => {
+        const selectedItem = this.elRef.nativeElement.querySelector(checkBoxsId) as HTMLInputElement;
+        console.log(selectedItem+"----");
+        if (selectedItem) {
+          this.elRef.nativeElement.querySelector(targetBtnId).removeEventListener('click',() => {},false);
+          resolve((selectedItem.value)); // Return selected player
+        }
+        else{
+          alert(errmsg);
+        }
+    },false);
+    });
   }
 }

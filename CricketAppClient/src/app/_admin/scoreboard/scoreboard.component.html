@@ -17,14 +17,17 @@
                       </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{strikerDetails.name==""?"":strikerDetails.name+"*"}}</td>
-                        <td>{{strikerDetails.runs_score}}</td>
-                        <td>{{strikerDetails.balls_faced}}</td>
-                        <td>{{strikerDetails.fours}}</td>
-                        <td>{{strikerDetails.sixes}}</td>
-                        <td>{{strikerDetails.strike_rate}}</td>
-                    </tr>
+                    <ng-container *ngIf="strikerDetails.name!=''">
+                        <tr>
+                            <td>{{strikerDetails.name==""?"":strikerDetails.name+"*"}}</td>
+                            <td>{{strikerDetails.runs_score}}</td>
+                            <td>{{strikerDetails.balls_faced}}</td>
+                            <td>{{strikerDetails.fours}}</td>
+                            <td>{{strikerDetails.sixes}}</td>
+                            <td>{{strikerDetails.strike_rate}}</td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="nonStrikerDetails.name!=''">
                     <tr>
                         <td>{{nonStrikerDetails.name}}</td>
                         <td>{{nonStrikerDetails.runs_score}}</td>
@@ -33,6 +36,7 @@
                         <td>{{nonStrikerDetails.sixes}}</td>
                         <td>{{nonStrikerDetails.strike_rate}}</td>
                     </tr>
+                </ng-container>
                 </tbody>
             </table>
         </div>
@@ -52,14 +56,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                 <tr>
-                    <td>{{bowlerDetails.name}}</td>
-                    <td>{{bowlerDetails.overs_bowl_display}}</td>
-                    <td>{{bowlerDetails.maiden_over}}</td>
-                    <td>{{bowlerDetails.runs_given}}</td>
-                    <td>{{bowlerDetails.wickets_taken}}</td>
-                    <td>{{bowlerDetails.economy}}</td>
-                  </tr>
+                   <ng-container *ngIf="bowlerDetails.name!=''">
+                     <tr>
+                        <td>{{bowlerDetails.name}}</td>
+                        <td>{{bowlerDetails.overs_bowl_display}}</td>
+                        <td>{{bowlerDetails.maiden_over}}</td>
+                        <td>{{bowlerDetails.runs_given}}</td>
+                        <td>{{bowlerDetails.wickets_taken}}</td>
+                        <td>{{bowlerDetails.economy}}</td>
+                     </tr>
+                    </ng-container>
+                   <ng-container *ngIf="last_bowlerDetails.overs_bowl>0">
+                    <tr>
+                        <td>{{last_bowlerDetails.name}}</td>
+                        <td>{{last_bowlerDetails.overs_bowl_display}}</td>
+                        <td>{{last_bowlerDetails.maiden_over}}</td>
+                        <td>{{last_bowlerDetails.runs_given}}</td>
+                        <td>{{last_bowlerDetails.wickets_taken}}</td>
+                        <td>{{last_bowlerDetails.economy}}</td>
+                      </tr>
+                  </ng-container>
                 </tbody>
             </table>
         </div>
@@ -109,7 +125,28 @@
                   <app-setplayer (sendPlayer)="readPlayer($event)" [player]="playersSet"></app-setplayer> 
             </div>
             <div class="text-center py-3">
-            <button type="button" id="confirm" class="btn btn-success" (click)="onConfirm(modalName)">Confirm</button>
+            <button type="button" id="confirm" class="btn btn-success">Confirm</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="runmademodal" bsModal #runmademodal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="question1">{{runmodalmessage}}</h5>
+            </div>
+            <div class="modal-body" id="selections">
+                <div class="list-group">
+                    <ng-container *ngFor="let run of extraRun">
+                        <input type="radio" name="optionsrun" id="{{run}}" value="{{run}}">
+                        <label class="list-group-item" for="{{run}}">{{run}}</label>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="text-center py-3">
+            <button type="button" id="rumconfirm" class="btn btn-success" (click)="onRunConfirm()">Confirm</button>
             </div>
         </div>
         </div>

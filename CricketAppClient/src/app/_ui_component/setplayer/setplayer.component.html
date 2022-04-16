@@ -1,6 +1,6 @@
 <div class="list-group">
     <ng-container *ngFor="let item of player">
-        <input type="radio" name="options" id="{{item.name}}" value="{{item.name}}" (change)="onplayerselect($event.target.value)">
+        <input type="radio" name="options" id="{{item.name}}" value="{{item.name}}">
         <label class="list-group-item" for="{{item.name}}">{{item.name}}</label>
     </ng-container>
 </div>
