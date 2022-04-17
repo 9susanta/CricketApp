@@ -1,8 +1,13 @@
 <div id="title" class="row center">
     <p class="alert alert-info small text-center p-0 mt-2 mb-0">🛈 Scoreboard</p>
 </div>
+<div class="row">
+    <div class="col mt-2 ms-1">
+        <p><b>{{battingTeamDetails.name}}</b> - {{battingTeamDetails.total}}/{{battingTeamDetails.wickets}}({{battingTeamDetails.overInTxt}})</p>
+    </div>
+</div>
 <div id="scoreboard">
-    <p class="alert alert-danger small text-start p-0 mt-2 mb-0"> 🏏 Batting Team</p>
+    <p class="alert alert-danger small text-start p-0 mt-0 mb-0"> 🏏 Batting Team</p>
     <div class="row">
         <div class="col">
             <table class="table table-borderless">

@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { matchplayer } from 'src/app/models/matchplayer';
 import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
 import { teamdetails } from 'src/app/models/teamdetails';
@@ -28,9 +27,6 @@ export class ScoreboardComponent implements OnInit {
 
   battingTeamDetails:teamdetails=new teamdetails();
   bowlingTeamDetails:teamdetails=new teamdetails();
-
-  battingTeam:string = "";
-  bowlingTeam:string = "";
 
   striker:string="";
   nonStriker:string = "";
@@ -66,9 +62,9 @@ export class ScoreboardComponent implements OnInit {
       this.teamAPlayers=JSON.parse(playerTeamA)
       let playerTeamB=this.match_player.teamBPlayers!;
       this.teamBPlayers=JSON.parse(playerTeamB);
-      this.battingTeam=this.match_player.teamABattingNoAtToss==1?'A':'B';
-      this.bowlingTeam=this.match_player.teamBBattingNoAtToss==1?'A':'B';
-      if(this.battingTeam=="A")
+      this.battingTeamDetails.name=this.match_player.teamABattingNoAtToss==1?this.match_player.teamAName!:this.match_player.teamBName!;
+      this.bowlingTeamDetails.name=this.match_player.teamBBattingNoAtToss==1?this.match_player.teamAName!:this.match_player.teamBName!;
+      if(this.battingTeamDetails.name==this.match_player.teamAName!)
       {
         for(let i=0;this.teamAPlayers.length>i;i++)
         {
@@ -79,7 +75,7 @@ export class ScoreboardComponent implements OnInit {
         } 
         
       }
-      else if(this.battingTeam=="B")
+      else if(this.battingTeamDetails.name==this.match_player.teamBName!)
       {
         for(let i=0;this.teamBPlayers.length>i;i++)
         {
@@ -89,7 +85,7 @@ export class ScoreboardComponent implements OnInit {
            this.currentBattingTeam.push(player);
         } 
       }
-      if(this.bowlingTeam=="A")
+      if(this.bowlingTeamDetails.name==this.match_player.teamAName!)
       {
         for(let i=0;this.teamAPlayers.length>i;i++)
         {
@@ -100,7 +96,7 @@ export class ScoreboardComponent implements OnInit {
            this.currentBowlingTeam.push(player);
         } 
       }
-      else if(this.bowlingTeam=="B")
+      else if(this.bowlingTeamDetails.name==this.match_player.teamBName!)
       {
         for(let i=0;this.teamBPlayers.length>i;i++)
         {
@@ -199,7 +195,6 @@ export class ScoreboardComponent implements OnInit {
         this.bowlerDetails=player;
         this.hideModal();
       }
-     
     }
   }
   async eventClick(event:any)
@@ -246,7 +241,6 @@ export class ScoreboardComponent implements OnInit {
           this.runScore("W", false,true); // Let him out
           this.chooseNonStriker(); // Get new player to non-strike
         }
-
         // If it was one-man batting, then batting team is all out
       } else {
         this.runScore("W", false);
@@ -276,7 +270,7 @@ export class ScoreboardComponent implements OnInit {
       if (runs) {
         // Add runs to striker if N
         if (event == "N") {
-          this.runScore(runs, false);
+          this.runScore(runs, true);
         }
         else if(["Lb","B"].includes(event))
         {
@@ -320,7 +314,6 @@ export class ScoreboardComponent implements OnInit {
     }
     else if(event=="P"||event=="Un")
     {
-
     }
     else 
     {
@@ -328,9 +321,14 @@ export class ScoreboardComponent implements OnInit {
       this.bowlerDetails.overs_bowl += 1;
       this.bowlerDetails.runs_given += event;
     }
-    this.bowlerDetails.overs_bowl_display=`${Math.floor( this.bowlerDetails.overs_bowl / 6)}.${
-      this.bowlerDetails.overs_bowl % 6}`
-    // Convert balls to overs
+     this.bowlerDetails.economy=(this.bowlerDetails.runs_given/(this.bowlerDetails.overs_bowl*0.1666666)).toFixed(2);
+    
+     let currentBowler=this.currentBowlingTeam.find(x=>x.name==this.bowlerDetails.name);
+     if(currentBowler)
+     {
+      currentBowler=this.bowlerDetails;
+     }
+
   }
   // Batting [countBall = false if Wd,W,N]
   runScore(event:any,countBall = true,isStrikeBatter=true)
@@ -347,12 +345,12 @@ export class ScoreboardComponent implements OnInit {
     if (countBall) {
         this.strikerDetails.balls_faced += 1;
     }
-
     if (event == "W") {
       // Wicket
-      this.strikerDetails.out = true;
+       this.strikerDetails.out = true;
     } 
-    else {
+    else 
+    {
       // Score runs
       this.strikerDetails.runs_score += event;
 
@@ -363,6 +361,20 @@ export class ScoreboardComponent implements OnInit {
         this.strikerDetails.sixes += 1;
       }
     }
+    this.strikerDetails.strike_rate=((this.strikerDetails.runs_score/this.strikerDetails.balls_faced)*100).toFixed(2);
+    
+    let currentnonStriker=this.currentBattingTeam.find(x=>x.name==this.nonStrikerDetails.name);
+    if(currentnonStriker)
+    {
+       currentnonStriker=this.nonStrikerDetails;
+    }
+
+    let currentstriker=this.currentBattingTeam.find(x=>x.name==this.strikerDetails.name);
+    if(currentstriker)
+    {
+       currentstriker=this.strikerDetails;
+    }
+
   }
   rotatePlayer()
   {
@@ -390,10 +402,8 @@ export class ScoreboardComponent implements OnInit {
       confirm.parentNode.replaceChild(temp, confirm);
       confirm = temp;
       temp=undefined;
-
       confirm.addEventListener('click',() => {
         const selectedItem = this.elRef.nativeElement.querySelector(checkBoxsId) as HTMLInputElement;
-        console.log(selectedItem);
         if (selectedItem) {
           resolve((selectedItem.value)); // Return selected player
         }
