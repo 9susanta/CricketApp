@@ -31,3 +31,6 @@
 .list-group input[type="radio"]:checked + .list-group-item:before {
     color: inherit;
 }
+.ctrl-disable {
+    pointer-events: none;
+}

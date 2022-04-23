@@ -1,8 +1,11 @@
+import { matchplayerdetails } from "./matchplayerdetails";
+
 export class teamdetails
 {
     name:string='';
     total:number=0;
-    _overs:number=0;
+    overs:number=0;
+    totOver:number=0;
     wickets:number=0;
     extra:number=0;
     wide:number=0;
@@ -11,11 +14,13 @@ export class teamdetails
     nb:number=0;
     penalty:number=0;
     overInTxt:string='0.0';
-    get overs(): number {
-        return this._overs;
-    }
-    set overs(value: number) {
-        this._overs = value;
-        this.overInTxt=`${Math.floor(this._overs / 6)}.${this._overs % 6}`
-    }
+    runRate:string='0.0';
+    requiredRunRate:string='0.0';
+    battingOrder:number=0;
+    players:matchplayerdetails[]=[];
+    strikerDetails:matchplayerdetails=new matchplayerdetails();
+    nonStrikerDetails:matchplayerdetails=new matchplayerdetails();
+    bowlerDetails:matchplayerdetails=new matchplayerdetails();
+    last_bowlerDetails:matchplayerdetails=new matchplayerdetails()
+    
 }

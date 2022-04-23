@@ -40,8 +40,8 @@ export class AddMatchPlayersComponent implements OnInit {
       tossBatting:'',  
       teamAPlayers:'',
       teamBPlayers:'',
-      teamABattingNoAtToss:0,
-      teamBBattingNoAtToss:0,
+      teamABattingOrder:0,
+      teamBBattingOrder:0,
   };
   
   constructor(private router: Router,private matchplayer:MatchplayerService) {}
@@ -116,17 +116,22 @@ export class AddMatchPlayersComponent implements OnInit {
   }
   startMatch()
   {
+    debugger;
     this.match_player.totalOvers=this.selectedOver;
     this.match_player.tossWinTeamName=this.tossWin;
     this.match_player.tossDecideName=this.tossDecide;
-    this.match_player.teamABattingNoAtToss=this.tossWin==this.teamAName?(this.tossDecide=="Batting"?1:2):(this.tossDecide!="Batting"?1:2);
-    this.match_player.teamBBattingNoAtToss=this.tossWin==this.teamBName?(this.tossDecide=="Batting"?1:2):(this.tossDecide!="Batting"?1:2);
+    this.match_player.teamABattingOrder=this.tossWin==this.teamAName?(this.tossDecide=="Batting"?1:2):(this.tossDecide!="Batting"?1:2);
+    this.match_player.teamBBattingOrder=this.tossWin==this.teamBName?(this.tossDecide=="Batting"?1:2):(this.tossDecide!="Batting"?1:2);
     this.match_player.tossBatting=this.tossDecide=="Batting"?"1":"2";
     this.match_player.teamAPlayers=JSON.stringify(this.teamA);
-    this.match_player.teamBPlayers=JSON.stringify(this.teamB)
+    this.match_player.teamBPlayers=JSON.stringify(this.teamB);
+    this.match_player.battingFirstTeamName=this.match_player.teamABattingOrder==1?this.match_player.teamAName!:this.match_player.teamBName!;
+    this.match_player.battingSecondTeamName=this.match_player.teamBBattingOrder==1?this.match_player.teamAName!:this.match_player.teamBName!;
 
     this.matchplayer.startMatch(this.match_player).subscribe(response => {
       this.router.navigate(['scoreboard',this.matchId]);
+    },err=>{
+      debugger;
     });
   }
   allowDrop(ev:any) {

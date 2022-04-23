@@ -22,7 +22,18 @@ namespace CricketApp._helpers
         public DateTime? lastUpdated { get; set; }
         public string teamAPlayers { get; set; }
         public string teamBPlayers { get; set; }
-        public int teamABattingNoAtToss { get; set; }
-        public int teamBBattingNoAtToss { get; set; }
+        public int teamABattingOrder { get; set; }
+        public int teamBBattingOrder { get; set; }
+
+        public string matchStatus { get; set; }
+        public int battingFirstScored { get; set; }
+        public string battingFirstTeamName { get; set; }
+        public int battingFirstWicketFall { get; set; }
+        public string battingFirstOverFaced { get; set; }
+        public int battingSecondtScored { get; set; }
+        public string battingSecondTeamName { get; set; }
+        public int battingSecondWicketFall { get; set; }
+        public string battingSecondOverFaced { get; set; }
+        public string result { get; set; }
     }
 }

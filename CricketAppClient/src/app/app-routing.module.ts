@@ -10,6 +10,7 @@ import { TeamsComponent } from './_admin/teams/teams.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: AddMatchPlayersComponent },
   { path: 'players', component: PlayersComponent },
   { path: 'teams', component: TeamsComponent },
   { path: 'series', component: SeriesComponent },

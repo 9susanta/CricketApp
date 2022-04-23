@@ -11,8 +11,22 @@ export interface matchplayer
       tossWinTeamName?:string, 
       tossDecideName?:string, 
       tossBatting?:string,
-      teamABattingNoAtToss?:number;
-      teamBBattingNoAtToss?:number,  
+      teamABattingOrder?:number;
+      teamBBattingOrder?:number,  
       teamAPlayers?:string,
-      teamBPlayers?:string
+      teamBPlayers?:string,
+
+      matchStatus?:string,
+      battingFirstScored?:number,
+      battingFirstTeamName?:string,
+      battingFirstWicketFall?:number,
+      battingFirstOverFaced?:string,
+
+      battingSecondtScored?:number,
+      battingSecondTeamName?:string,
+      battingSecondWicketFall?:number,
+      battingSecondOverFaced?:string,
+
+      result?:string,
+      currentmatchDetails?:string
 }

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Folder Include="DBServices\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

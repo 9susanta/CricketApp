@@ -10,7 +10,8 @@ namespace CricketApp.Interfaces
     public interface IStartMatchRepository
     {
         Task<int> updateMatchTeamDetails(matchStartDto _matchStartDto);
-        Task<tblMatchDetails> getMatchTeamDetails(int matchDetailsId);
+        matchPlayerScoreDetails getMatchTeamDetails(int matchDetailsId);
+        Task<int> updateCurrentMatchDetails(matchDto _matchDetailsDto);
         Task<int> NextId();
     }
 }

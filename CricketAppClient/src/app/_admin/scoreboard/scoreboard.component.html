@@ -3,7 +3,7 @@
 </div>
 <div class="row">
     <div class="col mt-2 ms-1">
-        <p><b>{{battingTeamDetails.name}}</b> - {{battingTeamDetails.total}}/{{battingTeamDetails.wickets}}({{battingTeamDetails.overInTxt}})</p>
+        <p><b>{{battingTeamDetails.name}}</b> - {{battingTeamDetails.total}}/{{battingTeamDetails.wickets}}({{battingTeamDetails.overInTxt}}/{{totover}}) (RR-{{battingTeamDetails.runRate}})</p>
     </div>
 </div>
 <div id="scoreboard">
@@ -22,24 +22,24 @@
                       </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngIf="strikerDetails.name!=''">
+                    <ng-container *ngIf="battingTeamDetails.strikerDetails.name!=''">
                         <tr>
-                            <td>{{strikerDetails.name==""?"":strikerDetails.name+"*"}}</td>
-                            <td>{{strikerDetails.runs_score}}</td>
-                            <td>{{strikerDetails.balls_faced}}</td>
-                            <td>{{strikerDetails.fours}}</td>
-                            <td>{{strikerDetails.sixes}}</td>
-                            <td>{{strikerDetails.strike_rate}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.name==""?"":battingTeamDetails.strikerDetails.name+"🏏"}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.runs_score}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.balls_faced}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.fours}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.sixes}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.strike_rate}}</td>
                         </tr>
                     </ng-container>
-                    <ng-container *ngIf="nonStrikerDetails.name!=''">
+                    <ng-container *ngIf="battingTeamDetails.nonStrikerDetails.name!=''">
                     <tr>
-                        <td>{{nonStrikerDetails.name}}</td>
-                        <td>{{nonStrikerDetails.runs_score}}</td>
-                        <td>{{nonStrikerDetails.balls_faced}}</td>
-                        <td>{{nonStrikerDetails.fours}}</td>
-                        <td>{{nonStrikerDetails.sixes}}</td>
-                        <td>{{nonStrikerDetails.strike_rate}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.name}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.runs_score}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.balls_faced}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.fours}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.sixes}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.strike_rate}}</td>
                     </tr>
                 </ng-container>
                 </tbody>
@@ -61,24 +61,24 @@
                   </tr>
                 </thead>
                 <tbody>
-                   <ng-container *ngIf="bowlerDetails.name!=''">
+                   <ng-container *ngIf="bowlingTeamDetails.bowlerDetails.name!=''">
                      <tr>
-                        <td>{{bowlerDetails.name}}</td>
-                        <td>{{bowlerDetails.overs_bowl_display}}</td>
-                        <td>{{bowlerDetails.maiden_over}}</td>
-                        <td>{{bowlerDetails.runs_given}}</td>
-                        <td>{{bowlerDetails.wickets_taken}}</td>
-                        <td>{{bowlerDetails.economy}}</td>
+                        <td>{{bowlingTeamDetails.bowlerDetails.name==""?"":bowlingTeamDetails.bowlerDetails.name+" 🥎"}}</td>
+                        <td>{{bowlingTeamDetails.bowlerDetails.overs_bowl_display}}</td>
+                        <td>{{bowlingTeamDetails.bowlerDetails.maiden_over}}</td>
+                        <td>{{bowlingTeamDetails.bowlerDetails.runs_given}}</td>
+                        <td>{{bowlingTeamDetails.bowlerDetails.wickets_taken}}</td>
+                        <td>{{bowlingTeamDetails.bowlerDetails.economy}}</td>
                      </tr>
                     </ng-container>
-                   <ng-container *ngIf="last_bowlerDetails.overs_bowl>0">
+                   <ng-container *ngIf="bowlingTeamDetails.last_bowlerDetails.overs_bowl>0">
                     <tr>
-                        <td>{{last_bowlerDetails.name}}</td>
-                        <td>{{last_bowlerDetails.overs_bowl_display}}</td>
-                        <td>{{last_bowlerDetails.maiden_over}}</td>
-                        <td>{{last_bowlerDetails.runs_given}}</td>
-                        <td>{{last_bowlerDetails.wickets_taken}}</td>
-                        <td>{{last_bowlerDetails.economy}}</td>
+                        <td>{{bowlingTeamDetails.last_bowlerDetails.name}}</td>
+                        <td>{{bowlingTeamDetails.last_bowlerDetails.overs_bowl_display}}</td>
+                        <td>{{bowlingTeamDetails.last_bowlerDetails.maiden_over}}</td>
+                        <td>{{bowlingTeamDetails.last_bowlerDetails.runs_given}}</td>
+                        <td>{{bowlingTeamDetails.last_bowlerDetails.wickets_taken}}</td>
+                        <td>{{bowlingTeamDetails.last_bowlerDetails.economy}}</td>
                       </tr>
                   </ng-container>
                 </tbody>
@@ -89,7 +89,7 @@
 <div id="events" class="container center">
     <div class="row">
         <div class="col-sm">
-            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;">
+            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" [ngClass]="([0,5,4].includes(matchStatus))?'ctrl-disable':''">
                 <div class="col-3 py-1 border btn btn-primary" data-event="0" (click)="eventClick('0')">0</div>
                 <div class="col-3 py-1 border btn btn-primary" data-event="1" (click)="eventClick('1')">1</div>
                 <div class="col-3 py-1 border btn btn-primary" data-event="2" (click)="eventClick('2')">2</div>
@@ -108,53 +108,72 @@
                 <div class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
                 <div class="offset-4 col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
 
-                <div class="col-4 py-1 border btn btn-secondary" data-event="Re" (click)="eventClick('Re')">Re-Ball</div>
+                <div class="col-4 py-1 border btn btn-secondary" data-event="Br" (click)="breakClick()">Break</div>
                 <div class="col-4 py-1 border btn btn-dark" data-event="Un" (click)="eventClick('Un')">Undo</div>
                 <div class="col-4 py-1 border btn btn-success" data-event="Ro" (click)="eventClick('Ro')">Rotate</div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="alert alert-secondary text-center" id="ballHistory">
         </div>
     </div>
-    
-    <div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="question">{{modalmessage}}</h5>
-            </div>
-            <div class="modal-body" id="selections">
-                  <app-setplayer (sendPlayer)="readPlayer($event)" [player]="playersSet"></app-setplayer> 
-            </div>
-            <div class="text-center py-3">
-            <button type="button" id="confirm" class="btn btn-success">Confirm</button>
-            </div>
+</div>
+
+<div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="question">{{modalmessage}}</h5>
         </div>
+        <div class="modal-body" id="selections1">
+              <app-setplayer [player]="playersSet"></app-setplayer> 
+        </div>
+        <div class="text-center py-1">
+        <button type="button" id="confirm" class="btn btn-success">Confirm</button>
         </div>
     </div>
+    </div>
+</div>
 
-    <div class="modal fade" id="runmademodal" bsModal #runmademodal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+<div class="modal fade" id="runmademodal" bsModal #runmademodal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="question1">{{runmodalmessage}}</h5>
+        </div>
+        <div class="modal-body" id="selections1">
+            <div class="list-group">
+                <ng-container *ngFor="let run of extraRun">
+                    <input type="radio" name="optionsrun" id="{{run}}" value="{{run}}">
+                    <label class="list-group-item" for="{{run}}">{{run}}</label>
+                </ng-container>
+            </div>
+        </div>
+        <div class="text-center py-1">
+        <button type="button" id="rumconfirm" class="btn btn-success" (click)="onRunConfirm()">Confirm</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade" id="inningStatus" bsModal #breakModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="question1">{{runmodalmessage}}</h5>
+            <h5 class="modal-title" id="question2">Break</h5>
             </div>
-            <div class="modal-body" id="selections">
-                <div class="list-group">
-                    <ng-container *ngFor="let run of extraRun">
-                        <input type="radio" name="optionsrun" id="{{run}}" value="{{run}}">
-                        <label class="list-group-item" for="{{run}}">{{run}}</label>
-                    </ng-container>
+            <div class="modal-body" id="selections3">
+                <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;">
+                    <div class="col-4 py-1 border btn btn-primary" (click)="breakEventClick(5)">Unwanted Break</div>
+                    <div class="col-4 py-1 border btn btn-primary" (click)="breakEventClick(6)">Restart</div>
+                    <div class="col-4 py-1 border btn btn-primary" (click)="breakEventClick(3)">Start 2nd Ings</div>
                 </div>
             </div>
-            <div class="text-center py-3">
-            <button type="button" id="rumconfirm" class="btn btn-success" (click)="onRunConfirm()">Confirm</button>
+            <div class="text-center py-1">
+                <button type="button" id="inningStatusconfirm" class="btn btn-success" (click)="breakEventConfirm()" >Confirm</button>
             </div>
         </div>
-        </div>
-    </div>
-
+     </div>
 </div>
+

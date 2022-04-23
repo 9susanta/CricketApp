@@ -36,13 +36,13 @@ namespace CricketApp.Controllers
             return Ok();
         }
         [HttpGet("get-matchdetails")]
-        public async Task<ActionResult> GetMatchDetails(int? matchDetailsId)
+        public ActionResult GetMatchDetails(int? matchId)
         {
-            if (matchDetailsId != null)
+            if (matchId != null)
             {
                 try
                 {
-                   var item = await _unitOfWork.StartMatchRepository.getMatchTeamDetails(matchDetailsId.Value);
+                   var item = _unitOfWork.StartMatchRepository.getMatchTeamDetails(matchId.Value);
                    return Ok(JsonConvert.SerializeObject(item));
                 }
                 catch (Exception ex)

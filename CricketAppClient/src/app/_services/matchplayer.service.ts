@@ -20,7 +20,12 @@ export class MatchplayerService {
   getMatch(modal:any)
   {
     let queryParams = new HttpParams();
-    queryParams = queryParams.append("matchDetailsId",modal);
+    queryParams = queryParams.append("matchId",modal);
     return this.http.get<matchplayer>(this.baseUrl+'StartMatch/get-matchdetails',{params:queryParams});
+  }
+  updateMatchScore(model:any){
+    return this.http.post(this.baseUrl+'MatchDetails/update-match-details',model).pipe(map((res:any)=>{
+      return res;
+    }));
   }
 }

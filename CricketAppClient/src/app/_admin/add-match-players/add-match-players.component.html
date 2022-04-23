@@ -30,7 +30,7 @@
     <div class="text-center p-2 my-2" [ngClass]="isdisabled==true?'ctrl-disable':''">
         <button class="btn me-4" [ngClass]="tossWin==teamAName?'btn-dark':'btn-secondary'" (click)="toss(teamAName)">🏏 {{teamAName}}</button>
         <button class="btn btn-success" disabled>← Toss →</button>
-        <button class="btn ms-4" [ngClass]="tossWin==teamBName?'btn-dark':'btn-secondary'" (click)="toss(teamAName)">🏏 {{teamBName}}</button>
+        <button class="btn ms-4" [ngClass]="tossWin==teamBName?'btn-dark':'btn-secondary'" (click)="toss(teamBName)">🏏 {{teamBName}}</button>
     </div>
     <div class="text-center mt-4 p-2" [ngClass]="isdisabled==false?'ctrl-disable':''">
         <button class="btn btn-info" (click)="startMatch()"> ➡️ Start Match</button>
