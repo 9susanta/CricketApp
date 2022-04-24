@@ -36,6 +36,9 @@ export class ScoreboardComponent implements OnInit {
   
   lastballScore:number=0;
   lastballEvent:string="";
+  
+  lastEvents:string[]=[];
+    
   //End-Match Details Data
   
   //Start-Modal Data
@@ -46,9 +49,12 @@ export class ScoreboardComponent implements OnInit {
 
   runmodalmessage:string="";
 
+  resultModalmessage:string="";
+
   @ViewChild('parentModal', { static: false }) modal?: ModalDirective;
   @ViewChild('runmademodal', { static: false }) runmademodal?: ModalDirective;
   @ViewChild('breakModal', { static: false }) breakModal?: ModalDirective;
+  @ViewChild('resultModal', { static: false }) resultModal?: ModalDirective;
   //End-Modal Data
 
   constructor(private route: ActivatedRoute,private matchplayer:MatchplayerService,private elRef:ElementRef) { }
@@ -68,11 +74,30 @@ export class ScoreboardComponent implements OnInit {
       if(this.match_player.currentmatchDetails!=null)
       {
          this.currentmatchDetails=JSON.parse(this.match_player.currentmatchDetails!);
-         this.battingTeamDetails=this.currentmatchDetails.battingTeamDetails;
-         this.bowlingTeamDetails=this.currentmatchDetails.bowlingTeamDetails;
-         this.lastballScore=this.currentmatchDetails.lastballScore;
-         this.lastballEvent=this.currentmatchDetails.lastballEvent;
          this.matchStatus=this.currentmatchDetails.matchStatus;
+         if([2,5].includes(this.matchStatus))
+         {
+           if(this.matchStatus==2)
+           {
+            this.battingTeamDetails=this.currentmatchDetails.battingTeamDetails;
+            this.bowlingTeamDetails=this.currentmatchDetails.bowlingTeamDetails;
+           }
+           this.showBreakModal();
+         }
+         if(this.matchStatus!=2)
+         {
+            this.battingTeamDetails=this.currentmatchDetails.battingTeamDetails;
+            this.bowlingTeamDetails=this.currentmatchDetails.bowlingTeamDetails;
+            this.lastballScore=this.currentmatchDetails.lastballScore;
+            this.lastballEvent=this.currentmatchDetails.lastballEvent;
+            this.lastEvents=this.currentmatchDetails.lastEvents;
+            this.outcome=this.currentmatchDetails.outcome;
+         }
+         if(this.matchStatus==4)
+         {
+           this.displayResult();
+         }
+         
       }
       else
       {
@@ -114,7 +139,6 @@ export class ScoreboardComponent implements OnInit {
   {
     this.modal?.hide();
   }
-
   async showBreakModal()
   {
     setTimeout(()=>{
@@ -125,7 +149,6 @@ export class ScoreboardComponent implements OnInit {
   {
     this.breakModal?.hide();
   }
-
   async chooseStriker()
   {
     let currentBattingTeam=this.battingTeamDetails.players.filter(x=>x.out==false&&x.name!=this.battingTeamDetails.strikerDetails.name&&x.name!=this.battingTeamDetails.nonStrikerDetails.name);
@@ -248,9 +271,18 @@ export class ScoreboardComponent implements OnInit {
       this.ballBowled(event, runs);
 
       // Show additional runs made in history and add runs to bowler, if any
-      //if (runs) {
-        //event = event+runs;
-      //}
+      if (runs>=0) {
+        let msg:any;
+        if(runs)
+        {
+         msg=event;
+        }
+        else{
+          msg=`${event}+${runs}`
+        }
+        this.updateLastEvents(msg);
+      }
+
       // If it is not one-man batting
       if (this.battingTeamDetails.nonStrikerDetails.name!="") {
         this.modalmessage="Who got Out ?";
@@ -294,6 +326,7 @@ export class ScoreboardComponent implements OnInit {
         this.rotatePlayer();
       }
       this.lastballScore=+event;
+      this.updateLastEvents(`${event}`);
     }
     else if (event != "Re") {
       // Additional runs made in that ball
@@ -321,8 +354,11 @@ export class ScoreboardComponent implements OnInit {
       }
       this.battingTeamDetails.total += 1 + runs;
       this.lastballScore=runs;
+      this.updateLastEvents(`${event}+${runs}`);
     }
+
     this.lastballEvent=event;
+    
     this.battingTeamDetails.overInTxt=`${Math.floor(this.battingTeamDetails.overs / 6)}.${this.battingTeamDetails.overs % 6}`
     this.battingTeamDetails.runRate= (this.battingTeamDetails.total/((this.battingTeamDetails.overs==0?1:this.battingTeamDetails.overs)*0.1666666)).toFixed(2);
     
@@ -362,16 +398,16 @@ export class ScoreboardComponent implements OnInit {
           }// If it was first batting team
           else if (this.battingTeamDetails.battingOrder == 1) 
           {
-                // End of batting team's innings
-                this.outcome = [null, null, "InningsBreak"];
-                this.matchStatus=2;
-                // If it was the chasing team, find match outcome
+              // End of batting team's innings
+              this.outcome = [null, null, "InningsBreak"];
+              this.matchStatus=2;
+              // If it was the chasing team, find match outcome
           } 
           else 
           {
              if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
               {
-                  // Draw
+                // Draw
                 this.outcome = [null, null, "Draw"];
                 this.matchStatus=4;
               } 
@@ -447,7 +483,10 @@ export class ScoreboardComponent implements OnInit {
      this.updateScore();
      if(this.outcome[2]!=null)
      {
-         this.showBreakModal();
+        if(this.matchStatus==4)
+        {
+          this.displayResult();
+        }
      }
   }
   // Bowling [extraRuns in case of Wd,N,W]
@@ -538,6 +577,22 @@ export class ScoreboardComponent implements OnInit {
     this.runmademodal?.show();
     return await this.getConfirmation('#rumconfirm','input[name="optionsrun"]:checked',errmsg);
   }
+  displayResult()
+  {
+     if(this.outcome[2]=="Draw")
+     {
+        this.resultModalmessage="The match is draw";
+     }
+     else if(this.outcome[2]=="Runs")
+     {
+       this.resultModalmessage=`${this.bowlingTeamDetails.name}`+' Won by '+`${this.outcome[1]}`+' Run';
+     }  
+     else if(this.outcome[2]=="Wickets")
+     {
+        this.resultModalmessage=`${this.battingTeamDetails.name}`+' Won by '+`${this.outcome[1]}`+' Wickets';
+     }    
+     this.resultModal?.show();
+  }
   onRunConfirm()
   {
     this.runmademodal?.hide();    
@@ -573,6 +628,8 @@ export class ScoreboardComponent implements OnInit {
     updateObj.lastballScore=this.lastballScore;
     updateObj.lastballEvent=this.lastballEvent;
     updateObj.matchStatus=this.matchStatus;
+    updateObj.lastEvents=this.lastEvents;
+    updateObj.outcome=this.outcome;
 
     let obj={matchId:this._match_id,currentmatchDetails:JSON.stringify(updateObj)};
 
@@ -584,16 +641,28 @@ export class ScoreboardComponent implements OnInit {
   {
     this.showBreakModal();
   }
-  breakEventConfirm()
+  async breakEventConfirm()
   {
     if(this.bufferMatchStatus!=0)
     {
       this.matchStatus=this.bufferMatchStatus;
-      this.hidebreakModal();
+      if(this.matchStatus==3)
+      {    
+           this.newInningsStart();
+           this.hidebreakModal();
+           await this.chooseStriker();
+           await this.chooseNonStriker();
+           await this.chooseBowler();
+      }
+      else
+      {
+         this.hidebreakModal();
+      }
     }
     else{
       alert("select a option !")
     }
+    this.bufferMatchStatus=0;
   }
   breakEventClick(event:any)
   {
@@ -609,5 +678,17 @@ export class ScoreboardComponent implements OnInit {
     {
       this.bufferMatchStatus=event;
     }
+  }
+  newInningsStart()
+  {
+    [this.battingTeamDetails,this.bowlingTeamDetails]=[this.bowlingTeamDetails,this.battingTeamDetails];
+  }
+  updateLastEvents(event:string)
+  {
+    if(this.lastEvents.length=13)
+    {
+      this.lastEvents=this.lastEvents.slice(1)
+    }
+    this.lastEvents.push(event);
   }
 }

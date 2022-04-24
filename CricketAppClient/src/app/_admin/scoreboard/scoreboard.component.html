@@ -3,6 +3,9 @@
 </div>
 <div class="row">
     <div class="col mt-2 ms-1">
+        <ng-container *ngIf="battingTeamDetails.battingOrder == 2">
+            <p><b class="text-secondary">{{bowlingTeamDetails.name}}</b> - {{bowlingTeamDetails.total}}/{{bowlingTeamDetails.wickets}}({{bowlingTeamDetails.overInTxt}}/{{bowlingTeamDetails.totOver}})</p>
+        </ng-container>
         <p><b>{{battingTeamDetails.name}}</b> - {{battingTeamDetails.total}}/{{battingTeamDetails.wickets}}({{battingTeamDetails.overInTxt}}/{{totover}}) (RR-{{battingTeamDetails.runRate}})</p>
     </div>
 </div>
@@ -14,6 +17,7 @@
                 <thead class="table-light">
                     <tr>
                         <th scope="col">Batter</th>
+                        <th scope="col"></th>
                         <td scope="col">R</td>
                         <td scope="col">B</td>
                         <td scope="col">4s</td>
@@ -25,6 +29,7 @@
                     <ng-container *ngIf="battingTeamDetails.strikerDetails.name!=''">
                         <tr>
                             <td>{{battingTeamDetails.strikerDetails.name==""?"":battingTeamDetails.strikerDetails.name+"🏏"}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.out=="true"?"Out":"Not Out"}}</td>
                             <td>{{battingTeamDetails.strikerDetails.runs_score}}</td>
                             <td>{{battingTeamDetails.strikerDetails.balls_faced}}</td>
                             <td>{{battingTeamDetails.strikerDetails.fours}}</td>
@@ -35,6 +40,7 @@
                     <ng-container *ngIf="battingTeamDetails.nonStrikerDetails.name!=''">
                     <tr>
                         <td>{{battingTeamDetails.nonStrikerDetails.name}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.out=="true"?"Out":"Not Out"}}</td>
                         <td>{{battingTeamDetails.nonStrikerDetails.runs_score}}</td>
                         <td>{{battingTeamDetails.nonStrikerDetails.balls_faced}}</td>
                         <td>{{battingTeamDetails.nonStrikerDetails.fours}}</td>
@@ -89,7 +95,7 @@
 <div id="events" class="container center">
     <div class="row">
         <div class="col-sm">
-            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" [ngClass]="([0,5,4].includes(matchStatus))?'ctrl-disable':''">
+            <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" [ngClass]="([0,2,4,5].includes(matchStatus))?'ctrl-disable':''">
                 <div class="col-3 py-1 border btn btn-primary" data-event="0" (click)="eventClick('0')">0</div>
                 <div class="col-3 py-1 border btn btn-primary" data-event="1" (click)="eventClick('1')">1</div>
                 <div class="col-3 py-1 border btn btn-primary" data-event="2" (click)="eventClick('2')">2</div>
@@ -116,6 +122,7 @@
     </div>
     <div class="row">
         <div class="alert alert-secondary text-center" id="ballHistory">
+            <span class="badge bg-secondary ms-1" *ngFor="let item of lastEvents">{{item}}</span>
         </div>
     </div>
 </div>
@@ -161,13 +168,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="question2">Break</h5>
+            <h6 class="modal-title" id="question2">Break</h6>
             </div>
             <div class="modal-body" id="selections3">
                 <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;">
-                    <div class="col-4 py-1 border btn btn-primary" (click)="breakEventClick(5)">Unwanted Break</div>
-                    <div class="col-4 py-1 border btn btn-primary" (click)="breakEventClick(6)">Restart</div>
-                    <div class="col-4 py-1 border btn btn-primary" (click)="breakEventClick(3)">Start 2nd Ings</div>
+                    <div class="col">
+                        <button class="btn btn-secondary" [ngClass]="bufferMatchStatus==5?'btn-dark':'btn-secondary'" (click)="breakEventClick(5)">Unwanted Break</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-secondary" [ngClass]="bufferMatchStatus==6?'btn-dark':'btn-secondary'" (click)="breakEventClick(6)">Restart Break</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-secondary" [ngClass]="bufferMatchStatus==3?'btn-dark':'btn-secondary'" (click)="breakEventClick(3)">Start 2nd Ings</button>
+                    </div>
                 </div>
             </div>
             <div class="text-center py-1">
@@ -177,3 +190,21 @@
      </div>
 </div>
 
+<div class="modal fade" id="result" bsModal #resultModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+            <h6 class="modal-title" id="question4">Result</h6>
+            </div>
+            <div class="modal-body" id="selections4">
+                <div class="row text-center" style="font-family: monospace;">
+                    <div class="col">
+                        <div class="alert alert-info" role="alert">
+                            {{resultModalmessage}}
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</div>

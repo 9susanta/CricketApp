@@ -34,3 +34,9 @@
 .ctrl-disable {
     pointer-events: none;
 }
+p{
+    margin-bottom: 0px;
+}
+.table td, .table th,div {
+    font-size: 12px;
+}
