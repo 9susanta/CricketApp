@@ -19,4 +19,6 @@ export class matchplayerdetails
     isStriker:boolean=false;
     isNonStriker:boolean=false;
     isCurrentBowler:boolean=false;
+    battingNo:number=0;
+    bowlingNo:number=0;
 }

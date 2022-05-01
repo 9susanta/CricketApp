@@ -1,8 +1,232 @@
 <div class="mt-3">
     <tabset>
       <tab heading="Scorecard" id="tabScorecard">
-          <div class="mt-3">
-            <div id="scoreboard">
+          <div class="mt-3 row">
+           <div class="col-9"><span class="text-danger">{{matchmsg}}</span></div>
+          </div>
+          <ng-container *ngIf="battingTeamDetails.battingOrder==2">
+            <div class="mt-3 row">
+              <div id="scoreboard" class="col-9">
+                    <div class="row">
+                    <div class="col">
+                      <div class="bg-secondary p-2 clearfix">
+                        <span class="text-light float-start">{{this.battingTeamDetails.name +' Innings'}}</span>
+                        <span class="text-light float-end">{{this.battingTeamDetails.total +'-'+this.battingTeamDetails.wickets+' ('+this.battingTeamDetails.overInTxt+')'}}</span>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                       <div class="col">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Batter</th>
+                                    <td scope="col"></td>
+                                    <td scope="col">R</td>
+                                    <td scope="col">B</td>
+                                    <td scope="col">4s</td>
+                                    <td scope="col">6s</td>
+                                    <td scope="col">SR</td>
+                                  </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of didBatSecArr">
+                                  <td>{{item.name}}</td>
+                                  <td>{{item.out==true?"out":"not out"}}</td>
+                                  <td>{{item.runs_score}}</td>
+                                  <td>{{item.balls_faced}}</td>
+                                  <td>{{item.fours}}</td>
+                                  <td>{{item.sixes}}</td>
+                                  <td>{{item.strike_rate}}</td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2">Extras</td>
+                                  <td colspan="5">{{this.battingTeamDetails.extra}}</td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2">Total</td>
+                                  <td colspan="5">{{this.battingTeamDetails.total+'('+this.battingTeamDetails.wickets+ ' Wkts, '+this.battingTeamDetails.overInTxt+' Ov)'}}</td>
+                                </tr>
+                                <tr>
+                                  <td>Yet to Bat</td>
+                                  <td colspan="6">
+                                    <ul>
+                                      <ng-container *ngFor="let item of didnotBatSecArr">
+                                        <li>{{item.name}}</li>
+                                      </ng-container>
+                                    </ul>
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col">
+                          <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Fall of Wickets</th>
+                                  </tr>
+                            </thead>
+                            </table>
+                        </div>
+                     </div>
+                     <div class="row">
+                         <div class="col">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                             <tr>
+                                <th scope="col">Bowler</th>
+                                <td scope="col">O</td>
+                                <td scope="col">M</td>
+                                <td scope="col">R</td>
+                                <td scope="col">W</td>
+                                <td scope="col">Eco.</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of bowlSecData">
+                                <td>{{item.name}}</td>
+                                <td>{{item.overs_bowl_display}}</td>
+                                <td>{{item.maiden_over}}</td>
+                                <td>{{item.runs_given}}</td>
+                                <td>{{item.wickets_taken}}</td>
+                                <td>{{item.economy}}</td>
+                              </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                  <th scope="col">Powerplays</th>
+                                  <th scope="col">Overs</th>
+                                  <th scope="col">Runs</th>
+                                </tr>
+                             </thead>
+                          </table>
+                      </div>
+                     </div>
+                  </div>
+              </div>           
+            </div>
+            
+            <div class="mt-3 row">
+              <div id="scoreboard" class="col-9">
+                    <div class="row">
+                    <div class="col">
+                      <div class="bg-secondary p-2 clearfix">
+                        <span class="text-light float-start">{{this.bowlingTeamDetails.name +' Innings'}}</span>
+                        <span class="text-light float-end">{{this.bowlingTeamDetails.total +'-'+this.bowlingTeamDetails.wickets+' ('+this.bowlingTeamDetails.overInTxt+')'}}</span>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                       <div class="col">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Batter</th>
+                                    <td scope="col"></td>
+                                    <td scope="col">R</td>
+                                    <td scope="col">B</td>
+                                    <td scope="col">4s</td>
+                                    <td scope="col">6s</td>
+                                    <td scope="col">SR</td>
+                                  </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of didBatFristArr">
+                                  <td>{{item.name}}</td>
+                                  <td>{{item.out==true?"out":"not out"}}</td>
+                                  <td>{{item.runs_score}}</td>
+                                  <td>{{item.balls_faced}}</td>
+                                  <td>{{item.fours}}</td>
+                                  <td>{{item.sixes}}</td>
+                                  <td>{{item.strike_rate}}</td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2">Extras</td>
+                                  <td colspan="5">{{this.bowlingTeamDetails.extra}}</td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2">Total</td>
+                                  <td colspan="5">{{this.bowlingTeamDetails.total+'('+this.bowlingTeamDetails.wickets+ ' Wkts, '+this.bowlingTeamDetails.overInTxt+' Ov)'}}</td>
+                                </tr>
+                                <tr>
+                                  <td>Yet to Bat</td>
+                                  <td colspan="6">
+                                    <ul>
+                                      <ng-container *ngFor="let item of didnotBatFristArr">
+                                        <li>{{item.name}}</li>
+                                      </ng-container>
+                                    </ul>
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col">
+                          <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Fall of Wickets</th>
+                                  </tr>
+                            </thead>
+                            </table>
+                        </div>
+                     </div>
+                     <div class="row">
+                         <div class="col">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                             <tr>
+                                <th scope="col">Bowler</th>
+                                <td scope="col">O</td>
+                                <td scope="col">M</td>
+                                <td scope="col">R</td>
+                                <td scope="col">W</td>
+                                <td scope="col">Eco.</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of bowlFirstData">
+                                <td>{{item.name}}</td>
+                                <td>{{item.overs_bowl_display}}</td>
+                                <td>{{item.maiden_over}}</td>
+                                <td>{{item.runs_given}}</td>
+                                <td>{{item.wickets_taken}}</td>
+                                <td>{{item.economy}}</td>
+                              </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                  <th scope="col">Powerplays</th>
+                                  <th scope="col">Overs</th>
+                                  <th scope="col">Runs</th>
+                                </tr>
+                             </thead>
+                          </table>
+                      </div>
+                     </div>
+                  </div>
+              </div>           
+            </div>
+
+          </ng-container>
+          <ng-container *ngIf="battingTeamDetails.battingOrder==1">
+          <div class="mt-3 row">
+            <div id="scoreboard" class="col-9">
                   <div class="row">
                   <div class="col">
                     <div class="bg-secondary p-2 clearfix">
@@ -13,11 +237,11 @@
                   </div>
                   <div class="row">
                      <div class="col">
-                      <table class="table table-borderless">
+                      <table class="table table-sm">
                           <thead class="table-light">
                               <tr>
                                   <th scope="col">Batter</th>
-                                  <th scope="col"></th>
+                                  <td scope="col"></td>
                                   <td scope="col">R</td>
                                   <td scope="col">B</td>
                                   <td scope="col">4s</td>
@@ -26,36 +250,51 @@
                                 </tr>
                           </thead>
                           <tbody>
-                              <ng-container *ngIf="battingTeamDetails.strikerDetails.name!=''">
-                                  <tr>
-                                      <td>{{battingTeamDetails.strikerDetails.name==""?"":battingTeamDetails.strikerDetails.name+"🏏"}}</td>
-                                      <td>{{battingTeamDetails.strikerDetails.out=="true"?"Out":"Not Out"}}</td>
-                                      <td>{{battingTeamDetails.strikerDetails.runs_score}}</td>
-                                      <td>{{battingTeamDetails.strikerDetails.balls_faced}}</td>
-                                      <td>{{battingTeamDetails.strikerDetails.fours}}</td>
-                                      <td>{{battingTeamDetails.strikerDetails.sixes}}</td>
-                                      <td>{{battingTeamDetails.strikerDetails.strike_rate}}</td>
-                                  </tr>
-                              </ng-container>
-                              <ng-container *ngIf="battingTeamDetails.nonStrikerDetails.name!=''">
-                              <tr>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.name}}</td>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.out=="true"?"Out":"Not Out"}}</td>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.runs_score}}</td>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.balls_faced}}</td>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.fours}}</td>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.sixes}}</td>
-                                  <td>{{battingTeamDetails.nonStrikerDetails.strike_rate}}</td>
+                              <tr *ngFor="let item of didBatFristArr">
+                                <td>{{item.name}}</td>
+                                <td>{{item.out==true?"out":"not out"}}</td>
+                                <td>{{item.runs_score}}</td>
+                                <td>{{item.balls_faced}}</td>
+                                <td>{{item.fours}}</td>
+                                <td>{{item.sixes}}</td>
+                                <td>{{item.strike_rate}}</td>
                               </tr>
-                          </ng-container>
+                              <tr>
+                                <td colspan="2">Extras</td>
+                                <td colspan="5">{{this.battingTeamDetails.extra}}</td>
+                              </tr>
+                              <tr>
+                                <td colspan="2">Total</td>
+                                <td colspan="5">{{this.battingTeamDetails.total+'('+this.battingTeamDetails.wickets+ ' Wkts, '+this.battingTeamDetails.overInTxt+' Ov)'}}</td>
+                              </tr>
+                              <tr>
+                                <td>Yet to Bat</td>
+                                <td colspan="6">
+                                  <ul>
+                                    <ng-container *ngFor="let item of didnotBatFristArr">
+                                      <li>{{item.name}}</li>
+                                    </ng-container>
+                                  </ul>
+                                </td>
+                              </tr>
                           </tbody>
                       </table>
                       </div>
                    </div>
-              
                    <div class="row">
-                  <div class="col">
-                      <table class="table table-borderless">
+                      <div class="col">
+                        <table class="table table-sm">
+                          <thead class="table-light">
+                              <tr>
+                                  <th scope="col">Fall of Wickets</th>
+                                </tr>
+                          </thead>
+                          </table>
+                      </div>
+                   </div>
+                   <div class="row">
+                       <div class="col">
+                      <table class="table table-sm">
                           <thead class="table-light">
                            <tr>
                               <th scope="col">Bowler</th>
@@ -67,32 +306,34 @@
                             </tr>
                           </thead>
                           <tbody>
-                             <ng-container *ngIf="bowlingTeamDetails.bowlerDetails.name!=''">
-                               <tr>
-                                  <td>{{bowlingTeamDetails.bowlerDetails.name==""?"":bowlingTeamDetails.bowlerDetails.name+" 🥎"}}</td>
-                                  <td>{{bowlingTeamDetails.bowlerDetails.overs_bowl_display}}</td>
-                                  <td>{{bowlingTeamDetails.bowlerDetails.maiden_over}}</td>
-                                  <td>{{bowlingTeamDetails.bowlerDetails.runs_given}}</td>
-                                  <td>{{bowlingTeamDetails.bowlerDetails.wickets_taken}}</td>
-                                  <td>{{bowlingTeamDetails.bowlerDetails.economy}}</td>
-                               </tr>
-                              </ng-container>
-                             <ng-container *ngIf="bowlingTeamDetails.last_bowlerDetails.overs_bowl>0">
-                              <tr>
-                                  <td>{{bowlingTeamDetails.last_bowlerDetails.name}}</td>
-                                  <td>{{bowlingTeamDetails.last_bowlerDetails.overs_bowl_display}}</td>
-                                  <td>{{bowlingTeamDetails.last_bowlerDetails.maiden_over}}</td>
-                                  <td>{{bowlingTeamDetails.last_bowlerDetails.runs_given}}</td>
-                                  <td>{{bowlingTeamDetails.last_bowlerDetails.wickets_taken}}</td>
-                                  <td>{{bowlingTeamDetails.last_bowlerDetails.economy}}</td>
-                                </tr>
-                            </ng-container>
+                            <tr *ngFor="let item of bowlFirstData">
+                              <td>{{item.name}}</td>
+                              <td>{{item.overs_bowl_display}}</td>
+                              <td>{{item.maiden_over}}</td>
+                              <td>{{item.runs_given}}</td>
+                              <td>{{item.wickets_taken}}</td>
+                              <td>{{item.economy}}</td>
+                            </tr>
                           </tbody>
                       </table>
                   </div>
+                  <div class="row">
+                    <div class="col">
+                      <table class="table table-sm">
+                          <thead class="table-light">
+                              <tr>
+                                <th scope="col">Powerplays</th>
+                                <th scope="col">Overs</th>
+                                <th scope="col">Runs</th>
+                              </tr>
+                           </thead>
+                        </table>
+                    </div>
                    </div>
-             </div>           
+                </div>
+            </div>           
           </div>
+        </ng-container>
       </tab>
       <tab heading="Commentary" id="tabCommentary"></tab>
     </tabset>

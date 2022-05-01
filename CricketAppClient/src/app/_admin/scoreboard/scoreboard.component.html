@@ -29,7 +29,7 @@
                     <ng-container *ngIf="battingTeamDetails.strikerDetails.name!=''">
                         <tr>
                             <td>{{battingTeamDetails.strikerDetails.name==""?"":battingTeamDetails.strikerDetails.name+"🏏"}}</td>
-                            <td>{{battingTeamDetails.strikerDetails.out=="true"?"Out":"Not Out"}}</td>
+                            <td>{{battingTeamDetails.strikerDetails.out=="true"?"out":"not out"}}</td>
                             <td>{{battingTeamDetails.strikerDetails.runs_score}}</td>
                             <td>{{battingTeamDetails.strikerDetails.balls_faced}}</td>
                             <td>{{battingTeamDetails.strikerDetails.fours}}</td>
@@ -40,7 +40,7 @@
                     <ng-container *ngIf="battingTeamDetails.nonStrikerDetails.name!=''">
                     <tr>
                         <td>{{battingTeamDetails.nonStrikerDetails.name}}</td>
-                        <td>{{battingTeamDetails.nonStrikerDetails.out=="true"?"Out":"Not Out"}}</td>
+                        <td>{{battingTeamDetails.nonStrikerDetails.out=="true"?"out":"not out"}}</td>
                         <td>{{battingTeamDetails.nonStrikerDetails.runs_score}}</td>
                         <td>{{battingTeamDetails.nonStrikerDetails.balls_faced}}</td>
                         <td>{{battingTeamDetails.nonStrikerDetails.fours}}</td>

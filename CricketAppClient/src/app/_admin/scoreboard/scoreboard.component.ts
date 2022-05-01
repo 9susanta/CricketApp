@@ -169,7 +169,6 @@ export class ScoreboardComponent implements OnInit {
       this.playersSet=[];
       this.playersSet=currentBattingTeam;
       let playername= await this.showModal("Select a player !");
-
        if(playername!="")
        {
          let player= this.battingTeamDetails.players.find(item => item.name === playername);
@@ -177,6 +176,14 @@ export class ScoreboardComponent implements OnInit {
          {
            player.isStriker = true;
            this.battingTeamDetails.strikerDetails=player;
+           if(this.battingTeamDetails.wickets==0)
+           {
+             this.battingTeamDetails.strikerDetails.battingNo=1;
+           }
+           else
+           {
+            this.battingTeamDetails.strikerDetails.battingNo=(this.battingTeamDetails.wickets+2);
+           }
            this.hideModal();
          }
        }
@@ -189,6 +196,14 @@ export class ScoreboardComponent implements OnInit {
       {
         player.isStriker = true;
         this.battingTeamDetails.strikerDetails=player;
+        if(this.battingTeamDetails.wickets==0)
+           {
+             this.battingTeamDetails.strikerDetails.battingNo=1;
+           }
+           else
+           {
+            this.battingTeamDetails.strikerDetails.battingNo=(this.battingTeamDetails.wickets+2);
+           }
       }
     }
   }
@@ -212,6 +227,14 @@ export class ScoreboardComponent implements OnInit {
           this.hideModal();
           player.isNonStriker = true;
           this.battingTeamDetails.nonStrikerDetails=player;
+          if(this.battingTeamDetails.wickets==0)
+          {
+            this.battingTeamDetails.nonStrikerDetails.battingNo=1;
+          }
+          else
+          {
+            this.battingTeamDetails.nonStrikerDetails.battingNo=(this.battingTeamDetails.wickets+2);
+          }
         }
        }
     }
@@ -223,6 +246,14 @@ export class ScoreboardComponent implements OnInit {
       { 
         player.isNonStriker = true;
         this.battingTeamDetails.nonStrikerDetails=player;
+        if(this.battingTeamDetails.wickets==0)
+          {
+            this.battingTeamDetails.nonStrikerDetails.battingNo=2;
+          }
+          else
+          {
+            this.battingTeamDetails.nonStrikerDetails.battingNo=(this.battingTeamDetails.wickets+2);
+          }
       }
     }
   }
@@ -252,12 +283,12 @@ export class ScoreboardComponent implements OnInit {
         let bolwerchoose=currentBowlingTeam[0];
         let player = this.bowlingTeamDetails.players.find(item => item.name === bolwerchoose.name);
         if(player)
-         {
-         player.isCurrentBowler = true;
-         this.bowlingTeamDetails.bowlerDetails=player;
-         }
+        {
+            player.isCurrentBowler = true;
+            this.bowlingTeamDetails.bowlerDetails=player;
+        }
      }
-    
+     this.bowlingTeamDetails.bowlerDetails.bowlingNo=(this.bowlingTeamDetails.bowlerDetails.bowlingNo+1)
   }
   async eventClick(event:any)
   {
@@ -372,6 +403,7 @@ export class ScoreboardComponent implements OnInit {
     this.battingTeamDetails.runRate= (this.battingTeamDetails.total/((this.battingTeamDetails.overs==0?1:this.battingTeamDetails.overs)*0.1666666)).toFixed(2);
     
     console.log(this.bowlingTeamDetails);
+    console.log(this.battingTeamDetails);
 
     if (this.battingTeamDetails.overs > 0 &&(this.battingTeamDetails.overs % 6 == 0)) 
       {
@@ -534,10 +566,10 @@ export class ScoreboardComponent implements OnInit {
     }
      this.bowlingTeamDetails.bowlerDetails.economy=(this.bowlingTeamDetails.bowlerDetails.runs_given/(this.bowlingTeamDetails.bowlerDetails.overs_bowl*0.1666666)).toFixed(2);
      this.bowlingTeamDetails.bowlerDetails.overs_bowl_display=`${Math.floor(this.bowlingTeamDetails.bowlerDetails.overs_bowl / 6)}.${this.bowlingTeamDetails.bowlerDetails.overs_bowl % 6}`
-     let currentBowler=this.bowlingTeamDetails.players.find(x=>x.name==this.bowlingTeamDetails.bowlerDetails.name);
-     if(currentBowler)
+     let currentBowlerIndex=this.bowlingTeamDetails.players.findIndex(x=>x.name==this.bowlingTeamDetails.bowlerDetails.name);
+     if(currentBowlerIndex>-1)
      {
-      currentBowler=this.bowlingTeamDetails.bowlerDetails;
+      this.bowlingTeamDetails.players[currentBowlerIndex]=this.bowlingTeamDetails.bowlerDetails;
      }
 
   }
@@ -547,8 +579,10 @@ export class ScoreboardComponent implements OnInit {
     if(isStrikeBatter==false)
     {
       if (event == "W") {
+        debugger;
        // Wicket
        this.battingTeamDetails.nonStrikerDetails.out = true;
+       this.battingTeamDetails.nonStrikerDetails.isNonStriker=false;
       }
     }
     else 
@@ -557,8 +591,10 @@ export class ScoreboardComponent implements OnInit {
           this.battingTeamDetails.strikerDetails.balls_faced += 1;
       }
       if (event == "W") {
+        debugger;
         // Wicket
          this.battingTeamDetails.strikerDetails.out = true;
+         this.battingTeamDetails.strikerDetails.isStriker=false;
       } 
       else 
       {
@@ -574,15 +610,15 @@ export class ScoreboardComponent implements OnInit {
     }       
     this.battingTeamDetails.strikerDetails.strike_rate=((this.battingTeamDetails.strikerDetails.runs_score/this.battingTeamDetails.strikerDetails.balls_faced)*100).toFixed(2);
     
-    let currentnonStriker=this.battingTeamDetails.players.find(x=>x.name==this.battingTeamDetails.nonStrikerDetails.name);
-    if(currentnonStriker)
+    let currentnonStrikerIndex=this.battingTeamDetails.players.findIndex(x=>x.name==this.battingTeamDetails.nonStrikerDetails.name);
+    if(currentnonStrikerIndex>-1)
     {
-       currentnonStriker=this.battingTeamDetails.nonStrikerDetails;
+      this.battingTeamDetails.players[currentnonStrikerIndex]=this.battingTeamDetails.nonStrikerDetails;
     }
-    let currentstriker=this.battingTeamDetails.players.find(x=>x.name==this.battingTeamDetails.strikerDetails.name);
-    if(currentstriker)
+    let currentstrikerIndex=this.battingTeamDetails.players.findIndex(x=>x.name==this.battingTeamDetails.strikerDetails.name);
+    if(currentstrikerIndex>-1)
     {
-       currentstriker=this.battingTeamDetails.strikerDetails;
+      this.battingTeamDetails.players[currentstrikerIndex]=this.battingTeamDetails.strikerDetails;
     }
   }
   rotatePlayer()

@@ -4,4 +4,15 @@
 .table td, .table th
 {
     padding:0.2rem;
+    border-bottom: 0px;
 }
+.table > thead > tr:first-child > td, 
+.table > tbody > tr:first-child > td {
+    border: none;
+}
+li {
+    display: inline-block;
+    padding:0.3em;
+}
+ul li:after { content: ","; }
+ul li:last-child:after { content: ""; }
