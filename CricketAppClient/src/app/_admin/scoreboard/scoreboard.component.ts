@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { matchplayer } from 'src/app/models/matchplayer';
 import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
@@ -57,7 +57,7 @@ export class ScoreboardComponent implements OnInit {
   @ViewChild('resultModal', { static: false }) resultModal?: ModalDirective;
   //End-Modal Data
 
-  constructor(private route: ActivatedRoute,private matchplayer:MatchplayerService,private elRef:ElementRef) { }
+  constructor(private route: ActivatedRoute,private router:Router,private matchplayer:MatchplayerService,private elRef:ElementRef) { }
 
   ngOnInit() {
     let id = this.route.snapshot.paramMap.get("id");
@@ -69,6 +69,8 @@ export class ScoreboardComponent implements OnInit {
       let playerTeamB=this.match_player.teamBPlayers!;
       this.teamBPlayers=JSON.parse(playerTeamB);
       this.totover=this.match_player.totalOvers!;
+
+      this.matchplayer.createHubConnection(this._match_id);
 
       //Need to change after frist innings
       if(this.match_player.currentmatchDetails!=null)
@@ -97,7 +99,6 @@ export class ScoreboardComponent implements OnInit {
          {
            this.displayResult();
          }
-         
       }
       else
       {
@@ -123,9 +124,18 @@ export class ScoreboardComponent implements OnInit {
           {
             this.bowlingTeamDetails.players=this.teamBPlayers;
           }
-           await this.chooseStriker();
-           await this.chooseNonStriker();
-           await this.chooseBowler();
+      }
+      if(this.battingTeamDetails.strikerDetails.name=="")
+      {
+          await this.chooseStriker();
+      }
+      if(this.battingTeamDetails.nonStrikerDetails.name=="")
+      {
+          await this.chooseNonStriker();
+      }
+      if(this.bowlingTeamDetails.bowlerDetails.name=="")
+      {
+          await this.chooseBowler();
       }
     });
   }
@@ -356,15 +366,19 @@ export class ScoreboardComponent implements OnInit {
       this.lastballScore=runs;
       this.updateLastEvents(`${event}+${runs}`);
     }
-
     this.lastballEvent=event;
     
     this.battingTeamDetails.overInTxt=`${Math.floor(this.battingTeamDetails.overs / 6)}.${this.battingTeamDetails.overs % 6}`
     this.battingTeamDetails.runRate= (this.battingTeamDetails.total/((this.battingTeamDetails.overs==0?1:this.battingTeamDetails.overs)*0.1666666)).toFixed(2);
     
+    console.log(this.bowlingTeamDetails);
+
     if (this.battingTeamDetails.overs > 0 &&(this.battingTeamDetails.overs % 6 == 0)) 
       {
-        if(this.battingTeamDetails.overs==(this.totover*6))
+        if(this.battingTeamDetails.overs==(this.totover*6)||
+        (this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1||
+        (this.battingTeamDetails.total > this.bowlingTeamDetails.total &&this.battingTeamDetails.battingOrder == 2)||
+        (this.battingTeamDetails.total == this.bowlingTeamDetails.total))
         {
           if((this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1)
           {
@@ -486,6 +500,10 @@ export class ScoreboardComponent implements OnInit {
         if(this.matchStatus==4)
         {
           this.displayResult();
+        }
+        else  if(this.matchStatus==2)
+        {
+          this.showBreakModal();
         }
      }
   }
@@ -633,9 +651,12 @@ export class ScoreboardComponent implements OnInit {
 
     let obj={matchId:this._match_id,currentmatchDetails:JSON.stringify(updateObj)};
 
-    this.matchplayer.updateMatchScore(obj).subscribe(response => {
-      console.log(response);
-    });
+    // this.matchplayer.updateMatchScore(obj).subscribe(response => {
+    //   console.log(response);
+    // });
+      this.matchplayer.sendLivescore(obj).then(() => {}).finally(() => {}).catch(obj=>{
+        console.log(obj);
+      });
   }
   breakClick()
   {
@@ -690,5 +711,9 @@ export class ScoreboardComponent implements OnInit {
       this.lastEvents=this.lastEvents.slice(1)
     }
     this.lastEvents.push(event);
+  }
+  onClickNewMatch()
+  {
+    this.router.navigate(['match']);
   }
 }

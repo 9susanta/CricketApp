@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CricketApp.Interfaces
 {
-    public interface ItblTeamsRepository
+    public interface ITeamsRepository
     {
         Task<tblTeams> GetTeams(int objectId);
         Task<int> Create(tblTeams tblTeams);

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CricketApp.Data
 {
-    public class tblTeamsRepository : ItblTeamsRepository
+    public class tblTeamsRepository : ITeamsRepository
     {
         private readonly IMongoCollection<tblTeams> _tblTeams;
         public tblTeamsRepository(IMongoDatabase _mongoDatabase)

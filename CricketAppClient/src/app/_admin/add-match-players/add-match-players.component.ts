@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { matchplayer } from 'src/app/models/matchplayer';
 import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
@@ -24,7 +24,7 @@ export class AddMatchPlayersComponent implements OnInit {
   teamAName:string="Team A";
   teamBName:string="Team B";
   selectedTeam:string=this.teamAName;
-  matchId:number=1;
+  matchId:number=0;
   match_player:matchplayer=
   {
       matchDetailsId:0, 
@@ -44,10 +44,12 @@ export class AddMatchPlayersComponent implements OnInit {
       teamBBattingOrder:0,
   };
   
-  constructor(private router: Router,private matchplayer:MatchplayerService) {}
+  constructor(private router: Router,private activatedroutes: ActivatedRoute,private matchplayer:MatchplayerService) {}
  
   @ViewChild(ModalDirective, { static: false }) modal?: ModalDirective;
   ngOnInit(): void {
+    let id = this.activatedroutes.snapshot.paramMap.get("id");
+    this.matchId=+id!;
   }
   showModal() {
     this.modal?.show();
@@ -117,6 +119,7 @@ export class AddMatchPlayersComponent implements OnInit {
   startMatch()
   {
     debugger;
+    this.match_player.matchId=this.matchId;
     this.match_player.totalOvers=this.selectedOver;
     this.match_player.tossWinTeamName=this.tossWin;
     this.match_player.tossDecideName=this.tossDecide;

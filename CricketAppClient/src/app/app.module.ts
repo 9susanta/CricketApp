@@ -22,11 +22,15 @@ import { AddplayerComponent } from './_ui_component/addplayer/addplayer.componen
 import { SquadComponent } from './_admin/squad/squad.component';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ModalModule } from 'ngx-bootstrap/modal';  
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AddMatchPlayersComponent } from './_admin/add-match-players/add-match-players.component';
 import { StartMatchComponent } from './_admin/start-match/start-match.component';
 import { PlayeruiComponent } from './_ui_component/playerui/playerui.component';
 import { ScoreboardComponent } from './_admin/scoreboard/scoreboard.component';
 import { SetplayerComponent } from './_ui_component/setplayer/setplayer.component';
+import { ScorecardComponent } from './_admin/scorecard/scorecard.component';
+import { MatchComponent } from './_admin/match/match.component';
+import { PreventDoubleClickDirective } from './directives/prevent-double-click.directive';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,10 @@ import { SetplayerComponent } from './_ui_component/setplayer/setplayer.componen
     StartMatchComponent,
     PlayeruiComponent,
     ScoreboardComponent,
-    SetplayerComponent
+    SetplayerComponent,
+    ScorecardComponent,
+    MatchComponent,
+    PreventDoubleClickDirective
   ],
   schemas: [
   ],
@@ -56,7 +63,8 @@ import { SetplayerComponent } from './_ui_component/setplayer/setplayer.componen
     HttpClientModule,
     FontAwesomeModule,
     TypeaheadModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    TabsModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

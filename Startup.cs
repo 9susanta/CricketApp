@@ -1,6 +1,7 @@
 using CricketApp.Data;
 using CricketApp.DBConfiguration;
 using CricketApp.Interfaces;
+using CricketApp.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,13 +29,11 @@ namespace CricketApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ActiveUsers>();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:4200"));
             });
 
             services.AddControllers();
@@ -42,6 +41,7 @@ namespace CricketApp
             services.AddSingleton<IDatabaseSettings>(x => x.GetRequiredService<IOptions<DatabaseSettings>>().Value);
             //services.AddSingleton<IMongoClient, MongoClient>(sp => new MongoClient(Configuration.GetConnectionString("MongoDb")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSignalR(o=>o.EnableDetailedErrors=true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +65,7 @@ namespace CricketApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<LiveScoreUpdateHub>("hubs/livescoreupdate");
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
         }

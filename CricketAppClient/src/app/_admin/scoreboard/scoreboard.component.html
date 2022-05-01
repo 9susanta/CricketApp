@@ -96,27 +96,27 @@
     <div class="row">
         <div class="col-sm">
             <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" [ngClass]="([0,2,4,5].includes(matchStatus))?'ctrl-disable':''">
-                <div class="col-3 py-1 border btn btn-primary" data-event="0" (click)="eventClick('0')">0</div>
-                <div class="col-3 py-1 border btn btn-primary" data-event="1" (click)="eventClick('1')">1</div>
-                <div class="col-3 py-1 border btn btn-primary" data-event="2" (click)="eventClick('2')">2</div>
-                <div class="col-3 py-1 border btn btn-primary" data-event="3" (click)="eventClick('3')">3</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="0" (click)="eventClick('0')">0</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="1" (click)="eventClick('1')">1</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="2" (click)="eventClick('2')">2</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="3" (click)="eventClick('3')">3</div>
                 
-                <div class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('4')">4</div>
-                <div class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('5')">5</div>
-                <div class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('6')">6</div>
-                <div class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('7')">7</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('4')">4</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('5')">5</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('6')">6</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('7')">7</div>
 
-                <div class="col-3 py-1 border btn btn-dark" data-event="Wd" (click)="eventClick('Wd')">Wide</div>
-                <div class="col-3 py-1 border btn btn-dark" data-event="N" (click)="eventClick('N')">No-Ball</div>
-                <div class="col-3 py-1 border btn btn-dark" data-event="Lb" (click)="eventClick('Lb')">Leg Bye</div>
-                <div class="col-3 py-1 border btn btn-dark" data-event="B" (click)="eventClick('B')">Bye</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="Wd" (click)="eventClick('Wd')">Wide</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="N" (click)="eventClick('N')">No-Ball</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="Lb" (click)="eventClick('Lb')">Leg Bye</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="B" (click)="eventClick('B')">Bye</div>
 
-                <div class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
-                <div class="offset-4 col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
+                <div appPreventDoubleClick class="offset-4 col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
 
-                <div class="col-4 py-1 border btn btn-secondary" data-event="Br" (click)="breakClick()">Break</div>
-                <div class="col-4 py-1 border btn btn-dark" data-event="Un" (click)="eventClick('Un')">Undo</div>
-                <div class="col-4 py-1 border btn btn-success" data-event="Ro" (click)="eventClick('Ro')">Rotate</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-secondary" data-event="Br" (click)="breakClick()">Break</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-dark" data-event="Un" (click)="eventClick('Un')">Undo</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-success" data-event="Ro" (click)="eventClick('Ro')">Rotate</div>
             </div>
         </div>
     </div>
@@ -202,6 +202,11 @@
                         <div class="alert alert-info" role="alert">
                             {{resultModalmessage}}
                           </div>
+                    </div>
+                </div>
+                <div class="row text-center" style="font-family: monospace;">
+                    <div class="col">
+                       <button class="btn btn-success"  (click)="onClickNewMatch()">Go to New Match</button>                        
                     </div>
                 </div>
             </div>

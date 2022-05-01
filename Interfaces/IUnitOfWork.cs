@@ -7,11 +7,13 @@ namespace CricketApp.Interfaces
 {
     public interface IUnitOfWork
     {
-        ItblTeamsRepository TeamsRepository { get; }
+        ITeamsRepository TeamsRepository { get; }
         ISeriesRepository SeriesRepository { get; }
         IPlayersRepository PlayersRepository { get; }
         ISquadRepository SquadRepository { get; }
+        IMatchRepository MatchRepository { get; }
         IStartMatchRepository StartMatchRepository { get; }
+        IScoreRepository ScoreRepository { get; }
 
     }
 }

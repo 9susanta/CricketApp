@@ -11,9 +11,12 @@ namespace CricketApp.Data
     public class MatchRepository : IMatchRepository
     {
         private readonly IMongoCollection<tblMatch> _tblMatches;
+        private readonly IMongoCollection<tblMatchDetails> _tblMatchDetails;
+
         public MatchRepository(IMongoDatabase _mongoDatabase)
         {
             _tblMatches = _mongoDatabase.GetCollection<tblMatch>(nameof(tblMatch));
+            _tblMatchDetails= _mongoDatabase.GetCollection<tblMatchDetails>(nameof(tblMatchDetails));
 
         }
         public async Task<int> Create(tblMatch tblMatchs)
@@ -89,13 +92,13 @@ namespace CricketApp.Data
         {
             try
             {
-                var series = await _tblMatches.FindAsync(x => x.Created != null);
+                var matches = await _tblMatchDetails.FindAsync(x => x.created!=null);
 
-                var last_item = series.ToList().OrderByDescending(x => x.Created).FirstOrDefault();
+                var last_item = matches.ToList().OrderByDescending(x => x.matchId).FirstOrDefault();
 
                 if (last_item != null)
                 {
-                    return (last_item.MatchId + 1);
+                    return (last_item.matchId + 1);
                 }
             }
             catch (Exception ex)
