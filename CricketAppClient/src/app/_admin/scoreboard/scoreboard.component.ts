@@ -106,8 +106,10 @@ export class ScoreboardComponent implements OnInit {
           this.battingTeamDetails.totOver=this.match_player.totalOvers!
           this.battingTeamDetails.name=this.match_player.battingFirstTeamName!;
           this.bowlingTeamDetails.name=this.match_player.battingSecondTeamName!;
-          this.battingTeamDetails.battingOrder=this.match_player.teamABattingOrder==1?1:2;
-          this.bowlingTeamDetails.battingOrder=this.match_player.teamBBattingOrder==1?1:2;
+
+          this.battingTeamDetails.battingOrder=1;
+          this.bowlingTeamDetails.battingOrder=2;
+
           if(this.battingTeamDetails.name==this.match_player.teamAName!)
           {
             this.battingTeamDetails.players=this.teamAPlayers; 
@@ -206,6 +208,8 @@ export class ScoreboardComponent implements OnInit {
            }
       }
     }
+    this.onStrikerDetailsUpdate();
+    this.updateScore();
   }
   async chooseNonStriker()
   {
@@ -256,6 +260,8 @@ export class ScoreboardComponent implements OnInit {
           }
       }
     }
+    this.onNonStrikerDetailsUpdate();
+    this.updateScore();
   }
   async chooseBowler()
   {
@@ -288,7 +294,16 @@ export class ScoreboardComponent implements OnInit {
             this.bowlingTeamDetails.bowlerDetails=player;
         }
      }
-     this.bowlingTeamDetails.bowlerDetails.bowlingNo=(this.bowlingTeamDetails.bowlerDetails.bowlingNo+1)
+     if(this.bowlingTeamDetails.bowlerDetails.bowlingNo==0)
+     {
+      this.bowlingTeamDetails.bowlerDetails.bowlingNo=(this.bowlingTeamDetails.last_bowlerDetails.bowlingNo+1)
+     }
+     else
+     {
+      this.bowlingTeamDetails.bowlerDetails.bowlingNo=(this.bowlingTeamDetails.bowlerDetails.bowlingNo+1)
+     }
+     this.onBowlerDetailsUpdate();
+     this.updateScore();
   }
   async eventClick(event:any)
   {
@@ -332,7 +347,7 @@ export class ScoreboardComponent implements OnInit {
         this.playersSet.push(this.battingTeamDetails.strikerDetails,this.battingTeamDetails.nonStrikerDetails)
         let wicket=await this.showModal("Select a player !");
         this.hideModal();
-
+        
         // If striker was out
         if (wicket == this.battingTeamDetails.strikerDetails.name) {
           this.runScore("W", false); // Let him out
@@ -349,6 +364,12 @@ export class ScoreboardComponent implements OnInit {
           } 
           // Get new player to non-strike
         }
+        let objfow:any={};
+        objfow.batter=wicket;
+        objfow.overs=`${Math.floor(this.battingTeamDetails.overs / 6)}.${this.battingTeamDetails.overs % 6}`;
+        objfow.totRun=this.battingTeamDetails.total;
+        this.battingTeamDetails.fallOfWickets.push(objfow);
+
         // If it was one-man batting, then batting team is all out
       } else {
         this.runScore("W", false);
@@ -402,142 +423,13 @@ export class ScoreboardComponent implements OnInit {
     this.battingTeamDetails.overInTxt=`${Math.floor(this.battingTeamDetails.overs / 6)}.${this.battingTeamDetails.overs % 6}`
     this.battingTeamDetails.runRate= (this.battingTeamDetails.total/((this.battingTeamDetails.overs==0?1:this.battingTeamDetails.overs)*0.1666666)).toFixed(2);
     
+    this.onprocessingOutcome(event);
+    
     console.log(this.bowlingTeamDetails);
     console.log(this.battingTeamDetails);
 
-    if (this.battingTeamDetails.overs > 0 &&(this.battingTeamDetails.overs % 6 == 0)) 
-      {
-        if(this.battingTeamDetails.overs==(this.totover*6)||
-        (this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1||
-        (this.battingTeamDetails.total > this.bowlingTeamDetails.total &&this.battingTeamDetails.battingOrder == 2)||
-        (this.battingTeamDetails.total == this.bowlingTeamDetails.total))
-        {
-          if((this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1)
-          {
-             if(this.battingTeamDetails.battingOrder == 1)
-             {
-               this.outcome = [null, null, "InningsBreak"];
-               this.matchStatus=2;
-             }
-             else if(this.battingTeamDetails.battingOrder == 2)
-             {
-               if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
-               {
-                 // Draw
-                 this.outcome = [null, null, "Draw"];
-                 this.matchStatus=4;
-               } 
-               else if (this.battingTeamDetails.total < this.bowlingTeamDetails.total) {
-                 // Batting team Lost
-                 let margin = this.bowlingTeamDetails.total - this.battingTeamDetails.total;
-                 this.outcome = [this.bowlingTeamDetails, margin, "Runs"];
-                 this.matchStatus=4;
-               } 
-              else 
-               {
-                 // Batting team won
-                 let margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
-                 this.outcome = [this.battingTeamDetails, margin, "Wickets"];
-                 this.matchStatus=4;
-               }
-             }
-          }// If it was first batting team
-          else if (this.battingTeamDetails.battingOrder == 1) 
-          {
-              // End of batting team's innings
-              this.outcome = [null, null, "InningsBreak"];
-              this.matchStatus=2;
-              // If it was the chasing team, find match outcome
-          } 
-          else 
-          {
-             if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
-              {
-                // Draw
-                this.outcome = [null, null, "Draw"];
-                this.matchStatus=4;
-              } 
-              else if (this.battingTeamDetails.total < this.bowlingTeamDetails.total) {
-                // Batting team Lost
-                let margin = this.bowlingTeamDetails.total - this.battingTeamDetails.total;
-                this.outcome = [this.bowlingTeamDetails, margin, "Runs"];
-                this.matchStatus=4;
-              } 
-              else 
-              {
-                // Batting team won
-                  let margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
-                  this.outcome = [this.battingTeamDetails, margin, "Wickets"];
-                  this.matchStatus=4;
-              }
-          }
-        }
-        else if(!["Wd","N"].includes(event))
-        {
-           this.chooseBowler();
-        
-           this.rotatePlayer();
-
-           this.bowlingTeamDetails.last_bowlerDetails= this.bowlingTeamDetails.bowlerDetails;
-           this.bowlingTeamDetails.bowlerDetails=new matchplayerdetails();
-        }
-        else if(["Wd","N"].includes(event))
-        {
-          if(this.lastballScore%2==1)
-          {
-            this.rotatePlayer();
-          }
-        }
-     }
-     else if (this.battingTeamDetails.total > this.bowlingTeamDetails.total &&this.battingTeamDetails.battingOrder == 2) 
-     {
-       const margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
-       this.outcome = [this.battingTeamDetails, margin, "Wickets"];
-       this.matchStatus=4;
-     }
-     else  if((this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1)
-     {
-        if(this.battingTeamDetails.battingOrder == 1)
-        {
-          this.outcome = [null, null, "InningsBreak"];
-          this.matchStatus=2;
-        }
-        else if(this.battingTeamDetails.battingOrder == 2)
-        {
-          if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
-          {
-            // Draw
-            this.outcome = [null, null, "Draw"];
-            this.matchStatus=4;
-          } 
-          else if (this.battingTeamDetails.total < this.bowlingTeamDetails.total) 
-          {
-              // Batting team Lost
-              let margin = this.bowlingTeamDetails.total - this.battingTeamDetails.total;
-              this.outcome = [this.bowlingTeamDetails, margin, "Runs"];
-              this.matchStatus=4;
-          } 
-         else 
-          {
-            // Batting team won
-            let margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
-            this.outcome = [this.battingTeamDetails, margin, "Wickets"];
-            this.matchStatus=4;
-          }
-        }
-     }
      this.updateScore();
-     if(this.outcome[2]!=null)
-     {
-        if(this.matchStatus==4)
-        {
-          this.displayResult();
-        }
-        else  if(this.matchStatus==2)
-        {
-          this.showBreakModal();
-        }
-     }
+     this.onmatchStatus();
   }
   // Bowling [extraRuns in case of Wd,N,W]
   ballBowled(event:any, extraRuns = 0) {
@@ -566,12 +458,8 @@ export class ScoreboardComponent implements OnInit {
     }
      this.bowlingTeamDetails.bowlerDetails.economy=(this.bowlingTeamDetails.bowlerDetails.runs_given/(this.bowlingTeamDetails.bowlerDetails.overs_bowl*0.1666666)).toFixed(2);
      this.bowlingTeamDetails.bowlerDetails.overs_bowl_display=`${Math.floor(this.bowlingTeamDetails.bowlerDetails.overs_bowl / 6)}.${this.bowlingTeamDetails.bowlerDetails.overs_bowl % 6}`
-     let currentBowlerIndex=this.bowlingTeamDetails.players.findIndex(x=>x.name==this.bowlingTeamDetails.bowlerDetails.name);
-     if(currentBowlerIndex>-1)
-     {
-      this.bowlingTeamDetails.players[currentBowlerIndex]=this.bowlingTeamDetails.bowlerDetails;
-     }
-
+     
+     this.onBowlerDetailsUpdate();
   }
   // Batting [countBall = false if Wd,W,N]
   runScore(event:any,countBall = true,isStrikeBatter=true)
@@ -579,7 +467,6 @@ export class ScoreboardComponent implements OnInit {
     if(isStrikeBatter==false)
     {
       if (event == "W") {
-        debugger;
        // Wicket
        this.battingTeamDetails.nonStrikerDetails.out = true;
        this.battingTeamDetails.nonStrikerDetails.isNonStriker=false;
@@ -591,7 +478,6 @@ export class ScoreboardComponent implements OnInit {
           this.battingTeamDetails.strikerDetails.balls_faced += 1;
       }
       if (event == "W") {
-        debugger;
         // Wicket
          this.battingTeamDetails.strikerDetails.out = true;
          this.battingTeamDetails.strikerDetails.isStriker=false;
@@ -610,16 +496,8 @@ export class ScoreboardComponent implements OnInit {
     }       
     this.battingTeamDetails.strikerDetails.strike_rate=((this.battingTeamDetails.strikerDetails.runs_score/this.battingTeamDetails.strikerDetails.balls_faced)*100).toFixed(2);
     
-    let currentnonStrikerIndex=this.battingTeamDetails.players.findIndex(x=>x.name==this.battingTeamDetails.nonStrikerDetails.name);
-    if(currentnonStrikerIndex>-1)
-    {
-      this.battingTeamDetails.players[currentnonStrikerIndex]=this.battingTeamDetails.nonStrikerDetails;
-    }
-    let currentstrikerIndex=this.battingTeamDetails.players.findIndex(x=>x.name==this.battingTeamDetails.strikerDetails.name);
-    if(currentstrikerIndex>-1)
-    {
-      this.battingTeamDetails.players[currentstrikerIndex]=this.battingTeamDetails.strikerDetails;
-    }
+    this.onStrikerDetailsUpdate();
+    this.onNonStrikerDetailsUpdate();
   }
   rotatePlayer()
   {
@@ -751,5 +629,169 @@ export class ScoreboardComponent implements OnInit {
   onClickNewMatch()
   {
     this.router.navigate(['match']);
+  }
+  onmatchStatus()
+  {
+    if(this.outcome[2]!=null)
+     {
+        if(this.matchStatus==4)
+        {
+          this.displayResult();
+        }
+        else  if(this.matchStatus==2)
+        {
+          this.showBreakModal();
+        }
+     }
+  }
+  onprocessingOutcome(event:string)
+  {
+    if (this.battingTeamDetails.overs > 0 &&(this.battingTeamDetails.overs % 6 == 0)) 
+      {
+        this.bowlingTeamDetails.bowlerDetails.isCurrentBowler=false
+
+        if(this.battingTeamDetails.overs==(this.totover*6)||
+        (this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1||
+        (this.battingTeamDetails.total > this.bowlingTeamDetails.total &&this.battingTeamDetails.battingOrder == 2)||
+        (this.battingTeamDetails.total == this.bowlingTeamDetails.total))
+        {
+          if((this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1)
+          {
+             if(this.battingTeamDetails.battingOrder == 1)
+             {
+               this.outcome = [null, null, "InningsBreak"];
+               this.matchStatus=2;
+             }
+             else if(this.battingTeamDetails.battingOrder == 2)
+             {
+               if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
+               {
+                 // Draw
+                 this.outcome = [null, null, "Draw"];
+                 this.matchStatus=4;
+               } 
+               else if (this.battingTeamDetails.total < this.bowlingTeamDetails.total) {
+                 // Batting team Lost
+                 let margin = this.bowlingTeamDetails.total - this.battingTeamDetails.total;
+                 this.outcome = [this.bowlingTeamDetails, margin, "Runs"];
+                 this.matchStatus=4;
+               } 
+              else 
+               {
+                 // Batting team won
+                 let margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
+                 this.outcome = [this.battingTeamDetails, margin, "Wickets"];
+                 this.matchStatus=4;
+               }
+             }
+          }// If it was first batting team
+          else if (this.battingTeamDetails.battingOrder == 1) 
+          {
+              // End of batting team's innings
+              this.outcome = [null, null, "InningsBreak"];
+              this.matchStatus=2;
+              // If it was the chasing team, find match outcome
+          } 
+          else 
+          {
+             if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
+              {
+                // Draw
+                this.outcome = [null, null, "Draw"];
+                this.matchStatus=4;
+              } 
+              else if (this.battingTeamDetails.total < this.bowlingTeamDetails.total) {
+                // Batting team Lost
+                let margin = this.bowlingTeamDetails.total - this.battingTeamDetails.total;
+                this.outcome = [this.bowlingTeamDetails, margin, "Runs"];
+                this.matchStatus=4;
+              } 
+              else 
+              {
+                // Batting team won
+                  let margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
+                  this.outcome = [this.battingTeamDetails, margin, "Wickets"];
+                  this.matchStatus=4;
+              }
+          }
+        }
+        else if(!["Wd","N"].includes(event))
+        {
+           this.chooseBowler();
+        
+           this.rotatePlayer();
+
+           this.bowlingTeamDetails.last_bowlerDetails= this.bowlingTeamDetails.bowlerDetails;
+           this.bowlingTeamDetails.bowlerDetails=new matchplayerdetails();
+        }
+        else if(["Wd","N"].includes(event))
+        {
+          if(this.lastballScore%2==1)
+          {
+            this.rotatePlayer();
+          }
+        }
+     }
+     else if (this.battingTeamDetails.total > this.bowlingTeamDetails.total &&this.battingTeamDetails.battingOrder == 2) 
+     {
+       const margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
+       this.outcome = [this.battingTeamDetails, margin, "Wickets"];
+       this.matchStatus=4;
+     }
+     else  if((this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1)
+     {
+        if(this.battingTeamDetails.battingOrder == 1)
+        {
+          this.outcome = [null, null, "InningsBreak"];
+          this.matchStatus=2;
+        }
+        else if(this.battingTeamDetails.battingOrder == 2)
+        {
+          if (this.battingTeamDetails.total == this.bowlingTeamDetails.total) 
+          {
+            // Draw
+            this.outcome = [null, null, "Draw"];
+            this.matchStatus=4;
+          } 
+          else if (this.battingTeamDetails.total < this.bowlingTeamDetails.total) 
+          {
+              // Batting team Lost
+              let margin = this.bowlingTeamDetails.total - this.battingTeamDetails.total;
+              this.outcome = [this.bowlingTeamDetails, margin, "Runs"];
+              this.matchStatus=4;
+          } 
+         else 
+          {
+            // Batting team won
+            let margin = this.battingTeamDetails.players.length - this.battingTeamDetails.wickets;
+            this.outcome = [this.battingTeamDetails, margin, "Wickets"];
+            this.matchStatus=4;
+          }
+        }
+     }
+  }
+  onStrikerDetailsUpdate()
+  {
+    let currentnonStrikerIndex=this.battingTeamDetails.players.findIndex(x=>x.name==this.battingTeamDetails.nonStrikerDetails.name);
+    if(currentnonStrikerIndex>-1)
+    {
+      this.battingTeamDetails.players[currentnonStrikerIndex]=this.battingTeamDetails.nonStrikerDetails;
+    }
+  }
+  onNonStrikerDetailsUpdate()
+  {
+    let currentstrikerIndex=this.battingTeamDetails.players.findIndex(x=>x.name==this.battingTeamDetails.strikerDetails.name);
+    if(currentstrikerIndex>-1)
+    {
+      this.battingTeamDetails.players[currentstrikerIndex]=this.battingTeamDetails.strikerDetails;
+    }
+  }
+  onBowlerDetailsUpdate()
+  {    
+    let currentBowlerIndex=this.bowlingTeamDetails.players.findIndex(x=>x.name==this.bowlingTeamDetails.bowlerDetails.name);
+     if(currentBowlerIndex>-1)
+     {
+      this.bowlingTeamDetails.players[currentBowlerIndex]=this.bowlingTeamDetails.bowlerDetails;
+     }
   }
 }

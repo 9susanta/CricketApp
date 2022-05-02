@@ -21,6 +21,9 @@ export class teamdetails
     strikerDetails:matchplayerdetails=new matchplayerdetails();
     nonStrikerDetails:matchplayerdetails=new matchplayerdetails();
     bowlerDetails:matchplayerdetails=new matchplayerdetails();
-    last_bowlerDetails:matchplayerdetails=new matchplayerdetails()
-    
+    last_bowlerDetails:matchplayerdetails=new matchplayerdetails();
+    fallOfWickets:string[]=[];
+    lastFiveOverScore:string[]=[];
+    patnership:string[]=[];
+    powerPlay:string[]=[];
 }

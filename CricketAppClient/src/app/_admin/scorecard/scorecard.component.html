@@ -31,7 +31,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of didBatSecArr">
-                                  <td>{{item.name}}</td>
+                                  <td class="text-primary" [ngClass]="item.out==false?'font-weight-bold':''">{{item.name}}</td>
                                   <td>{{item.out==true?"out":"not out"}}</td>
                                   <td>{{item.runs_score}}</td>
                                   <td>{{item.balls_faced}}</td>
@@ -48,8 +48,8 @@
                                   <td colspan="5">{{this.battingTeamDetails.total+'('+this.battingTeamDetails.wickets+ ' Wkts, '+this.battingTeamDetails.overInTxt+' Ov)'}}</td>
                                 </tr>
                                 <tr>
-                                  <td>Yet to Bat</td>
-                                  <td colspan="6">
+                                  <td>{{didNotBatMsg}}</td>
+                                  <td colspan="6" class="text-primary">
                                     <ul>
                                       <ng-container *ngFor="let item of didnotBatSecArr">
                                         <li>{{item.name}}</li>
@@ -66,9 +66,18 @@
                           <table class="table table-sm">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Fall of Wickets</th>
-                                  </tr>
+                                  <th scope="col">Fall of Wickets</th>
+                                </tr>
                             </thead>
+                            <tbody>
+                              <tr>
+                                <ul>
+                                  <li *ngFor="let item of battingTeamDetails.fallOfWickets;let i=index">
+                                    {{item.totRun+"-"+(i+1)+" ("+item.batter+", "+item.overs+")"}}
+                                  </li>
+                                </ul>
+                              </tr>
+                            </tbody>
                             </table>
                         </div>
                      </div>
@@ -87,7 +96,7 @@
                             </thead>
                             <tbody>
                               <tr *ngFor="let item of bowlSecData">
-                                <td>{{item.name}}</td>
+                                <td class="text-primary" [ngClass]="item.isCurrentBowler==true?'font-weight-bold':''">{{item.name}}</td>
                                 <td>{{item.overs_bowl_display}}</td>
                                 <td>{{item.maiden_over}}</td>
                                 <td>{{item.runs_given}}</td>
@@ -140,7 +149,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of didBatFristArr">
-                                  <td>{{item.name}}</td>
+                                  <td class="text-primary" [ngClass]="item.out==false?'font-weight-bold':''">{{item.name}}</td>
                                   <td>{{item.out==true?"out":"not out"}}</td>
                                   <td>{{item.runs_score}}</td>
                                   <td>{{item.balls_faced}}</td>
@@ -157,8 +166,8 @@
                                   <td colspan="5">{{this.bowlingTeamDetails.total+'('+this.bowlingTeamDetails.wickets+ ' Wkts, '+this.bowlingTeamDetails.overInTxt+' Ov)'}}</td>
                                 </tr>
                                 <tr>
-                                  <td>Yet to Bat</td>
-                                  <td colspan="6">
+                                  <td>{{didNotBatMsg}}</td>
+                                  <td colspan="6" class="text-primary">
                                     <ul>
                                       <ng-container *ngFor="let item of didnotBatFristArr">
                                         <li>{{item.name}}</li>
@@ -174,10 +183,19 @@
                         <div class="col">
                           <table class="table table-sm">
                             <thead class="table-light">
-                                <tr>
+                                  <tr>
                                     <th scope="col">Fall of Wickets</th>
                                   </tr>
                             </thead>
+                            <tbody>
+                                 <tr>
+                                   <ul>
+                                     <li *ngFor="let item of bowlingTeamDetails.fallOfWickets;let i=index">
+                                       {{item.totRun+"-"+(i+1)+" ("+item.batter+", "+item.overs+")"}}
+                                     </li>
+                                   </ul>
+                                 </tr>
+                            </tbody>
                             </table>
                         </div>
                      </div>
@@ -196,7 +214,7 @@
                             </thead>
                             <tbody>
                               <tr *ngFor="let item of bowlFirstData">
-                                <td>{{item.name}}</td>
+                                <td class="text-primary" [ngClass]="item.isCurrentBowler==true?'font-weight-bold':''">{{item.name}}</td>
                                 <td>{{item.overs_bowl_display}}</td>
                                 <td>{{item.maiden_over}}</td>
                                 <td>{{item.runs_given}}</td>
@@ -251,7 +269,7 @@
                           </thead>
                           <tbody>
                               <tr *ngFor="let item of didBatFristArr">
-                                <td>{{item.name}}</td>
+                                <td class="text-primary" [ngClass]="item.out==false?'font-weight-bold':''">{{item.name}}</td>
                                 <td>{{item.out==true?"out":"not out"}}</td>
                                 <td>{{item.runs_score}}</td>
                                 <td>{{item.balls_faced}}</td>
@@ -269,7 +287,7 @@
                               </tr>
                               <tr>
                                 <td>Yet to Bat</td>
-                                <td colspan="6">
+                                <td colspan="6" class="text-primary">
                                   <ul>
                                     <ng-container *ngFor="let item of didnotBatFristArr">
                                       <li>{{item.name}}</li>
@@ -289,6 +307,15 @@
                                   <th scope="col">Fall of Wickets</th>
                                 </tr>
                           </thead>
+                          <tbody>
+                            <tr>
+                              <ul>
+                                <li *ngFor="let item of battingTeamDetails.fallOfWickets;let i=index">
+                                  {{item.totRun+"-"+(i+1)+" ("+item.batter+", "+item.overs+")"}}
+                                </li>
+                              </ul>
+                            </tr>
+                       </tbody>
                           </table>
                       </div>
                    </div>
@@ -307,7 +334,7 @@
                           </thead>
                           <tbody>
                             <tr *ngFor="let item of bowlFirstData">
-                              <td>{{item.name}}</td>
+                              <td class="text-primary" [ngClass]="item.isCurrentBowler==true?'font-weight-bold':''">{{item.name}}</td>
                               <td>{{item.overs_bowl_display}}</td>
                               <td>{{item.maiden_over}}</td>
                               <td>{{item.runs_given}}</td>
