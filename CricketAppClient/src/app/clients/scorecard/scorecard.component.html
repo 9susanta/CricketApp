@@ -6,27 +6,27 @@
           </div>
           <ng-container *ngIf="battingTeamDetails.battingOrder==2">
             <div class="mt-3 row">
-              <div id="scoreboard" class="col-9">
+              <div id="scoreboard" class="col-8">
                     <div class="row">
-                    <div class="col">
+                      <div class="col">
                       <div class="bg-secondary p-2 clearfix">
                         <span class="text-light float-start">{{this.battingTeamDetails.name +' Innings'}}</span>
                         <span class="text-light float-end">{{this.battingTeamDetails.total +'-'+this.battingTeamDetails.wickets+' ('+this.battingTeamDetails.overInTxt+')'}}</span>
                       </div>
-                    </div>
+                       </div>
                     </div>
                     <div class="row">
-                       <div class="col">
+                        <div class="col">
                         <table class="table table-sm">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Batter</th>
-                                    <td scope="col"></td>
+                                    <th scope="col" class="batter-width">Batter</th>
+                                    <td scope="col" class="batterstatus-width"></td>
                                     <td scope="col">R</td>
                                     <td scope="col">B</td>
                                     <td scope="col">4s</td>
                                     <td scope="col">6s</td>
-                                    <td scope="col">SR</td>
+                                    <td scope="col" class="stikerate-width">SR</td>
                                   </tr>
                             </thead>
                             <tbody>
@@ -41,7 +41,7 @@
                                 </tr>
                                 <tr>
                                   <td colspan="2">Extras</td>
-                                  <td colspan="5">{{this.battingTeamDetails.extra}}</td>
+                                  <td colspan="5">{{this.battingTeamDetails.extra+' (Nb '+ this.battingTeamDetails.nb +', Wd '+this.battingTeamDetails.wide+', B '+this.battingTeamDetails.b+', Lb '+this.battingTeamDetails.lb+')'}}</td>
                                 </tr>
                                 <tr>
                                   <td colspan="2">Total</td>
@@ -120,9 +120,11 @@
                       </div>
                      </div>
                   </div>
+              </div>
+              <div class="col-4">
+                 <app-key-stats></app-key-stats>
               </div>           
             </div>
-            
             <div class="mt-3 row">
               <div id="scoreboard" class="col-9">
                     <div class="row">
@@ -138,13 +140,13 @@
                         <table class="table table-sm">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col">Batter</th>
-                                    <td scope="col"></td>
+                                    <th scope="col" class="batter-width" >Batter</th>
+                                    <td scope="col" class="batterstatus-width"></td>
                                     <td scope="col">R</td>
                                     <td scope="col">B</td>
                                     <td scope="col">4s</td>
                                     <td scope="col">6s</td>
-                                    <td scope="col">SR</td>
+                                    <td scope="col" class="stikerate-width">SR</td>
                                   </tr>
                             </thead>
                             <tbody>
@@ -159,7 +161,7 @@
                                 </tr>
                                 <tr>
                                   <td colspan="2">Extras</td>
-                                  <td colspan="5">{{this.bowlingTeamDetails.extra}}</td>
+                                  <td colspan="5">{{this.bowlingTeamDetails.extra+' (Nb '+ this.bowlingTeamDetails.nb +', Wd '+this.bowlingTeamDetails.wide+', B '+this.bowlingTeamDetails.b+', Lb '+this.bowlingTeamDetails.lb+')'}}</td>
                                 </tr>
                                 <tr>
                                   <td colspan="2">Total</td>
@@ -240,11 +242,10 @@
                   </div>
               </div>           
             </div>
-
           </ng-container>
           <ng-container *ngIf="battingTeamDetails.battingOrder==1">
           <div class="mt-3 row">
-            <div id="scoreboard" class="col-9">
+            <div id="scoreboard" class="col-8">
                   <div class="row">
                   <div class="col">
                     <div class="bg-secondary p-2 clearfix">
@@ -258,13 +259,13 @@
                       <table class="table table-sm">
                           <thead class="table-light">
                               <tr>
-                                  <th scope="col">Batter</th>
-                                  <td scope="col"></td>
+                                  <th scope="col" class="batter-width">Batter</th>
+                                  <td scope="col" class="batterstatus-width"></td>
                                   <td scope="col">R</td>
                                   <td scope="col">B</td>
                                   <td scope="col">4s</td>
                                   <td scope="col">6s</td>
-                                  <td scope="col">SR</td>
+                                  <td scope="col" class="stikerate-width">SR</td>
                                 </tr>
                           </thead>
                           <tbody>
@@ -279,7 +280,7 @@
                               </tr>
                               <tr>
                                 <td colspan="2">Extras</td>
-                                <td colspan="5">{{this.battingTeamDetails.extra}}</td>
+                                <td colspan="5">{{this.battingTeamDetails.extra+' (Nb '+ this.battingTeamDetails.nb +', Wd '+this.battingTeamDetails.wide+', B '+this.battingTeamDetails.b+', Lb '+this.battingTeamDetails.lb+')'}}</td>
                               </tr>
                               <tr>
                                 <td colspan="2">Total</td>
@@ -358,7 +359,10 @@
                     </div>
                    </div>
                 </div>
-            </div>           
+            </div>
+            <div class="col-4">
+              <app-key-stats></app-key-stats>
+           </div>           
           </div>
         </ng-container>
       </tab>

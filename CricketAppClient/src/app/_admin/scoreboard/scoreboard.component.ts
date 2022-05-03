@@ -269,6 +269,7 @@ export class ScoreboardComponent implements OnInit {
     this.modalName="bowler";
     this.playersSet=[];
     let currentBowlingTeam=this.bowlingTeamDetails.players.filter(x=>x.name!=this.bowlingTeamDetails.bowlerDetails.name);
+    
     if(currentBowlingTeam.length>1)
     {
       this.playersSet=currentBowlingTeam;
@@ -376,7 +377,7 @@ export class ScoreboardComponent implements OnInit {
       }
     }
     // In case runs was scored
-    else if (!["N", "Wd", "Re","Lb","B","P","Un"].includes(event)) {
+    else if (!["N", "Wd", "Re","Lb","B","P","Un","Bc","W","Ro"].includes(event)) {
       this.runScore(event);
       this.ballBowled(event);
 
@@ -414,6 +415,25 @@ export class ScoreboardComponent implements OnInit {
           this.rotatePlayer();
         }
       }
+     if(event=="N")
+     { 
+        this.battingTeamDetails.nb += 1 + runs;
+     }
+     else if(event=="W")
+     {
+      this.battingTeamDetails.wide += 1 + runs;
+     }
+     else if(event=="Lb")
+     {
+      this.battingTeamDetails.lb += runs;
+     }
+     else if(event=="B")
+     {
+      this.battingTeamDetails.b+=runs;
+     }
+     this.battingTeamDetails.extra=(this.battingTeamDetails.nb+
+     this.battingTeamDetails.wide+this.battingTeamDetails.lb+this.battingTeamDetails.b);
+
       this.battingTeamDetails.total += 1 + runs;
       this.lastballScore=runs;
       this.updateLastEvents(`${event}+${runs}`);
@@ -425,11 +445,13 @@ export class ScoreboardComponent implements OnInit {
     
     this.onprocessingOutcome(event);
     
-    console.log(this.bowlingTeamDetails);
-    console.log(this.battingTeamDetails);
-
      this.updateScore();
      this.onmatchStatus();
+  }
+  async eventBowlerChangeClick()
+  {
+    this.bowlerDetailsSwap();
+    await this.chooseBowler();
   }
   // Bowling [extraRuns in case of Wd,N,W]
   ballBowled(event:any, extraRuns = 0) {
@@ -648,8 +670,6 @@ export class ScoreboardComponent implements OnInit {
   {
     if (this.battingTeamDetails.overs > 0 &&(this.battingTeamDetails.overs % 6 == 0)) 
       {
-        this.bowlingTeamDetails.bowlerDetails.isCurrentBowler=false
-
         if(this.battingTeamDetails.overs==(this.totover*6)||
         (this.battingTeamDetails.players.length - this.battingTeamDetails.wickets)==1||
         (this.battingTeamDetails.total > this.bowlingTeamDetails.total &&this.battingTeamDetails.battingOrder == 2)||
@@ -721,8 +741,7 @@ export class ScoreboardComponent implements OnInit {
         
            this.rotatePlayer();
 
-           this.bowlingTeamDetails.last_bowlerDetails= this.bowlingTeamDetails.bowlerDetails;
-           this.bowlingTeamDetails.bowlerDetails=new matchplayerdetails();
+           this.bowlerDetailsSwap();
         }
         else if(["Wd","N"].includes(event))
         {
@@ -794,4 +813,10 @@ export class ScoreboardComponent implements OnInit {
       this.bowlingTeamDetails.players[currentBowlerIndex]=this.bowlingTeamDetails.bowlerDetails;
      }
   }
+  bowlerDetailsSwap()
+  {
+    [this.bowlingTeamDetails.last_bowlerDetails,this.bowlingTeamDetails.bowlerDetails]= [this.bowlingTeamDetails.bowlerDetails,this.bowlingTeamDetails.last_bowlerDetails];
+    this.bowlingTeamDetails.bowlerDetails.isCurrentBowler=false;
+  }
+  
 }

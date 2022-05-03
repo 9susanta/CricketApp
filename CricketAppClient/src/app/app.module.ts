@@ -28,9 +28,10 @@ import { StartMatchComponent } from './_admin/start-match/start-match.component'
 import { PlayeruiComponent } from './_ui_component/playerui/playerui.component';
 import { ScoreboardComponent } from './_admin/scoreboard/scoreboard.component';
 import { SetplayerComponent } from './_ui_component/setplayer/setplayer.component';
-import { ScorecardComponent } from './_admin/scorecard/scorecard.component';
+import { ScorecardComponent } from './clients/scorecard/scorecard.component';
 import { MatchComponent } from './_admin/match/match.component';
 import { PreventDoubleClickDirective } from './directives/prevent-double-click.directive';
+import { KeyStatsComponent } from './clients/key-stats/key-stats.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { PreventDoubleClickDirective } from './directives/prevent-double-click.d
     SetplayerComponent,
     ScorecardComponent,
     MatchComponent,
-    PreventDoubleClickDirective
+    PreventDoubleClickDirective,
+    KeyStatsComponent
   ],
   schemas: [
   ],

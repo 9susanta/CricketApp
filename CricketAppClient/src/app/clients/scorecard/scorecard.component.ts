@@ -48,6 +48,7 @@ export class ScorecardComponent implements OnInit {
       this._match_id=this.match_player.matchId!;
       this.totover=this.match_player.totalOvers!;
       this.currentmatchDetails=JSON.parse(this.match_player.currentmatchDetails!);
+
       if(this.currentmatchDetails.battingTeamDetails.battingOrder==1)
       {
         this.matchmsg=this.match_player.tossWinTeamName+" "+" won the toss and decide to "+this.match_player.tossDecideName+" frist";
@@ -56,8 +57,11 @@ export class ScorecardComponent implements OnInit {
       {
         this.matchmsg=this.currentmatchDetails.battingTeamDetails.name+" need "+((this.currentmatchDetails.bowlingTeamDetails.total+1)-this.currentmatchDetails.battingTeamDetails.total)+" runs in "+((this.currentmatchDetails.battingTeamDetails.totOver*6)-this.currentmatchDetails.battingTeamDetails.overs) +" balls";
       }
-      this.updateScore()
-      this.matchplayer.createHubConnection(this._match_id);
+      this.updateScore();
+      if(this.matchStatus!=4)
+      {
+         this.matchplayer.createHubConnection(this._match_id);
+      }
     })
     this.matchplayer.messageThreadSource.subscribe(res=>{
       if(res.currentmatchDetails!="")

@@ -111,10 +111,11 @@
                 <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="Lb" (click)="eventClick('Lb')">Leg Bye</div>
                 <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="B" (click)="eventClick('B')">Bye</div>
 
-                <div appPreventDoubleClick class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
-                <div appPreventDoubleClick class="offset-4 col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
-
                 <div appPreventDoubleClick class="col-4 py-1 border btn btn-secondary" data-event="Br" (click)="breakClick()">Break</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
+
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-success" data-event="Bc" (click)="eventBowlerChangeClick()">Change Bowler</div>
                 <div appPreventDoubleClick class="col-4 py-1 border btn btn-dark" data-event="Un" (click)="eventClick('Un')">Undo</div>
                 <div appPreventDoubleClick class="col-4 py-1 border btn btn-success" data-event="Ro" (click)="eventClick('Ro')">Rotate</div>
             </div>

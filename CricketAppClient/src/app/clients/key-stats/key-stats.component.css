@@ -1,0 +1,8 @@
+.card,card-header
+{
+  width: 100%;
+  font-size: 0.98em;
+}
+.card-header {
+  padding: 0.2rem 0.3rem;
+}

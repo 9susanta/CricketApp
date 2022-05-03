@@ -4,7 +4,7 @@ import { AddMatchPlayersComponent } from './_admin/add-match-players/add-match-p
 import { MatchComponent } from './_admin/match/match.component';
 import { PlayersComponent } from './_admin/players/players.component';
 import { ScoreboardComponent } from './_admin/scoreboard/scoreboard.component';
-import { ScorecardComponent } from './_admin/scorecard/scorecard.component';
+import { ScorecardComponent } from './clients/scorecard/scorecard.component';
 import { SeriesComponent } from './_admin/series/series.component';
 import { SquadComponent } from './_admin/squad/squad.component';
 import { TeamsComponent } from './_admin/teams/teams.component';
