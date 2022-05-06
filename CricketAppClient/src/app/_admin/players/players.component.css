@@ -1,0 +1,17 @@
+.table td, .table th,div {
+    font-size: 0.98em;
+}
+.table td, .table th
+{
+    padding:0.2rem;
+    border-bottom: 0px;
+}
+.table > thead > tr:first-child > td, 
+.table > tbody > tr:first-child > td {
+    border: none;
+}
+.btn-link
+{
+    padding-top: 0;
+    padding-bottom: 0;
+}

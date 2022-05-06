@@ -96,15 +96,15 @@
     <div class="row">
         <div class="col-sm">
             <div class="row text-center mb-2 flex-wrap" style="font-family: monospace;" [ngClass]="([0,2,4,5].includes(matchStatus))?'ctrl-disable':''">
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="0" (click)="eventClick('0')">0</div>
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="1" (click)="eventClick('1')">1</div>
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="2" (click)="eventClick('2')">2</div>
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="3" (click)="eventClick('3')">3</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="0" (click)="eventClick('0')">0</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="1" (click)="eventClick('1')">1</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="2" (click)="eventClick('2')">2</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="3" (click)="eventClick('3')">3</div>
                 
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('4')">4</div>
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('5')">5</div>
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="4" (click)="eventClick('6')">6</div>
-                <div appPreventDoubleClick class="col-3 py-1 border btn btn-primary" data-event="6" (click)="eventClick('7')">7</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="4" (click)="eventClick('4')">4</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="6" (click)="eventClick('5')">5</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="4" (click)="eventClick('6')">6</div>
+                <div appPreventDoubleClick class="col-3 py-1 border btn btn-info" data-event="6" (click)="eventClick('7')">7</div>
 
                 <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="Wd" (click)="eventClick('Wd')">Wide</div>
                 <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="N" (click)="eventClick('N')">No-Ball</div>
@@ -112,7 +112,7 @@
                 <div appPreventDoubleClick class="col-3 py-1 border btn btn-dark" data-event="B" (click)="eventClick('B')">Bye</div>
 
                 <div appPreventDoubleClick class="col-4 py-1 border btn btn-secondary" data-event="Br" (click)="breakClick()">Break</div>
-                <div appPreventDoubleClick class="col-4 py-1 border btn btn-info" data-event="P" (click)="eventClick('P')">Penalty</div>
+                <div appPreventDoubleClick class="col-4 py-1 border btn btn-warning" data-event="P" (click)="eventClick('P')">Penalty</div>
                 <div appPreventDoubleClick class="col-4 py-1 border btn btn-danger" data-event="W" (click)="eventClick('W')">Wicket</div>
 
                 <div appPreventDoubleClick class="col-4 py-1 border btn btn-success" data-event="Bc" (click)="eventBowlerChangeClick()">Change Bowler</div>
@@ -129,15 +129,15 @@
 </div>
 
 <div class="modal fade" id="modal" bsModal #parentModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="question">{{modalmessage}}</h5>
         </div>
         <div class="modal-body" id="selections1">
-              <app-setplayer [player]="playersSet"></app-setplayer> 
+            <app-setplayer [player]="playersSet"></app-setplayer>
         </div>
-        <div class="text-center py-1">
+        <div class="text-end py-1">
         <button type="button" id="confirm" class="btn btn-success">Confirm</button>
         </div>
     </div>
@@ -145,9 +145,9 @@
 </div>
 
 <div class="modal fade" id="runmademodal" bsModal #runmademodal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="question1">{{runmodalmessage}}</h5>
         </div>
         <div class="modal-body" id="selections1">
@@ -168,7 +168,7 @@
 <div class="modal fade" id="inningStatus" bsModal #breakModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-success text-white">
             <h6 class="modal-title" id="question2">Break</h6>
             </div>
             <div class="modal-body" id="selections3">
@@ -194,7 +194,7 @@
 <div class="modal fade" id="result" bsModal #resultModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-success text-white">
             <h6 class="modal-title" id="question4">Result</h6>
             </div>
             <div class="modal-body" id="selections4">

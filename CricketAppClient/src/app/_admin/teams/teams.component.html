@@ -1,19 +1,19 @@
 
 <div class="row mt-3">
-   <h6>TEAMS</h6>
+  <p class="alert alert-success small p-0"> 🏏 Teams</p>
 </div>
-<div class="row mt-2">
+<div class="row">
     <div class="col-4">
         <div class="card shadow">
           <div class="card-body">
             <form [formGroup]="teamForm" (ngSubmit)="OnSubmit()">
               <div class="mb-3">
-                <label for="inputTeam" class="form-label">TEAM NAME</label>
-                <input type="text" formControlName="teamName" class="form-control" id="inputTeam">
+                <label for="inputTeam" class="form-label">Team Name</label>
+                <input type="text" formControlName="teamName" class="form-control form-control-sm" id="inputTeam">
               </div>
               <div class="mb-3">
-                <label for="ddltypes" class="form-label">TEAM TYPE</label>
-                <app-type-dropdown [cssClass]="'form-control'" [formControl]='teamForm.controls["teamTypeId"]'></app-type-dropdown>
+                <label for="ddltypes" class="form-label">Team Type</label>
+                <app-type-dropdown [cssClass]="'form-control form-control-sm'" [formControl]='teamForm.controls["teamTypeId"]'></app-type-dropdown>
               </div>
               <div class="mb-3 float-end">
               <button type="submit" class="btn btn-success">{{buttonText}}</button>
@@ -25,10 +25,10 @@
       </div>
       <div class="col-8">
         <div class="row">
-          <table class="table">
-            <thead>
+          <table class="table table-sm">
+            <thead class="table-light">
               <tr>
-                <th>#</th>
+                <th>No.</th>
                 <th>Team</th>
                 <th>Type</th>
                 <th>Action</th>

@@ -3,7 +3,7 @@
       <form [formGroup]="playerForm" (ngSubmit)="OnSubmit()">
         <div class="mb-3">
           <label for="inputName" class="form-label">Player Name</label>
-          <input type="text" formControlName="Name" class="form-control" id="inputName">
+          <input type="text" formControlName="Name" class="form-control form-control-sm" id="inputName">
         </div>
        <div class="mb-3">
            <div class="form-check">
@@ -17,7 +17,7 @@
        </div>
        <div class="mb-3" *ngIf="IsInternational">
          <label for="inputationalTeam" class="form-label">International Team/Country</label>
-         <select formControlName="InternationalTeam" class="form-control" id="inputationalTeam">
+         <select formControlName="InternationalTeam" class="form-control form-control-sm" id="inputationalTeam">
             <option *ngFor="let team of teams" [value]="team.teamId">
                 {{team.teamName}}
               </option>
