@@ -70,26 +70,23 @@ namespace CricketApp.Data
 
         public async Task<PagedList<PlayerDto>> GetPlayersList(playerParam seriesParam)
         {
-            var _player = await _tblPlayers.Find(x => x.IsDeleated == false).ToListAsync();
+            var item =await Task.FromResult((from pl in _tblPlayers.AsQueryable().AsEnumerable()
+                                             join tm in _tblTeams.AsQueryable().AsEnumerable()
+                                             on pl.InternationalTeam equals tm.TeamId into tmp_team
+                                             from tmp_tem in tmp_team.DefaultIfEmpty()
+                                             select new PlayerDto
+                                             {
+                                                PlayersId = pl.PlayersId,
+                                                Name = pl.Name,
+                                                InternationalTeam = pl.InternationalTeam,
+                                                IsActive = pl.IsActive,
+                                                IsDeleated = pl.IsDeleated,
+                                                IsLocalPlayer = pl.IsLocalPlayer,
+                                                Role=pl.Role,
+                                                TeamName = tmp_tem?.TeamName
+                                             }).ToList());
 
-            var _teams = _tblTeams.Find(x => x.IsDeleated == false).ToList();
-
-            var players = from pl in _player
-                          join tm in _teams
-                          on pl.InternationalTeam equals tm.TeamId into tmp_team
-                          from tmp_tem in tmp_team.DefaultIfEmpty()
-                          select new PlayerDto 
-                          { 
-                              PlayersId=pl.PlayersId, 
-                              Name=pl.Name,
-                              InternationalTeam=pl.InternationalTeam,
-                              IsActive=pl.IsActive,
-                              IsDeleated=pl.IsDeleated,
-                              IsLocalPlayer=pl.IsLocalPlayer,
-                              TeamName = tmp_tem?.TeamName
-                          };
-
-            return PagedList<PlayerDto>.CreateAsyc(players.AsQueryable(), seriesParam.PageNumber, seriesParam.PageSize); ;
+            return PagedList<PlayerDto>.CreateAsyc(item.AsQueryable(), seriesParam.PageNumber, seriesParam.PageSize); ;
         }
 
         public async Task<bool> IsExist(string Name)
@@ -134,8 +131,9 @@ namespace CricketApp.Data
                  .Set(c => c.Name, tblPlayers.Name)
                  .Set(c => c.JerseyName, tblPlayers.JerseyName)
                  .Set(c => c.JerseyNo, tblPlayers.JerseyNo)
-                 .Set(c=>c.IsLocalPlayer,tblPlayers.IsLocalPlayer)
+                 .Set(c => c.IsLocalPlayer, tblPlayers.IsLocalPlayer)
                  .Set(c => c.InternationalTeam, tblPlayers.InternationalTeam)
+                 .Set(c => c.Role, tblPlayers.Role)
                  .Set(c=>c.IsActive,tblPlayers.IsActive)
                  .Set(c => c.LastUpdated, DateTime.Now);
                  

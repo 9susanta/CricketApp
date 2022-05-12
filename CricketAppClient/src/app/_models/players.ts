@@ -3,6 +3,7 @@ export interface players{
     jerseyNo:string,
     jerseyName:string,
     name:string,
+    role:string,
     dob:Date,
     internationalTeam:number,
     localTeams:number,

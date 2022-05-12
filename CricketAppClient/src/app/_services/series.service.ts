@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { series } from '../models/series';
+import { series } from '../_models/series';
 import { getPaginatedResult, getPaginationHeaders } from '../_helpers/paginationHelper';
 
 @Injectable({

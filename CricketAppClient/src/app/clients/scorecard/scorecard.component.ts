@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { matchplayer } from 'src/app/models/matchplayer';
-import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
-import { teamdetails } from 'src/app/models/teamdetails';
+import { matchplayer } from 'src/app/_models/matchplayer';
+import { matchplayerdetails } from 'src/app/_models/matchplayerdetails';
+import { teamdetails } from 'src/app/_models/teamdetails';
 import { MatchplayerService } from 'src/app/_services/matchplayer.service';
 
 @Component({

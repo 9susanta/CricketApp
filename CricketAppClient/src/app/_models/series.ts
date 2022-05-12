@@ -5,5 +5,8 @@ export interface series{
     seriesTypeId:number,
     status:number,
     statusName:string,
-    isDeleated:boolean
+    isDeleated:boolean,
+    location:string,
+    startDate:Date,
+    endDate:Date
 }

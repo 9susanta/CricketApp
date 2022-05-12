@@ -21,6 +21,12 @@ namespace CricketApp.Entity
 
         public string SeriesTypes { get; set; }
 
+        public string location {get; set;}
+
+        public DateTime startDate { get; set; }
+
+        public DateTime endDate { get; set; }
+
         public int Status { get; set; }
 
         public string StatusName { get; set; }

@@ -1,79 +1,109 @@
-
-<div class="row mt-3">
+<div class="row mt-2">
     <p class="alert alert-success small p-0"> 🏆 Series</p>
  </div>
- <div class="row">
-     <div class="col-lg-4 col-md-12 col-sm-12">
-         <div class="card shadow">
-           <div class="card-body">
-             <form [formGroup]="seriesForm" (ngSubmit)="OnSubmit()">
-               <div class="mb-3">
-                 <label for="inputSeries" class="form-label">Series Name</label>
-                 <input type="text" formControlName="SeriesName" class="form-control form-control-sm" id="inputSeries">
-               </div>
-               <div class="mb-3">
-                 <label for="inputseriesType" class="form-label">Series Type</label>
-                 <app-type-dropdown [cssClass]="'form-control form-control-sm'" id="inputseriesType" [formControl]='seriesForm.controls["SeriesTypeId"]'></app-type-dropdown>
-               </div>
-               <div class="mb-3">
-                  <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="radio1" name="StatusName" formControlName="StatusName" value="Schedule">Schedule
-                    <label class="form-check-label" for="radio1"></label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="radio2" name="StatusName" formControlName="StatusName" value="Completed">Completed
-                    <label class="form-check-label" for="radio2"></label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="radio3" name="StatusName" formControlName="StatusName" value="Cancelled">Cancelled
-                    <label class="form-check-label" for="radio3"></label>
-                  </div>
-              </div>
-               <div class="mb-3 float-end">
-               <button type="submit" class="btn btn-success shadow">{{buttonText}}</button>
-               <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1 shadow-lg">Reset</button>
-               </div>
-             </form>
-          </div>
-         </div>
-       </div>
-       <div class="col-lg-8 col-md-12 col-sm-12">
-         <div class="row">
-           <table class="table table-sm">
-             <thead class="table-light">
-               <tr>
-                 <th>No.</th>
-                 <th>Series</th>
-                 <th>Type</th>
-                 <th>Status</th>
-                 <th>Action</th>
-               </tr>
-             </thead>
-             <tbody>
-               <tr *ngFor="let item of serieses;let i = index;">
-                 <td>{{(i+1)*pageNumber}}</td>
-                 <td>{{item.seriesName}}</td>
-                 <td>{{item.seriesTypes}}</td>
-                 <td>{{item.statusName}}</td>
-                 <td><button type="button" (click)="OnEdit(item)" class="btn btn-link">Edit</button>  
-                   <button type="button" class="btn btn-link" (click)="OnDelete(item.seriesId)">Delete</button> 
-                 </td>
-               </tr>
-             </tbody>
-           </table>
-         </div>
-         <div class="d-flex justify-content-center" *ngIf="pagination">
-           <pagination 
-               [boundaryLinks]="true" 
-               [totalItems]="pagination.totalItems"
-               [itemsPerPage]="pagination.itemsPerPage"
-               [(ngModel)]="pagination.currentPage"
-               (pageChanged)="pageChanged($event)"
-               previousText="&lsaquo;" 
-               nextText="&rsaquo;" 
-               firstText="&laquo;" 
-               lastText="&raquo;">
-           </pagination>
-       </div>
+ <div class="row mb-1">
+  <div class="col">
+     <button class="btn btn-info float-end shadow" (click)="onShow()">Add New</button>
+  </div>
  </div>
+ <div class="row">
+     <div class="col-lg-3 col-md-4 col-sm-6 mt-2 pad-reduce-card" *ngFor="let item of serieses;let i = index;">
+        <div class="card shadow" [ngClass]="getappcommonService(i)">
+         <div class="card-body">
+              <div class="mt-1">
+                <span><fa-icon class="color-9 me-1" icon="trophy"></fa-icon><b>{{item.seriesName}}</b></span>
+              </div>
+              <div class="mt-1">
+                <span><fa-icon class="color-10 me-1" icon="location-dot"></fa-icon>{{item.location}}</span>
+              </div>
+              <div class="mt-1">
+                <span><fa-icon class="color-10 me-1" icon="{{item.seriesTypes=='International'?'earth-americas':'house'}}"></fa-icon>{{item.seriesTypes}}</span>
+              </div>
+              <div class="mt-1">
+                <span><fa-icon class="color-10 me-1" icon="calendar-days"></fa-icon>{{item.startDate | date:'mediumDate'}}-{{item.endDate | date:'mediumDate'}}</span>
+              </div>
+              <div class="mt-1">
+                <span><fa-icon class="color-10 me-1" icon="calendar-check"></fa-icon>{{item.statusName}}</span>
+              </div>
+              <div class="top-right-pos">
+                <button type="button" (click)="OnEdit(item)" class="btn btn-link"> <fa-icon icon="pen-to-square"></fa-icon> Edit</button>  
+                <button type="button" class="ms-1 btn btn-link" (click)="OnDelete(item.seriesId)"><fa-icon icon="trash"></fa-icon> Delete</button> 
+              </div>
+         </div>
+        </div>
+     </div>
+     <div class="d-flex justify-content-center mt-3" *ngIf="pagination!=undefined">
+      <pagination 
+          [boundaryLinks]="true" 
+          [totalItems]="pagination.totalItems"
+          [itemsPerPage]="pagination.itemsPerPage"
+          [(ngModel)]="pagination.currentPage"
+          (pageChanged)="pageChanged($event)"
+          previousText="&lsaquo;" 
+          nextText="&rsaquo;" 
+          firstText="&laquo;" 
+          lastText="&raquo;">
+      </pagination>
+  </div>
+ </div>
+
+  <div class="modal fade" id="modal"  [config]="{backdrop: 'static'}" bsModal #seriesModal="bs-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable h-auto">
+     <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h6 class="modal-title" id="question">Add new Series/Tournament</h6>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="onClose()">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="selections1">
+      <form [formGroup]="seriesForm" (ngSubmit)="OnSubmit()">
+        <div class="mb-1">
+          <label for="inputSeries" class="form-label"><fa-icon class="color-9 me-1" icon="trophy"></fa-icon> Series/Tournament</label>
+          <input type="text" formControlName="SeriesName" placeholder="Enter Series/Tournament Name" class="form-control form-control-sm" id="inputSeries">
+        </div>
+        <div class="mb-1">
+         <label for="inputLocation" class="form-label"><fa-icon class="color-10 me-1" icon="location-dot"></fa-icon> Location</label>
+         <input type="text" formControlName="location" placeholder="Enter Location Name" class="form-control form-control-sm" id="inputLocation">
+       </div>
+        <div class="mb-1">
+          <label for="inputseriesType" class="form-label"><fa-icon class="color-10 me-1" icon="earth-americas"></fa-icon>Series Type</label>
+          <app-type-dropdown [cssClass]="'form-select form-select-sm'" id="inputseriesType" [formControl]='seriesForm.controls["SeriesTypeId"]'></app-type-dropdown>
+        </div>
+        <div class="mb-2">
+             <div class="row">
+               <div class="col-lg-6 col-sm-12">
+                 <label for="inputstrtdt" class="form-label"><fa-icon class="color-10 me-1" icon="calendar-plus"></fa-icon>Start Date</label>
+                 <input id="inputstrtdt" (bsValueChange)="onValueChange($event)" [minDate]="minDate" [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY' ,adaptivePosition: true}" formControlName="startDate" type="text" placeholder="Start Date" class="form-control form-control-sm" bsDatepicker>
+               </div>
+               <div class="col-lg-6 col-sm-12">
+                 <label for="inputenddt" class="form-label"><fa-icon class="color-10 me-1" icon="calendar-minus"></fa-icon> End Date</label>
+                 <input type="text" id="inputenddt" [minDate]="tominDate" [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY',adaptivePosition: true }" formControlName="endDate" placeholder="End Date" class="form-control form-control-sm" bsDatepicker>
+               </div>
+             </div>            
+         </div>
+        <div class="mb-1">
+           <div class="form-check form-check-inline">
+             <input type="radio" class="form-check-input" id="radio1" name="StatusName" formControlName="StatusName" value="Schedule">Schedule
+             <label class="form-check-label" for="radio1"></label>
+           </div>
+           <div class="form-check form-check-inline">
+             <input type="radio" class="form-check-input" id="radio2" name="StatusName" formControlName="StatusName" value="Completed">Completed
+             <label class="form-check-label" for="radio2"></label>
+           </div>
+           <div class="form-check form-check-inline">
+             <input type="radio" class="form-check-input" id="radio3" name="StatusName" formControlName="StatusName" value="Cancelled">Cancelled
+             <label class="form-check-label" for="radio3"></label>
+           </div>
+       </div>
+        <div class="float-end">
+          <button type="submit" class="btn btn-success shadow">{{buttonText}}</button>
+           <button type="reset" (click)="onClose()" class="btn btn-danger ms-1 shadow-lg">Reset</button>
+        </div>
+      </form>
+      </div>
+    </div>
+    </div>
+  </div>
+
  

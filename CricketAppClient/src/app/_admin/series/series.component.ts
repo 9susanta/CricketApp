@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Pagination } from 'src/app/models/pagination';
-import { series } from 'src/app/models/series';
-import { team } from 'src/app/models/team';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { Pagination } from 'src/app/_models/pagination';
+import { series } from 'src/app/_models/series';
+import { AppcommonService } from 'src/app/_services/appcommon.service';
+import { ConfirmService } from 'src/app/_services/confirm.service';
 import { SeriesService } from 'src/app/_services/series.service';
-
 @Component({
   selector: 'app-series',
   templateUrl: './series.component.html',
@@ -20,21 +22,43 @@ export class SeriesComponent implements OnInit {
   pagination!: Pagination;
   series!:series;
   buttonText:string="Add";
-
-
-  constructor(private fb: FormBuilder,private seriesService:SeriesService) { }
+  minDate:Date=new Date();
+  tominDate:Date=new Date();
+  
+  @ViewChild('seriesModal', { static: false }) modal?: ModalDirective;
+  constructor(private fb: FormBuilder,private seriesService:SeriesService,
+    private toastr:ToastrService,private confirmService:ConfirmService,
+    private appcommonService:AppcommonService) { }
 
   ngOnInit(): void {
     this.intitializeForm();
-    this.pageSize=20;
+    this.pageSize=12;
     this.loadSeries();
+  }
+  
+  onShow()
+  {
+    this.OnReset();
+    this.modal?.show();
+  }
+  onClose()
+  {
+     this.OnReset();
+     this.modal?.hide();
+  }
+  getappcommonService(indx:number)
+  {
+    return this.appcommonService.generateRandom(indx);
   }
   intitializeForm()
   {
     this.seriesForm=this.fb.group({
-      SeriesName: [''],
-      SeriesTypeId: [''],
-      StatusName:['Schedule']
+      SeriesName: ['',[Validators.required, Validators.minLength(3)]],
+      location:['',[Validators.required]],
+      SeriesTypeId: ['',[Validators.required]],
+      startDate:['',[Validators.required]],
+      endDate:['',[Validators.required]],
+      StatusName:['Schedule',[Validators.required]]
     });
   }
   loadSeries() {
@@ -47,15 +71,18 @@ export class SeriesComponent implements OnInit {
   {
     this.pageNumber=event.page;
     this.loadSeries();
-  }
-  
+  }  
   OnEdit(item:any)
   {
+    this.onShow()
     this.series=item;
     this.seriesForm.setValue({  
       SeriesName: this.series.seriesName,
       SeriesTypeId: this.series.seriesTypeId,
-      StatusName:this.series.statusName
+      StatusName:this.series.statusName,
+      location:this.series.location,
+      startDate:new Date(this.series.startDate),
+      endDate:new Date(this.series.endDate)
      });  
      this.buttonText="Update";
   }
@@ -64,43 +91,72 @@ export class SeriesComponent implements OnInit {
     this.series.seriesName=this.seriesForm.controls['SeriesName'].value 
     this.series.seriesTypeId=this.seriesForm.controls['SeriesTypeId'].value 
     this.series.statusName=this.seriesForm.controls['StatusName'].value 
+    this.series.location=this.seriesForm.controls['location'].value,
+    this.series.startDate=this.seriesForm.controls['startDate'].value,
+    this.series.endDate=this.seriesForm.controls['endDate'].value
     this.seriesService.updateSeries(this.series).subscribe(obj=>{
+      this.toastr.success('Update Tournament', 'Updated successfully !');
       this.OnReset();
+      this.onClose();
       this.loadSeries();
-   },err=>{
-     console.log(err);
    });
   }
   OnReset()
   {
     this.seriesForm.setValue({  
-      SeriesName: [''],
-      SeriesTypeId: [''],
-      StatusName:['Schedule']
+      SeriesName: '',
+      location:'',
+      SeriesTypeId: "",
+      startDate:'',
+      endDate:'',
+      StatusName:'Schedule'
      });  
      this.buttonText="Add";
   }
+  onValueChange(value: Date): void {
+    this.tominDate = value;
+  }
   OnDelete(id:any)
   {
-    this.seriesService.deleteSeries(id).subscribe(response => {
-      if(response==true)
-      {
-        this.loadSeries();
+    this.confirmService.confirm('Confirm delete').subscribe(result => {
+      if (result) {
+        this.seriesService.deleteSeries(id).subscribe(response => {
+          if(response==true)
+          {
+            this.toastr.success('Remove Tournament', 'Removed successfully !');
+            this.loadSeries();
+          }
+        });
       }
-    });
+    })
   }
 
   OnSubmit()
   {
+    if(this.seriesForm.status=='INVALID')
+    {
+      this.toastr.warning('Enter all the field !')
+      return;
+    }
+
     if(this.buttonText=="Add")
     {
-    this.seriesService.addSeries(this.seriesForm.value).subscribe(obj=>{
-      this.OnReset()
-    },err=>{
-      console.log(err);
-    })
+       this.seriesService.addSeries(this.seriesForm.value).subscribe(obj=>{
+         if(obj=="1")
+         {
+           this.toastr.success('Add Tournament', 'Added successfully !');
+           this.onClose();
+           this.OnReset();
+           this.loadSeries();
+         }
+         else
+         {
+          this.toastr.error('Add Tournament', 'Tournament exist !');
+         }
+       })
     }
-    else{
+    else
+    {
       this.OnUpdate()
     }
   }

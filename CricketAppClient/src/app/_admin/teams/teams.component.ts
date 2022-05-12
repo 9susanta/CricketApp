@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl,FormBuilder,FormGroup,FormControl} from '@angular/forms';
-import { Pagination } from 'src/app/models/pagination';
-import { team } from 'src/app/models/team';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl,FormBuilder,FormGroup,FormControl, Validators} from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { Pagination } from 'src/app/_models/pagination';
+import { team } from 'src/app/_models/team';
+import { AppcommonService } from 'src/app/_services/appcommon.service';
+import { ConfirmService } from 'src/app/_services/confirm.service';
 import { TeamsServiceService } from 'src/app/_services/teams-service.service';
 
 @Component({
@@ -20,30 +24,61 @@ export class TeamsComponent implements OnInit {
   team!:team;
   buttonText:string="Add";
 
-  constructor(private fb: FormBuilder,private teamService:TeamsServiceService) { }
+  @ViewChild('teamsModal', { static: false }) modal?: ModalDirective;
+
+  constructor(private fb: FormBuilder,private teamService:TeamsServiceService,
+    private toastr:ToastrService,private confirmService:ConfirmService,
+    private appcommonService:AppcommonService) { }
 
   ngOnInit() {
     this.intitializeForm()
-    this.pageSize=20;
+    this.pageSize=16;
     this.loadTeams();
   }
 
   intitializeForm()
   {
     this.teamForm=this.fb.group({
-      teamName: [''],
-      teamTypeId: ['']
+      teamName: ['',[Validators.required, Validators.minLength(3)]],
+      teamTypeId: ['',[Validators.required]]
     });
+  }
+  onShow()
+  {
+    this.OnReset();
+    this.modal?.show();
+  }
+  onClose()
+  {
+     this.OnReset();
+     this.modal?.hide();
+  }
+  getappcommonService(indx:number)
+  {
+    return this.appcommonService.generateRandom(indx);
   }
   
   OnSubmit()
   {
+    if(this.teamForm.status=='INVALID')
+    {
+      this.toastr.warning('Enter all the field !')
+      return;
+    }
     if(this.buttonText=="Add")
     {
     this.teamService.addTeams(this.teamForm.value).subscribe(obj=>{
-      this.OnReset()
-    },err=>{
-      console.log(err);
+      if(obj=="1")
+      {
+        this.toastr.success('Add Tournament', 'Added successfully !');
+        this.onClose();
+        this.OnReset()
+        this.loadTeams();
+      }
+      else
+      {
+       this.toastr.error('Add Tournament', 'Tournament exist !');
+      }
     })
     }
     else{
@@ -63,7 +98,7 @@ export class TeamsComponent implements OnInit {
   }
   OnEdit(item:any)
   {
-    debugger;
+    this.onShow()
     this.team=item;
     this.teamForm.setValue({  
       teamName: item.teamName,  
@@ -76,10 +111,10 @@ export class TeamsComponent implements OnInit {
     this.team.teamName=this.teamForm.controls['teamName'].value 
     this.team.teamTypeId=this.teamForm.controls['teamTypeId'].value 
     this.teamService.updateTeams(this.team).subscribe(obj=>{
+      this.toastr.success('Update Team', 'Updated successfully !');
       this.OnReset();
+      this.onClose();
       this.loadTeams();
-   },err=>{
-     console.log(err);
    });
   }
   OnReset()
@@ -92,11 +127,17 @@ export class TeamsComponent implements OnInit {
   }
   OnDelete(id:any)
   {
-    this.teamService.deleteTeams(id).subscribe(response => {
-      if(response==true)
-      {
-        this.loadTeams();
+
+    this.confirmService.confirm('Confirm delete').subscribe(result => {
+      if (result) {
+        this.teamService.deleteTeams(id).subscribe(response => {
+          if(response==true)
+          {
+            this.toastr.success('Removed Team', 'Removed successfully !');
+            this.loadTeams();
+          }
+        });
       }
-    });
+    })
   }
 }

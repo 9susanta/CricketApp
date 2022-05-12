@@ -7,15 +7,14 @@ import { AppComponent } from './app.component';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatmoduleModule } from './matmodule/matmodule.module';
 
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TypeDropdownComponent } from './_ui_component/type-dropdown/type-dropdown.component';
 
 import { TeamsComponent } from './_admin/teams/teams.component';
 import { MenubarComponent } from './_ui_component/menubar/menubar.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { SeriesComponent } from './_admin/series/series.component';
 import { PlayersComponent } from './_admin/players/players.component';
 import { AddplayerComponent } from './_ui_component/addplayer/addplayer.component';
@@ -30,8 +29,13 @@ import { ScoreboardComponent } from './_admin/scoreboard/scoreboard.component';
 import { SetplayerComponent } from './_ui_component/setplayer/setplayer.component';
 import { ScorecardComponent } from './clients/scorecard/scorecard.component';
 import { MatchComponent } from './_admin/match/match.component';
-import { PreventDoubleClickDirective } from './directives/prevent-double-click.directive';
+import { PreventDoubleClickDirective } from './_directives/prevent-double-click.directive';
 import { KeyStatsComponent } from './clients/key-stats/key-stats.component';
+import { SharedModule } from './_module/shared.module';
+import { ConfirmComponent } from './_modal/confirm/confirm.component';
+import { LoadingInterceptor } from './_interceptor/loading.interceptor';
+import { TeamtoseriesComponent } from './_admin/teamtoseries/teamtoseries.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -51,7 +55,9 @@ import { KeyStatsComponent } from './clients/key-stats/key-stats.component';
     ScorecardComponent,
     MatchComponent,
     PreventDoubleClickDirective,
-    KeyStatsComponent
+    KeyStatsComponent,
+    ConfirmComponent,
+    TeamtoseriesComponent
   ],
   schemas: [
   ],
@@ -61,14 +67,15 @@ import { KeyStatsComponent } from './clients/key-stats/key-stats.component';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     FormsModule,
-    MatmoduleModule,
+    SharedModule,
     HttpClientModule,
-    FontAwesomeModule,
     TypeaheadModule.forRoot(),
     ModalModule.forRoot(),
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    BsDatepickerModule.forRoot(),
+    NgMultiSelectDropDownModule.forRoot()
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

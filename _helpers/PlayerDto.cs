@@ -9,6 +9,7 @@ namespace CricketApp._helpers
     {
         public int PlayersId { get; set; }
         public string Name { get; set; }
+        public string Role { get; set; }
         public string JerseyNo { get; set; }
         public string JerseyName { get; set; }
         public DateTime? Dob { get; set; }

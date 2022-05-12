@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { map } from "rxjs";
-import { PaginatedResult } from "../models/pagination";
+import { PaginatedResult } from "../_models/pagination";
 
 export function getPaginationHeaders(pageNumber:number,pageSize:number)
 {

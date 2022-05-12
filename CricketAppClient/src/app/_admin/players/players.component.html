@@ -1,46 +1,63 @@
 <div class="row mt-3">
   <p class="alert alert-success small p-0"> 👲 Players</p>
  </div>
- <div class="row">
-     <div class="col-lg-4 col-md-12 col-sm-12">
-        <app-addplayer [EditItem]="player" (OutputItemEvent)="outputFunction($event)"></app-addplayer>
-     </div>
-       <div class="col-lg-8 col-md-12 col-sm-12">
-           <table class="table table-sm">
-             <thead class="table-light">
-               <tr>
-                 <th>No.</th>
-                 <th>Player Name</th>
-                 <th>Player Type</th>
-                 <th>Teams/Country</th>
-                 <th>Is Active</th>
-                 <th>Action</th>
-               </tr>
-             </thead>
-             <tbody>
-               <tr *ngFor="let item of players;let i = index;">
-                 <td>{{(i+1)*pageNumber}}</td>
-                 <td>{{item.name}}</td>
-                 <td>{{item.isLocalPlayer==true?'Local':'International'}}</td>
-                 <td>{{item.teamName}}</td>
-                 <td>{{item.isActive==true?'Active':'In Active'}}</td>
-                 <td><button type="button" (click)="OnEdit(item)" class="btn btn-link">Edit</button>  
-                   <button type="button" class="btn btn-link" (click)="OnDelete(item.playersId)">Delete</button> 
-                 </td>
-               </tr>
-             </tbody>
-           </table>
-         <div class="d-flex justify-content-center" *ngIf="pagination">
-           <pagination 
-               [boundaryLinks]="true" 
-               [totalItems]="pagination.totalItems"
-               [itemsPerPage]="pagination.itemsPerPage"
-               [(ngModel)]="pagination.currentPage"
-               (pageChanged)="pageChanged($event)"
-               previousText="&lsaquo;" 
-               nextText="&rsaquo;" 
-               firstText="&laquo;" 
-               lastText="&raquo;">
-           </pagination>
-       </div>
+ <div class="row mb-1">
+  <div class="col">
+     <button class="btn btn-info float-end shadow" (click)="onShow()">Add New</button>
+  </div>
  </div>
+ <div class="row">
+  <div class="col-lg-3 col-md-4 col-sm-6 mt-2 pad-reduce-card" *ngFor="let item of players;let i = index;">
+    <div class="card shadow" [ngClass]="getappcommonService(i)">
+     <div class="card-body">
+          <div class="mt-1">
+            <span><fa-icon class="color-1 me-1" icon="user-alt"></fa-icon><b>{{item.name}}</b></span>
+          </div>
+          <div class="mt-1">
+            <span><fa-icon class="color-4 me-1" icon="users"></fa-icon>{{item.role}}</span>
+          </div>
+          <div class="mt-1">
+            <span><fa-icon class="color-10 me-1" icon="{{item.isLocalPlayer==false?'earth-americas':'house'}}"></fa-icon>{{item.isLocalPlayer==false?'International Player':'Domestic Player'}}</span>
+          </div>
+          <div class="mt-1">
+              <span><fa-icon class="color-9 me-1" icon="people-group"></fa-icon>{{item.teamName!=null?item.teamName:"-- NA --"}}</span>
+          </div>
+          <div class="mt-1">
+            <span><fa-icon class="color-10 me-1" icon="{{item.isActive==true?'lock-open':'lock'}}"></fa-icon>{{item.isActive==true?'Active':'Inactive'}}</span>
+          </div>
+          <div class="top-right-pos">
+            <button type="button" (click)="OnEdit(item)" class="btn btn-link"><fa-icon icon="pen-to-square"></fa-icon> Edit</button>  
+            <button type="button" class="btn btn-link" (click)="OnDelete(item.playersId)"><fa-icon icon="trash"></fa-icon> Delete</button>
+          </div>
+     </div>
+    </div>
+ </div>
+  <div class="d-flex justify-content-center mt-3" *ngIf="pagination!=undefined">
+    <pagination 
+        [boundaryLinks]="true" 
+        [totalItems]="pagination.totalItems"
+        [itemsPerPage]="pagination.itemsPerPage"
+        [(ngModel)]="pagination.currentPage"
+        (pageChanged)="pageChanged($event)"
+        previousText="&lsaquo;" 
+        nextText="&rsaquo;" 
+        firstText="&laquo;" 
+        lastText="&raquo;">
+    </pagination>
+  </div>
+ </div>
+<div class="modal fade" id="modal" bsModal #playerModal="bs-modal" [config]="{backdrop: 'static'}" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable h-auto">
+     <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+         <h6 class="modal-title" id="question">Add a new player</h6>
+          <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="onClose()">
+           <span aria-hidden="true" class="visually-hidden">&times;</span></button>
+        </div>
+        <div class="modal-body" id="selections1">
+          <app-addplayer [EditItem]="player" (OutputItemEvent)="outputFunction($event)"></app-addplayer>
+        </div>
+     </div>
+   </div>
+</div>
+ 

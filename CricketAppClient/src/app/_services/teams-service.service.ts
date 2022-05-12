@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { team } from '../models/team';
+import { team } from '../_models/team';
 import { map } from 'rxjs';
 import { getPaginatedResult, getPaginationHeaders } from '../_helpers/paginationHelper';
 
@@ -12,6 +12,7 @@ export class TeamsServiceService {
   baseUrl=environment.apiUrl
   constructor(private http:HttpClient) { }
   addTeams(model:any){
+    debugger
     return this.http.post(this.baseUrl+'RegisterTeams/add-teams',model).pipe(map((team:any)=>{
       return team;
     }));

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
+import { matchplayerdetails } from 'src/app/_models/matchplayerdetails';
 
 @Component({
   selector: 'app-playerui',

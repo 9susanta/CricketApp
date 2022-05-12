@@ -77,7 +77,7 @@ namespace CricketApp.Data
         {
             try
             {
-                var res = await _tblSeries.FindAsync(x => x.SeriesName == Name && x.SeriesTypes == Types);
+                var res = await _tblSeries.FindAsync(x => x.SeriesName == Name);
                 return res.Any();
             }
             catch (Exception ex)
@@ -116,7 +116,10 @@ namespace CricketApp.Data
                  .Set(c => c.SeriesTypes, tblSeries.SeriesTypes)
                  .Set(c => c.SeriesTypeId, tblSeries.SeriesTypeId)
                  .Set(c => c.Status, tblSeries.Status)
-                  .Set(c => c.StatusName, tblSeries.StatusName)
+                 .Set(c => c.StatusName, tblSeries.StatusName)
+                 .Set(c=>c.location,tblSeries.location)
+                 .Set(c=>c.startDate,tblSeries.startDate)
+                 .Set(c=>c.endDate,tblSeries.endDate)
                  .Set(c => c.LastUpdated, DateTime.Now);
                 var result = await _tblSeries.UpdateOneAsync(filter, update);
                 if (result.ModifiedCount > 0)

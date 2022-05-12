@@ -3,5 +3,6 @@ export interface team{
     teamName:string,
     teamTypes:string,
     teamTypeId:number,
-    isDeleated:boolean
+    isDeleated:boolean,
+    isAddedSeries:boolean
 }

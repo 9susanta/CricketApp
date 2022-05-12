@@ -1,38 +1,50 @@
-<div class="card shadow">
-    <div class="card-body">
-      <form [formGroup]="playerForm" (ngSubmit)="OnSubmit()">
-        <div class="mb-3">
-          <label for="inputName" class="form-label">Player Name</label>
-          <input type="text" formControlName="Name" class="form-control form-control-sm" id="inputName">
-        </div>
-       <div class="mb-3">
-           <div class="form-check">
-             <input type="radio" class="form-check-input" id="radio1" (click)="OnCheck($event)" name="IsLocalPlayer" formControlName="IsLocalPlayer" value="false">International/Domestic Player
-             <label class="form-check-label" for="radio1"></label>
-           </div>
-           <div class="form-check">
-             <input type="radio" class="form-check-input" id="radio2" (click)="OnCheck($event)" name="IsLocalPlayer" formControlName="IsLocalPlayer" value="true">Local Player
-             <label class="form-check-label" for="radio1"></label>
-           </div>
-       </div>
-       <div class="mb-3" *ngIf="IsInternational">
-         <label for="inputationalTeam" class="form-label">International Team/Country</label>
-         <select formControlName="InternationalTeam" class="form-control form-control-sm" id="inputationalTeam">
-            <option *ngFor="let team of teams" [value]="team.teamId">
-                {{team.teamName}}
-              </option>
-         </select>
-       </div>
-        <div class="mb-3">
-           <div class="form-check">
-             <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" formControlName="IsActive">Is Active
-             <label class="form-check-label" for="IsActive"></label>
-           </div>
-       </div>
-        <div class="mb-3 float-end">
-           <button type="submit" class="btn btn-success">{{buttonText}}</button>
-           <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
-        </div>
-      </form>
+<form [formGroup]="playerForm" (ngSubmit)="OnSubmit()">
+  <div class="mb-2">
+          <label for="inputName" class="form-label"><fa-icon class="color-1 me-1" icon="user-alt"></fa-icon> Player Name</label>
+          <input type="text" placeholder="Enter Player Name" formControlName="Name" class="form-control form-control-sm" id="inputName">
+  </div>
+
+  <div class="mb-2">
+    <label for="inputPlayerRole" class="form-label"><fa-icon class="color-4 me-1" icon="users"></fa-icon> Role</label>
+    <select formControlName="playerRole" class="form-select form-select-sm" id="inputPlayerRole">
+      <option value="">--Select player Role--</option> 
+      <option value="Batter">Batter</option>
+      <option value="Bowler">Bowler</option>
+      <option value="Wicket-Keeper">Wicket-Keeper</option>
+      <option value="All-Rounder">All-Rounder</option>
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <div class="form-check-inline">
+      <input type="radio" class="form-check-input" (click)="OnCheck($event)" id="radio1" name="IsLocalPlayer" formControlName="IsLocalPlayer" value="false">
+      <label class="form-check-label" for="radio1"><fa-icon class="color-10 me-1" icon="earth-americas"></fa-icon> International Player</label>
+    </div>
+    <div class="form-check-inline">
+      <input type="radio" class="form-check-input" (click)="OnCheck($event)" id="radio2" name="IsLocalPlayer" formControlName="IsLocalPlayer" value="true">
+      <label class="form-check-label" for="radio1"> <fa-icon class="color-10 me-1" icon="house"></fa-icon> Domestic Player</label>
     </div>
   </div>
+  
+  <div class="mb-2">
+    <label for="inputationalTeam" class="form-label"><fa-icon class="color-9 me-1" icon="people-group"></fa-icon> International Team/Country Name</label>
+    <select formControlName="InternationalTeam" class="form-select form-select-sm" id="inputationalTeam">
+      <option value="">--Select a Team--</option> 
+      <option *ngFor="let team of teams" [value]="team.teamId">
+           {{team.teamName}}
+         </option>
+    </select>
+  </div>
+
+  <div class="mb-2">
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="IsActive" name="IsActive" formControlName="IsActive">Is Active
+        <label class="form-check-label" for="IsActive"></label>
+    </div>
+   </div>
+    <div class="mb-2 float-end">
+        <button type="submit" class="btn btn-success">{{buttonText}}</button>
+        <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
+    </div>
+</form>
+

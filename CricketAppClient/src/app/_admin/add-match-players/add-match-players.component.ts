@@ -1,9 +1,9 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { matchplayer } from 'src/app/models/matchplayer';
-import { matchplayerdetails } from 'src/app/models/matchplayerdetails';
-import { players } from 'src/app/models/players';
+import { matchplayer } from 'src/app/_models/matchplayer';
+import { matchplayerdetails } from 'src/app/_models/matchplayerdetails';
+import { players } from 'src/app/_models/players';
 import { MatchplayerService } from 'src/app/_services/matchplayer.service';
 
 @Component({

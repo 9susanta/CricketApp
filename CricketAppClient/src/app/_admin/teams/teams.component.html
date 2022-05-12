@@ -2,61 +2,67 @@
 <div class="row mt-3">
   <p class="alert alert-success small p-0"> 🏏 Teams</p>
 </div>
-<div class="row">
-    <div class="col-4">
-        <div class="card shadow">
-          <div class="card-body">
-            <form [formGroup]="teamForm" (ngSubmit)="OnSubmit()">
-              <div class="mb-3">
-                <label for="inputTeam" class="form-label">Team Name</label>
-                <input type="text" formControlName="teamName" class="form-control form-control-sm" id="inputTeam">
-              </div>
-              <div class="mb-3">
-                <label for="ddltypes" class="form-label">Team Type</label>
-                <app-type-dropdown [cssClass]="'form-control form-control-sm'" [formControl]='teamForm.controls["teamTypeId"]'></app-type-dropdown>
-              </div>
-              <div class="mb-3 float-end">
-              <button type="submit" class="btn btn-success">{{buttonText}}</button>
-              <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
-              </div>
-            </form>
-          </div>
-        </div>
+<div class="row mb-1">
+  <div class="col">
+     <button class="btn btn-info float-end shadow" (click)="onShow()">Add New</button>
+  </div>
+ </div>
+ <div class="row">
+  <div class="col-lg-3 col-md-4 col-sm-6 mt-2 pad-reduce-card" *ngFor="let item of teams;let i = index;">
+     <div class="card shadow" [ngClass]="getappcommonService(i)">
+      <div class="card-body">
+           <div class="mt-1">
+             <span><fa-icon class="color-9 me-1" icon="people-group"></fa-icon><b>{{item.teamName}}</b></span>
+           </div>
+           <div class="mt-1">
+             <span><fa-icon class="color-10 me-1" icon="{{item.teamTypes=='International'?'earth-americas':'house'}}"></fa-icon>{{item.teamTypes}}</span>
+           </div>
+           <div class="top-right-pos">
+             <button type="button" (click)="OnEdit(item)" class="btn btn-link"> <fa-icon icon="pen-to-square"></fa-icon> Edit</button>  
+             <button type="button" class="ms-1 btn btn-link" (click)="OnDelete(item.teamId)"><fa-icon icon="trash"></fa-icon> Delete</button> 
+           </div>
       </div>
-      <div class="col-8">
-        <div class="row">
-          <table class="table table-sm">
-            <thead class="table-light">
-              <tr>
-                <th>No.</th>
-                <th>Team</th>
-                <th>Type</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of teams;let i = index;">
-                <td>{{(i+1)*pageNumber}}</td>
-                <td>{{item.teamName}}</td>
-                <td>{{item.teamTypes}}</td>
-                <td><button type="button" (click)="OnEdit(item)" class="btn btn-link">Edit</button>  
-                  <button type="button" class="btn btn-link" (click)="OnDelete(item.teamId)">Delete</button> 
-                </td>
-              </tr>
-            </tbody>
-          </table>
+     </div>
+  </div>
+  <div class="d-flex justify-content-center mt-3" *ngIf="pagination!=undefined">
+   <pagination 
+       [boundaryLinks]="true" 
+       [totalItems]="pagination.totalItems"
+       [itemsPerPage]="pagination.itemsPerPage"
+       [(ngModel)]="pagination.currentPage"
+       (pageChanged)="pageChanged($event)"
+       previousText="&lsaquo;" 
+       nextText="&rsaquo;" 
+       firstText="&laquo;" 
+       lastText="&raquo;">
+   </pagination>
+  </div>
+</div>
+<div class="modal fade"  [config]="{backdrop: 'static'}" id="modal" bsModal #teamsModal="bs-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable h-auto">
+   <div class="modal-content">
+    <div class="modal-header bg-success text-white">
+      <h6 class="modal-title" id="question">Add a new Team</h6>
+      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="onClose()">
+        <span aria-hidden="true" class="visually-hidden">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" id="selections1">
+      <form [formGroup]="teamForm" (ngSubmit)="OnSubmit()">
+        <div class="mb-3">
+          <label for="inputTeam" class="form-label"><fa-icon class="color-9 me-1" icon="people-group"></fa-icon> Team Name</label>
+          <input type="text" formControlName="teamName" placeholder="Enter Team Name" class="form-control form-control-sm" id="inputTeam">
         </div>
-        <div class="d-flex justify-content-center" *ngIf="pagination">
-          <pagination 
-              [boundaryLinks]="true" 
-              [totalItems]="pagination.totalItems"
-              [itemsPerPage]="pagination.itemsPerPage"
-              [(ngModel)]="pagination.currentPage"
-              (pageChanged)="pageChanged($event)"
-              previousText="&lsaquo;" 
-              nextText="&rsaquo;" 
-              firstText="&laquo;" 
-              lastText="&raquo;">
-          </pagination>
-      </div>
+        <div class="mb-3">
+          <label for="ddltypes" class="form-label"><fa-icon class="color-10 me-1" icon="earth-americas"></fa-icon>Team Type</label>
+          <app-type-dropdown [cssClass]="'form-control form-control-sm'" [formControl]='teamForm.controls["teamTypeId"]'></app-type-dropdown>
+        </div>
+        <div class="mb-3 float-end">
+        <button type="submit" class="btn btn-success">{{buttonText}}</button>
+        <button type="reset" (click)="OnReset()" class="btn btn-danger ms-1">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
 </div>
