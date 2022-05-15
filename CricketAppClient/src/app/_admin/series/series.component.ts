@@ -81,8 +81,8 @@ export class SeriesComponent implements OnInit {
       SeriesTypeId: this.series.seriesTypeId,
       StatusName:this.series.statusName,
       location:this.series.location,
-      startDate:new Date(this.series.startDate),
-      endDate:new Date(this.series.endDate)
+      startDate:new Date(this.series.startDate!),
+      endDate:new Date(this.series.endDate!)
      });  
      this.buttonText="Update";
   }
@@ -123,7 +123,7 @@ export class SeriesComponent implements OnInit {
         this.seriesService.deleteSeries(id).subscribe(response => {
           if(response==true)
           {
-            this.toastr.success('Remove Tournament', 'Removed successfully !');
+            this.toastr.success('Removed successfully !','Remove Tournament');
             this.loadSeries();
           }
         });
@@ -144,14 +144,14 @@ export class SeriesComponent implements OnInit {
        this.seriesService.addSeries(this.seriesForm.value).subscribe(obj=>{
          if(obj=="1")
          {
-           this.toastr.success('Add Tournament', 'Added successfully !');
+           this.toastr.success('Added successfully !','Add Tournament');
            this.onClose();
            this.OnReset();
            this.loadSeries();
          }
          else
          {
-          this.toastr.error('Add Tournament', 'Tournament exist !');
+          this.toastr.error('Tournament exist !','Add Tournament');
          }
        })
     }

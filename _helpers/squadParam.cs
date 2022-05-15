@@ -16,7 +16,5 @@ namespace CricketApp._helpers
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
         public int seriesId { get; set; }
-        public int playersId { get; set; }
-
     }
 }

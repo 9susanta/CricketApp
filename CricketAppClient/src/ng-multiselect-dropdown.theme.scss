@@ -1,0 +1,40 @@
+$base-color: #e01890;
+$disable-background-color: #eceeef;
+.multiselect-dropdown {
+  .dropdown-btn {
+    padding: 2px 4px !important;
+    .dropdown-multiselect__caret
+    {height: 30px !important;line-height: 18px !important;}
+    .selected-item{margin-right:1px !important;}
+    .selected-item-container{margin-right: 0px !important;}
+    .ng-star-inserted{margin-right: 7px;}
+    .selected-item {border: 1px solid $base-color !important;background: $base-color !important;}
+  }
+}
+
+.dropdown-list {
+  padding-top: 0px !important;
+  margin-top: 5px !important;
+  li {padding: 2px 10px !important;}
+}
+
+.multiselect-item-checkbox input[type='checkbox']:focus + div:before,
+.multiselect-item-checkbox input[type='checkbox']:hover + div:before {
+  border-color: $base-color !important;
+  background-color: #f2f2f2;
+}
+
+.multiselect-item-checkbox input[type='checkbox'] + div:before {
+  color: $base-color !important;
+  border: 2px solid $base-color !important;
+}
+
+.multiselect-item-checkbox input[type='checkbox'] + div:after {
+  background-color: $base-color !important;
+}
+.multiselect-item-checkbox input[type='checkbox']:checked + div:before 
+{
+  animation: borderscale 200ms ease-in;background: $base-color !important;
+}
+
+@keyframes borderscale {50% {box-shadow: 0 0 0 2px $base-color !important;}}

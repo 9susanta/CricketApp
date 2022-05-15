@@ -10,8 +10,9 @@ namespace CricketApp._helpers
         public int SquadsId { get; set; }
         public int SeriesId { get; set; }
         public string Series { get; set; }
-        public int PlayersId { get; set; }
-        public string Player { get; set; }
+        public int? teamId { get; set; }
+        public string teams{ get; set; }
+        public string players { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? LastUpdated { get; set; }
 

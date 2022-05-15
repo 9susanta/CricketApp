@@ -24,6 +24,8 @@ namespace CricketApp.Entity
 
         public bool? IsDeleated { get; set; }
 
+        public bool? IsAddedSeries { get; set; }
+
         public DateTime? Created { get; set; }
 
         public DateTime? LastUpdated { get; set; }

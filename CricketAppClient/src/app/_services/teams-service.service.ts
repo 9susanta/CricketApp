@@ -12,7 +12,6 @@ export class TeamsServiceService {
   baseUrl=environment.apiUrl
   constructor(private http:HttpClient) { }
   addTeams(model:any){
-    debugger
     return this.http.post(this.baseUrl+'RegisterTeams/add-teams',model).pipe(map((team:any)=>{
       return team;
     }));

@@ -19,24 +19,61 @@ namespace CricketApp.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        [HttpPost("add-squad")]
-        public async Task<ActionResult> UpdateSquad([FromBody] string squads)
+        [HttpPost("add-squad-team")]
+        public async Task<ActionResult> UpdateSquadTeam([FromBody] List<tblSquadTeam> squadTeam)
         {
-            if(!string.IsNullOrEmpty(squads))
+            if(squadTeam.Count>0)
             {
                 try
                 {
-                    var listSquad = JsonConvert.DeserializeObject<List<tblSquads>>(squads);
-                    var result = await _unitOfWork.SquadRepository.UpdateSquad(listSquad);
+                    var result = await _unitOfWork.SquadRepository.UpdateSquadTeam(squadTeam);
 
                     return Ok(result);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest();
+                    
                 }
             }
             return BadRequest();
         }
+        [HttpPost("add-squad-players")]
+        public async Task<ActionResult> UpdateSquadPlayers([FromBody] tblSquadPlayer squadPlayers)
+        {
+            if (squadPlayers != null)
+            {
+                try
+                {
+                    var result = await _unitOfWork.SquadRepository.UpdateSquadPlayer(squadPlayers);
+
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                  
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("get-squad/{seriesId}")]
+        public async Task<ActionResult> GetSquad(int seriesId)
+        {
+            
+            try
+            {
+               
+               var result = await _unitOfWork.SquadRepository.GetSquad(seriesId);
+
+               return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+   
+            }
+            return BadRequest();
+        }
+
     }
 }

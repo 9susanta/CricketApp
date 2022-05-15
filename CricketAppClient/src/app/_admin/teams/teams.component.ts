@@ -127,7 +127,6 @@ export class TeamsComponent implements OnInit {
   }
   OnDelete(id:any)
   {
-
     this.confirmService.confirm('Confirm delete').subscribe(result => {
       if (result) {
         this.teamService.deleteTeams(id).subscribe(response => {

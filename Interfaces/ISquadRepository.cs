@@ -9,7 +9,8 @@ namespace CricketApp.Interfaces
 {
     public interface ISquadRepository
     {
-        Task<int> UpdateSquad(List<tblSquads> squads);
-        Task<PagedList<SquadDto>> GetSquad(squadParam squadParam);
+        Task<int> UpdateSquadTeam(List<tblSquadTeam> squadsTeams);
+        Task<int> UpdateSquadPlayer(tblSquadPlayer squadsPlayer);
+        Task<List<SquadDto>> GetSquad(int seriesId);
     }
 }

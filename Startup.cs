@@ -66,7 +66,7 @@ namespace CricketApp
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<LiveScoreUpdateHub>("hubs/livescoreupdate");
-                endpoints.MapFallbackToController("Index", "Fallback");
+                //endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
