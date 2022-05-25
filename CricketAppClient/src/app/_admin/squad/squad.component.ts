@@ -26,14 +26,11 @@ export class SquadComponent implements OnInit {
     private appcommonService:AppcommonService,private squadService:SquadService,
     private toastr:ToastrService,private confirmService:ConfirmService) { }
   serieses:series[]=[];
-  seriesId!:number;
-  teamid!:number;
-  playerId!:number;
-  players:players[]=[];
+  originalPlayersList:players[]=[];
+  originalPlayers:players[]=[];
   originalTeam:team[]=[];
   originalTeamList:team[]=[];
-  playerid!:number;
-  isLocal:boolean=false;
+  
   isDeleted:boolean=false;
   
   selectedSeries!:series
@@ -42,6 +39,10 @@ export class SquadComponent implements OnInit {
    
   selectedTeamList:team[]=[];
   selectedPlayerList:players[]=[];
+
+  savedSquadList:any[]=[];
+
+  playerList:any[]=[];
 
   btnRemoveText='Remove Teams';
 
@@ -58,6 +59,10 @@ export class SquadComponent implements OnInit {
   {
     this.modal?.hide();
   }
+  onMatchStart()
+  {
+    
+  }
   getappcommonService(indx:number)
   {
     return this.appcommonService.generateRandom(indx);
@@ -71,23 +76,23 @@ export class SquadComponent implements OnInit {
   }
   loadPlayer()
   {
-    this.playerService.getPlayers(0,2000).subscribe(response => {
-       this.players=response.result;
-       this.players=this.players.filter(x=>x.isDeleated==false);
-       if(this.isLocal==false)
-       {
-          this.players=this.players.filter(x=>x.isLocalPlayer==false);
-       }
-       else if(this.isLocal==true)
-       {
-          this.players=this.players.filter(x=>x.isLocalPlayer==true);
-       }
-    });
+    if(this.originalPlayersList.length<=0)
+    {
+      this.playerService.getPlayers(0,2000).subscribe(response => {
+       this.originalPlayersList=response.result;
+       this.originalPlayers=this.originalPlayersList.map(obj => ({...obj})).filter(x=>x.isDeleated==false);
+      });
+    }
+    else
+    {
+      this.originalPlayers=this.originalPlayersList.map(obj => ({...obj})).filter(x=>x.isDeleated==false);
+    }
   }
   getSquad(seriesId:number)
   {
     this.squadService.getSquad(seriesId).subscribe(result=>{
       this.selectedTeamList=[];
+      this.savedSquadList=result;
       for(let i=0;i<result.length;i++)
       {
         this.updateTeamList(JSON.parse(result[i].teams));
@@ -117,7 +122,6 @@ export class SquadComponent implements OnInit {
        this.originalTeam=this.originalTeamList.map(obj => ({...obj})).filter(x=>x.teamTypeId==teamTypeId);
     }
   }
-  
   onChangeTeam(chkteam:team,event:any)
   {
     if(this.selectedSeries==null)
@@ -132,7 +136,6 @@ export class SquadComponent implements OnInit {
       this.updateTeamList(chkteam)
     }
   }
-  
   updateTeamList(selTeam:team)
   {
     this.selectedTeamList.push(selTeam);
@@ -158,7 +161,6 @@ export class SquadComponent implements OnInit {
       }
     })
   }
-  
   onDeleteClick()
   {
     if(this.btnRemoveText=="Remove Teams")
@@ -175,9 +177,9 @@ export class SquadComponent implements OnInit {
   onTeamClick(selectTeam:team)
   {
     this.selectedTeam=selectTeam;
+    this.loadPlayerforModal(selectTeam.teamId)
     this.onShow();
   }
-  
   onSeriesSelect(series:series)
   {
       this.selectedSeries=series;
@@ -241,7 +243,35 @@ export class SquadComponent implements OnInit {
       this.selectedPlayerList.splice(indx,1);
     }
   }
+  loadPlayerforModal(teamId:number)
+  {
+    this.playerList=[];
+    let selectedPlayer = this.savedSquadList.filter(x=>x.teamId==teamId);
+    let selectedPlayerList:players[]=[];
+    if(selectedPlayer[0].players!=null)
+    {
+      selectedPlayerList=JSON.parse(selectedPlayer[0].players);
+    }
+    let players:players[]=this.originalPlayers.filter(x=>x.internationalTeam==teamId)
 
+    for(let i=0;i<players.length;i++)
+    {
+      let obj:any={};
+      obj.player=players[i];
+      obj.isSelected=false;
+      if(selectedPlayerList.length>0)
+      {
+        let indx=selectedPlayerList.findIndex(x=>x.playersId==players[i].playersId);
+        if(indx>-1)
+        {
+          obj.isSelected=true;
+        }
+      }
+      this.playerList.push(obj);
+    }
+  }
+  
+  //--------------------------------------------------------------------------------------------
   dropdownSettings:IDropdownSettings = {};
   dropdownList:team[] = [];
   selectedItems:team[] = [];

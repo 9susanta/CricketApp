@@ -30,7 +30,7 @@ namespace CricketApp.Controllers
             return Ok(result);
         }
         [HttpGet("get-teams")]
-        public async Task<ActionResult> GetTeams([FromQuery] TeamParam teamParam)
+        public async Task<ActionResult> GetTeams([FromQuery] teamParam teamParam)
         {
             var teams= await _unitOfWork.TeamsRepository.GetTeamsList(teamParam);
 

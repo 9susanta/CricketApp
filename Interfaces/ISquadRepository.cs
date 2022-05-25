@@ -11,6 +11,6 @@ namespace CricketApp.Interfaces
     {
         Task<int> UpdateSquadTeam(List<tblSquadTeam> squadsTeams);
         Task<int> UpdateSquadPlayer(tblSquadPlayer squadsPlayer);
-        Task<List<SquadDto>> GetSquad(int seriesId);
+        Task<List<squadDto>> GetSquad(int seriesId);
     }
 }

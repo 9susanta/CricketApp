@@ -24,17 +24,14 @@ namespace CricketApp.Controllers
         public async Task<ActionResult> AddMatch([FromBody] tblMatch tblMatch)
         {
             var result = await _unitOfWork.MatchRepository.Create(tblMatch);
-
             return Ok(result);
         }
         [HttpGet("get-match")]
-        public async Task<ActionResult> GetMatch([FromQuery] MatchParam teamParam)
+        public async Task<ActionResult> GetMatch([FromQuery] matchParam teamParam)
         {
-            var teams = await _unitOfWork.MatchRepository.GetMatchsList();
-
-            //Response.AddPaginationHeader(teams.CurrentPage, teams.PageSize, teams.TotalCount, teams.TotalPages);
-
-            return Ok(teams);
+            var matches = await _unitOfWork.MatchRepository.GetMatchsList(teamParam);
+            Response.AddPaginationHeader(matches.CurrentPage, matches.PageSize, matches.TotalCount, matches.TotalPages);
+            return Ok(matches);
         }
         [HttpPut("update-match/{id}")]
         public async Task<ActionResult> EditMatch(int id, [FromBody] tblMatch tblMatch)
@@ -51,6 +48,14 @@ namespace CricketApp.Controllers
 
             return Ok(teams);
         }
+
+        [HttpGet("get-matchdetails-byid")]
+        public ActionResult GetMatchDetailsById([FromQuery]  int matchId)
+        {
+            var match = _unitOfWork.MatchRepository.GetMatchById(matchId);
+            return Ok(match);
+        }
+
         [HttpGet("get-new-match")]
         public async Task<ActionResult> GetNewMatch()
         {

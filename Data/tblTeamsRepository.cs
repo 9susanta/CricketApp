@@ -48,7 +48,7 @@ namespace CricketApp.Data
             throw new NotImplementedException();
         }
 
-        public async Task<PagedList<tblTeams>> GetTeamsList(TeamParam teamParam)
+        public async Task<PagedList<tblTeams>> GetTeamsList(teamParam teamParam)
         {
             var teams = await _tblTeams.Find(x=>x.IsDeleated==false).ToListAsync();
 

@@ -12,7 +12,7 @@ namespace CricketApp.Interfaces
     {
         Task<tblTeams> GetTeams(int objectId);
         Task<int> Create(tblTeams tblTeams);
-        Task<PagedList<tblTeams>> GetTeamsList(TeamParam teamParam);
+        Task<PagedList<tblTeams>> GetTeamsList(teamParam teamParam);
         Task<bool> Update(int objectId, tblTeams tblTeams);
         Task<bool> Delete(int objectId);
         Task<bool> IsExist(string Name,string TeamTypes);

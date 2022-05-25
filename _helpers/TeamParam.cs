@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CricketApp._helpers
 {
-    public class TeamParam:PaginationParams
+    public class teamParam:PaginationParams
     {
         private const int MaxPageSize = 50;
         public int PageNumber { get; set; } = 1;

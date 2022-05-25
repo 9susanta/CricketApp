@@ -1,8 +1,137 @@
-<div id="matchDetails" class="pt-3 pb-2">
-    <div class="row center">
-        <p class="alert alert-secondary small text-center p-0">🛈 New match</p>
-        <div class="text-center pt-5">
-            <button class="btn btn-success" (click)="onCreate()">🏏 Create New Match</button>
+<div class="row mt-3">
+    <p class="alert alert-secondary small p-0">🛈 New match</p>
+</div>
+<div class="row mt-1">
+    <div class="col-3">
+      <div class="mb-3">
+        <div class="row">
+          <span class="ms-2 mb-1">-- Ongoing/Scheduled Tournaments --</span>
+          <div class="col-12 mb-1 pad-reduce-card" *ngFor="let item of serieses;let i = index;">
+             <div class="card shadow">
+               <div class="card-body">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" (change)="onSeriesSelect(item)" type="radio" name="teams" id="Radio{{i}}" value="{{item.seriesId}}" >
+                  <label class="form-check-label" for="Radio{{i}}">
+                    <fa-icon class="color-9 me-1" icon="trophy"></fa-icon>{{item.seriesName}}
+                  </label>
+                </div>
+                <div>
+                  <span><fa-icon class="color-10 me-1" icon="{{item.seriesTypes=='International'?'earth-americas':'house'}}"></fa-icon>{{item.seriesTypes}}</span><span>(<fa-icon class="color-10 me-1" icon="location-dot"></fa-icon>{{item.location}})</span>
+                </div>
+                <div class="mt-1">
+                  <span><fa-icon class="color-10 me-1" icon="calendar-days"></fa-icon>{{item.startDate | date:'mediumDate'}}-{{item.endDate | date:'mediumDate'}}</span>
+                </div>
+               </div>
+            </div>
+          </div>  
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+        <div class="row">
+          <span class="mb-1">-- Teams for the Tournament/Series --</span>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-2 pad-reduce-card" *ngFor="let item of originalTeam;let i = index;">
+            <div class="card shadow" [ngClass]="getappcommonService(i+1)">
+              <div class="card-body">
+                <div class="mt-1">
+                  <span><fa-icon class="color-9 me-1" icon="people-group"></fa-icon><b>{{item.teamName}}</b></span>
+                </div>
+                <div class="mt-1">
+                  <span><fa-icon class="color-10 me-1" icon="{{item.teamTypes=='International'?'earth-americas':'house'}}"></fa-icon>{{item.teamTypes}}</span>
+                </div>
+                <div class="top-right-pos">
+                  <input type="checkbox" class="form-check-input" [disabled]="item.isAddedSeries" [checked]="item.isAddedSeries"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1" *ngIf="originalTeam.length>0">
+            <div class="col">
+               <button class="btn btn-info float-end shadow" (click)="onAddMatch()">Add New Match/Fixture</button>
+            </div>
+        </div>
+        <div class="row">
+          <span class="mb-1">-- All matches --</span>
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-2 pad-reduce-card" *ngFor="let item of matchList;let i = index;">
+            <div class="card shadow" [ngClass]="getappcommonService(i+2)">
+              <div class="card-body" (click)="onStart(item)">
+                <div class="mt-1">
+                  <span><fa-icon class="color-9 me-1" icon="trophy"></fa-icon><b>{{item.matchName}}</b></span>
+                </div>
+                <div class="mt-1">
+                  <span><fa-icon class="color-10 me-1" icon="house"></fa-icon>{{item.teamHomeName}}</span> V <span><fa-icon class="color-10 me-1" icon="earth-americas"></fa-icon>{{item.teamVisitingName}}</span>
+                </div>
+                <div class="mt-1">
+                  <span><fa-icon class="color-10 me-1" icon="location-dot"></fa-icon>{{item.location}}</span>
+                </div>
+                <div class="mt-1">
+                  <span><fa-icon class="color-10 me-1" icon="clock"></fa-icon>{{item.fromDate|date}}</span>
+                </div>
+                <!-- <div class="mt-1">
+                  <span><fa-icon class="color-10 me-1" icon="clock"></fa-icon>{{item.fromDate|date}}</span>
+                </div> -->
+                <div class="top-right-pos-2">
+                  <button type="button" (click)="OnEdit(item)" class="btn btn-link"> <fa-icon icon="pen-to-square"></fa-icon> Edit</button>  
+                  <button type="button" class="btn btn-link" (click)="OnDelete(item)"><fa-icon icon="trash"></fa-icon> Delete</button> 
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
+</div>
+<div class="modal fade" id="modal"  [config]="{backdrop: 'static'}" bsModal #matchModal="bs-modal" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable h-auto">
+     <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h6 class="modal-title" id="question">Create new Match/Fixture</h6>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="onClose()">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="selections1">
+        <form [formGroup]="matchForm">
+          <div class="mb-1">
+            <label for="inputMatchName" class="form-label"><fa-icon class="color-9 me-1" icon="trophy"></fa-icon>Match Name</label>
+            <input type="text" formControlName="matchName" placeholder="Enter Match Name Eg:1st ODI,2nd TOI,Match 14" class="form-control form-control-sm" id="inputMatchName">
+          </div>
+          <div class="mb-1">
+            <label for="inputMatchType" class="form-label"><fa-icon class="color-6 me-1" icon="baseball-ball"></fa-icon>Match Type</label>
+            <select class="form-select form-select-sm" formControlName="matchType" id="inputMatchType">
+              <option value="" selected disabled >--Select One Item--</option>
+              <option *ngFor="let item of matchTypeList" value="{{item.Id}}">{{item.name}}</option>
+             </select>
+          </div>
+          <div class="mb-1">
+            <label for="inputhomeTeam" class="form-label"><fa-icon class="color-4 me-1" icon="people-group"></fa-icon>Home Team</label>
+            <select class="form-select form-select-sm" formControlName="homeTeam" id="inputhomeTeam">
+              <option value="" selected disabled >--Select One Home Team--</option>
+              <option *ngFor="let item of originalTeam" value="{{item.teamId}}">{{item.teamName}}</option>
+             </select>
+          </div>
+          <div class="mb-1">
+            <label for="inputvisitingTeam" class="form-label"><fa-icon class="color-7 me-1" icon="people-group"></fa-icon>Visiting Team</label>
+            <select class="form-select form-select-sm" formControlName="visitingTeam" id="inputvisitingTeam">
+              <option value="" selected disabled >--Select One Visiting Team--</option>
+              <option *ngFor="let item of originalTeam" value="{{item.teamId}}">{{item.teamName}}</option>
+             </select>
+          </div>
+          <div class="mb-1">
+           <label for="inputLocation" class="form-label"><fa-icon class="color-10 me-1" icon="location-dot"></fa-icon>Stadium Name,City</label>
+           <input type="text" formControlName="location" placeholder="Enter Stadium Name,City" class="form-control form-control-sm" id="inputLocation">
+         </div>
+          <div class="mb-2">
+              <label for="inputstrtdt" class="form-label"><fa-icon class="color-10 me-1" icon="calendar-plus"></fa-icon>Start Date</label>
+              <input id="inputstrtdt" (bsValueChange)="onValueChange($event)" [minDate]="minDate" [bsConfig]="{ dateInputFormat: 'DD-MMM-YYYY' ,adaptivePosition: true}" formControlName="startDate" type="text" placeholder="Start Date" class="form-control form-control-sm" bsDatepicker>
+           </div>
+          <div class="float-end mt-1">
+            <button type="button" [disabled]="ismatchstart" (click)="onMatchStart('savefixture')" class="btn btn-secondary shadow">{{savebuttonText}}</button>
+            <button type="button" [disabled]="!ismatchstart" (click)="onMatchStart('startmatch')" class="btn btn-success shadow ms-1">{{startbuttonText}}</button>
+            <button type="button" (click)="onClose()" class="btn btn-danger ms-1 shadow">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

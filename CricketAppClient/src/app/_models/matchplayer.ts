@@ -2,19 +2,19 @@ export interface matchplayer
 {
       matchDetailsId?:number, 
       matchId?:number 
-      teamAId?:number 
-      teamAName?:string, 
-      teamBId?:number, 
-      teamBName?:string, 
+      teamHomeId?:number 
+      teamHomeName?:string, 
+      teamVisitingId?:number, 
+      teamVisitingName?:string, 
       totalOvers?:number, 
       tossWinTeamId?:number, 
       tossWinTeamName?:string, 
       tossDecideName?:string, 
       tossBatting?:string,
-      teamABattingOrder?:number;
-      teamBBattingOrder?:number,  
-      teamAPlayers?:string,
-      teamBPlayers?:string,
+      teamHomeBattingOrder?:number;
+      teamVisitingBattingOrder?:number,  
+      teamHomePlayers?:string,
+      teamVisitingPlayers?:string,
 
       matchStatus?:string,
       battingFirstScored?:number,

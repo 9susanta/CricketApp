@@ -34,13 +34,13 @@ tr.border-danger, tr.border-warning, tr.border-success {
     width:80%;
 }
 
-#teamA {
+#teamHome {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
 
-#teamB {
+#teamVisiting {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

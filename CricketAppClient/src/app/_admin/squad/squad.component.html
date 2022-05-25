@@ -6,7 +6,7 @@
     <div class="col-3">
       <div class="mb-3">
         <div class="row">
-          <span class="ms-2 mb-1">-- Ongoing/scheduled Tournaments --</span>
+          <span class="ms-2 mb-1">-- Ongoing/Scheduled Tournaments --</span>
           <div class="col-12 mb-1 pad-reduce-card" *ngFor="let item of serieses;let i = index;">
              <div class="card shadow">
                <div class="card-body">
@@ -15,7 +15,7 @@
                   <label class="form-check-label" for="Radio{{i}}">
                     <fa-icon class="color-9 me-1" icon="trophy"></fa-icon>{{item.seriesName}}
                   </label>
-                </div>
+                 </div>
                 <div>
                   <span><fa-icon class="color-10 me-1" icon="{{item.seriesTypes=='International'?'earth-americas':'house'}}"></fa-icon>{{item.seriesTypes}}</span><span>(<fa-icon class="color-10 me-1" icon="location-dot"></fa-icon>{{item.location}})</span>
                 </div>
@@ -96,7 +96,7 @@
       </button>
     </div>
     <div class="modal-body" id="selections1">
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-lg-3">
                 <span>Player Type</span>
                 <ng-multiselect-dropdown
@@ -134,20 +134,20 @@
                   <button type="button" class="btn btn-secondary btn-margin-top">Reset Filters</button>
                </div>
           </div>
-          <hr/>
+          <hr/> -->
             <div class="row">
               <span>-- Players --</span>
-              <div class="col-lg-2 col-md-4 col-sm-6 m-2 pad-reduce-card" *ngFor="let item of players;let i = index;">
+              <div class="col-lg-2 col-md-4 col-sm-6 m-2 pad-reduce-card" *ngFor="let item of playerList;let i = index;">
                 <div class="card shadow" [ngClass]="getappcommonService(i)">
                   <div class="card-body">
                     <div class="mt-1">
-                      <span><fa-icon class="color-1 me-1" icon="user-alt"></fa-icon><b>{{item.name}}</b></span>
+                      <span><fa-icon class="color-1 me-1" icon="user-alt"></fa-icon><b>{{item.player.name}}</b></span>
                     </div>
                     <div class="mt-1">
-                      <span><fa-icon class="color-4 me-1" icon="users"></fa-icon>{{item.role}}</span><span>({{item.teamName!=null?item.teamName:"-- NA --"}})</span>
+                      <span><fa-icon class="color-4 me-1" icon="users"></fa-icon>{{item.player.role}}</span><span>({{item.player.teamName!=null?item.player.teamName:"-- NA --"}})</span>
                     </div>
                     <div class="top-right-pos">
-                      <input type="checkbox" class="form-check-input" (change)="onPlayerSelect(item,$event)">
+                      <input type="checkbox" class="form-check-input" (change)="onPlayerSelect((item.player),$event)" [checked]="item.isSelected">
                     </div>
                   </div>
                 </div>

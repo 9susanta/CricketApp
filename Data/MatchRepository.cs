@@ -1,4 +1,5 @@
-﻿using CricketApp.Entity;
+﻿using CricketApp._helpers;
+using CricketApp.Entity;
 using CricketApp.Interfaces;
 using MongoDB.Driver;
 using System;
@@ -12,21 +13,24 @@ namespace CricketApp.Data
     {
         private readonly IMongoCollection<tblMatch> _tblMatches;
         private readonly IMongoCollection<tblMatchDetails> _tblMatchDetails;
+        private readonly IMongoCollection<tblSquadPlayer> _tblSquadPlayer;
 
         public MatchRepository(IMongoDatabase _mongoDatabase)
         {
             _tblMatches = _mongoDatabase.GetCollection<tblMatch>(nameof(tblMatch));
             _tblMatchDetails= _mongoDatabase.GetCollection<tblMatchDetails>(nameof(tblMatchDetails));
-
+            _tblSquadPlayer = _mongoDatabase.GetCollection<tblSquadPlayer>(nameof(tblSquadPlayer));
         }
+
         public async Task<int> Create(tblMatch tblMatchs)
         {
             try
             {
-                var isExist = await IsExist(tblMatchs.MatchName, tblMatchs.MatchTypes);
+                var isExist = await IsExist(tblMatchs.matchName, tblMatchs.matchTypes);
                 if (!isExist)
                 {
-                    tblMatchs.MatchId = await NextId();
+                    tblMatchs.matchId = await NextId();
+                    tblMatchs.IsDeleated = false;
                     await _tblMatches.InsertOneAsync(tblMatchs);
 
                     return 1;
@@ -47,7 +51,7 @@ namespace CricketApp.Data
         {
             try
             {
-                var filter = Builders<tblMatch>.Filter.Eq(c => c.MatchId, objectId);
+                var filter = Builders<tblMatch>.Filter.Eq(c => c.matchId, objectId);
                 var update = Builders<tblMatch>.Update
                  .Set(c => c.IsDeleated, true);
                 var result = await _tblMatches.UpdateOneAsync(filter, update);
@@ -62,23 +66,58 @@ namespace CricketApp.Data
             return false;
         }
 
-        public Task<tblMatch> GetMatchs(int objectId)
+        public List<seriesMatchDto> GetMatchById(int matchId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return (from mtc in _tblMatches.AsQueryable().ToEnumerable()
+                                              join sqdplrhm in _tblSquadPlayer.AsQueryable().ToEnumerable()
+                                              on new {x = mtc.seriesId,y = mtc.teamHomeId } equals new { x = sqdplrhm.seriesId, y = sqdplrhm.teamId }
+                                              into joinDt1
+                                              from homeplr in joinDt1.DefaultIfEmpty()
+
+                                              join sqdplrvi in _tblSquadPlayer.AsQueryable().ToEnumerable()
+                                              on new { x = mtc.seriesId, y = mtc.teamVisitingId } equals new { x = sqdplrvi.seriesId, y = sqdplrvi.teamId }
+                                              into joinDt2
+                                              from visitplr in joinDt2.DefaultIfEmpty()
+                                              where mtc.matchId == matchId
+                                              select new seriesMatchDto
+                                              {
+                                                  matchId = mtc.matchId,
+                                                  matchName = mtc.matchName,
+                                                  matchTypeId = mtc.matchTypeId,
+                                                  matchTypes = mtc.matchTypes,
+                                                  teamHomeId = mtc.teamHomeId,
+                                                  teamHomeName = mtc.teamHomeName,
+                                                  teamVisitingId = mtc.teamVisitingId,
+                                                  teamVisitingName =mtc.teamVisitingName,
+                                                  location = mtc.location,
+                                                  fromDate = mtc.fromDate,
+                                                  toDate =  mtc.toDate,
+                                                  StatusName = mtc.StatusName,
+                                                  seriesId = mtc.seriesId,
+                                                  hmteamplrDetails = homeplr?.playerSquadDetails,
+                                                  visitteamplrDetails = visitplr?.playerSquadDetails,
+                                              }).ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public async Task<IEnumerable<tblMatch>> GetMatchsList()
+        public async Task<PagedList<tblMatch>> GetMatchsList(matchParam teamParam)
         {
-            var matches = await _tblMatches.Find(x => x.IsDeleated == false).ToListAsync();
+            var matches = await _tblMatches.Find(x => x.IsDeleated == false&&x.seriesId==teamParam.seriesId).ToListAsync();
 
-            return matches;
+            return PagedList<tblMatch>.CreateAsyc(matches.AsQueryable(), teamParam.PageNumber, teamParam.PageSize);
         }
 
         public async Task<bool> IsExist(string Name, string MatchTypes)
         {
             try
             {
-                var res = await _tblMatches.FindAsync(x => x.MatchName == Name && x.MatchTypes == MatchTypes);
+                var res = await _tblMatches.FindAsync(x => x.matchName == Name && x.matchTypes == MatchTypes);
                 return res.Any();
             }
             catch (Exception ex)
@@ -111,13 +150,19 @@ namespace CricketApp.Data
         {
             try
             {
-                var filter = Builders<tblMatch>.Filter.Eq(c => c.MatchId, objectId);
+                var filter = Builders<tblMatch>.Filter.Eq(c => c.matchId, objectId);
                 var update = Builders<tblMatch>.Update
-                 .Set(c => c.MatchName, tblMatchs.MatchName)
-                 .Set(c => c.MatchTypes, tblMatchs.MatchTypes)
-                 .Set(c => c.MatchTypeId, tblMatchs.MatchTypeId)
-                 .Set(c => c.Status, tblMatchs.Status)
-                  .Set(c => c.StatusName, tblMatchs.StatusName)
+                 .Set(c => c.matchName, tblMatchs.matchName)
+                 .Set(c => c.matchTypes, tblMatchs.matchTypes)
+                 .Set(c => c.matchTypeId, tblMatchs.matchTypeId)
+                 .Set(c => c.teamHomeId, tblMatchs.teamHomeId)
+                 .Set(c => c.teamHomeName, tblMatchs.teamHomeName)
+                 .Set(c => c.teamVisitingId, tblMatchs.teamVisitingId)
+                 .Set(c => c.teamVisitingName, tblMatchs.teamVisitingName)
+                 .Set(c => c.location, tblMatchs.location)
+                 .Set(c => c.fromDate, tblMatchs.fromDate)
+                 .Set(c => c.toDate, tblMatchs.toDate)
+                 .Set(c => c.StatusName, tblMatchs.StatusName)
                  .Set(c => c.LastUpdated, DateTime.Now);
                 var result = await _tblMatches.UpdateOneAsync(filter, update);
                 if (result.ModifiedCount > 0)

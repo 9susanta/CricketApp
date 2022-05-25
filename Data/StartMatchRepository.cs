@@ -36,10 +36,10 @@ namespace CricketApp.Data
                                      {
                                          matchDetailsId = tmd.matchDetailsId,
                                          matchId = tmd.matchId,
-                                         teamAId = tmd.teamAId,
-                                         teamAName = tmd.teamAName,
-                                         teamBId = tmd.teamBId,
-                                         teamBName = tmd.teamBName,
+                                         teamHomeId = tmd.teamHomeId,
+                                         teamHomeName = tmd.teamHomeName,
+                                         teamVisitingId = tmd.teamVisitingId,
+                                         teamVisitingName = tmd.teamVisitingName,
                                          totalOvers = tmd.totalOvers,
                                          tossWinTeamId = tmd.tossWinTeamId,
                                          tossWinTeamName = tmd.tossWinTeamName,
@@ -47,10 +47,10 @@ namespace CricketApp.Data
                                          tossBatting = tmd.tossBatting,
                                          created = tmd.created,
                                          lastUpdated = tmd.lastUpdated,
-                                         teamAPlayers = tmd.teamAPlayers,
-                                         teamBPlayers = tmd.teamBPlayers,
-                                         teamABattingOrder = tmd.teamABattingOrder,
-                                         teamBBattingOrder = tmd.teamBBattingOrder,
+                                         teamHomePlayers = tmd.teamHomePlayers,
+                                         teamVisitingPlayers = tmd.teamVisitingPlayers,
+                                         teamHomeBattingOrder = tmd.teamHomeBattingOrder,
+                                         teamVisitingBattingOrder = tmd.teamVisitingBattingOrder,
 
                                          matchStatus = tmd.matchStatus,
                                          battingFirstScored = tmd.battingFirstScored,
@@ -125,19 +125,19 @@ namespace CricketApp.Data
                 tblMatchDetails _matchDetails = new tblMatchDetails();
                 _matchDetails.matchDetailsId = nextId;
                 _matchDetails.matchId = matchStartDto.matchId.Value;
-                _matchDetails.teamAId = matchStartDto.teamAId.Value;
-                _matchDetails.teamAName = matchStartDto.teamAName;
-                _matchDetails.teamBId = matchStartDto.teamBId.Value;
-                _matchDetails.teamBName = matchStartDto.teamBName;
+                _matchDetails.teamHomeId = matchStartDto.teamHomeId.Value;
+                _matchDetails.teamHomeName = matchStartDto.teamHomeName;
+                _matchDetails.teamVisitingId = matchStartDto.teamVisitingId.Value;
+                _matchDetails.teamVisitingName = matchStartDto.teamVisitingName;
                 _matchDetails.tossDecideName = matchStartDto.tossDecideName;
                 _matchDetails.tossWinTeamId = matchStartDto.tossWinTeamId.Value;
                 _matchDetails.tossWinTeamName = matchStartDto.tossWinTeamName;
                 _matchDetails.totalOvers = matchStartDto.totalOvers.Value;
                 _matchDetails.tossBatting = matchStartDto.tossBatting;
-                _matchDetails.teamAPlayers= matchStartDto.teamAPlayers;
-                _matchDetails.teamBPlayers = matchStartDto.teamBPlayers;
-                _matchDetails.teamABattingOrder = matchStartDto.teamABattingOrder;
-                _matchDetails.teamBBattingOrder = matchStartDto.teamBBattingOrder;
+                _matchDetails.teamHomePlayers= matchStartDto.teamHomePlayers;
+                _matchDetails.teamVisitingPlayers = matchStartDto.teamVisitingPlayers;
+                _matchDetails.teamHomeBattingOrder = matchStartDto.teamHomeBattingOrder;
+                _matchDetails.teamVisitingBattingOrder = matchStartDto.teamVisitingBattingOrder;
                 _matchDetails.battingFirstTeamName = matchStartDto.battingFirstTeamName;
                 _matchDetails.battingSecondTeamName = matchStartDto.battingSecondTeamName;
                 _tblMatchDetails.InsertOne(_matchDetails);
@@ -147,20 +147,20 @@ namespace CricketApp.Data
                 var filter = Builders<tblMatchDetails>.Filter.Eq(c => c.matchId, matchStartDto.matchId);
                 var update = Builders<tblMatchDetails>.Update
                  .Set(c => c.matchId, matchStartDto.matchId.Value)
-                 .Set(c => c.teamAId, matchStartDto.teamAId.Value)
-                 .Set(c => c.teamAName, matchStartDto.teamAName)
-                 .Set(c => c.teamBId, matchStartDto.teamBId.Value)
-                 .Set(c => c.teamBName, matchStartDto.teamBName)
+                 .Set(c => c.teamHomeId, matchStartDto.teamHomeId.Value)
+                 .Set(c => c.teamHomeName, matchStartDto.teamHomeName)
+                 .Set(c => c.teamVisitingId, matchStartDto.teamVisitingId.Value)
+                 .Set(c => c.teamVisitingName, matchStartDto.teamVisitingName)
                  .Set(c => c.tossDecideName, matchStartDto.tossDecideName)
                  .Set(c => c.tossWinTeamId, matchStartDto.tossWinTeamId.Value)
                  .Set(c => c.tossWinTeamName, matchStartDto.tossWinTeamName)
                  .Set(c => c.totalOvers, matchStartDto.totalOvers)
                  .Set(c => c.tossBatting, matchStartDto.tossBatting)
-                 .Set(c => c.teamAPlayers, matchStartDto.teamAPlayers)
-                 .Set(c => c.teamBPlayers, matchStartDto.teamBPlayers)
+                 .Set(c => c.teamHomePlayers, matchStartDto.teamHomePlayers)
+                 .Set(c => c.teamVisitingPlayers, matchStartDto.teamVisitingPlayers)
                  .Set(c => c.lastUpdated, DateTime.Now)
-                 .Set(c => c.teamABattingOrder, matchStartDto.teamABattingOrder)
-                 .Set(c => c.teamBBattingOrder, matchStartDto.teamBBattingOrder)
+                 .Set(c => c.teamHomeBattingOrder, matchStartDto.teamHomeBattingOrder)
+                 .Set(c => c.teamVisitingBattingOrder, matchStartDto.teamVisitingBattingOrder)
                  .Set(c => c.battingFirstTeamName, matchStartDto.battingFirstTeamName)
                  .Set(c => c.battingSecondTeamName, matchStartDto.battingSecondTeamName)
                  .Set(c => c.battingFirstScored, matchStartDto.battingFirstScored)

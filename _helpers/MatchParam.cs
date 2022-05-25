@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CricketApp._helpers
 {
-    public class MatchParam
+    public class matchParam: PaginationParams
     {
         private const int MaxPageSize = 50;
         public int PageNumber { get; set; } = 1;
@@ -16,5 +16,6 @@ namespace CricketApp._helpers
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
         public string Orderby { get; set; } = "created";
+        public int seriesId { get; set; }
     }
 }

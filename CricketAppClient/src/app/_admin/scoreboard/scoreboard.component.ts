@@ -17,8 +17,8 @@ export class ScoreboardComponent implements OnInit {
   _match_id:number=0;
   match_player:matchplayer={};
   
-  teamAPlayers:matchplayerdetails[]=[];
-  teamBPlayers:matchplayerdetails[]=[];
+  teamHomePlayers:matchplayerdetails[]=[];
+  teamVisitingPlayers:matchplayerdetails[]=[];
 
   target_run:number=0;
   totover:number=0;
@@ -66,10 +66,10 @@ export class ScoreboardComponent implements OnInit {
     this.matchplayer.getMatch(id).subscribe(async response => {
       this.match_player=response;
       this._match_id=this.match_player.matchId!;
-      let playerTeamA:string=this.match_player.teamAPlayers!;
-      this.teamAPlayers=JSON.parse(playerTeamA)
-      let playerTeamB=this.match_player.teamBPlayers!;
-      this.teamBPlayers=JSON.parse(playerTeamB);
+      let playerteamHome:string=this.match_player.teamHomePlayers!;
+      this.teamHomePlayers=JSON.parse(playerteamHome)
+      let playerteamVisiting=this.match_player.teamVisitingPlayers!;
+      this.teamVisitingPlayers=JSON.parse(playerteamVisiting);
       this.totover=this.match_player.totalOvers!;
 
       this.matchplayer.createHubConnection(this._match_id);
@@ -113,21 +113,21 @@ export class ScoreboardComponent implements OnInit {
           this.battingTeamDetails.battingOrder=1;
           this.bowlingTeamDetails.battingOrder=2;
 
-          if(this.battingTeamDetails.name==this.match_player.teamAName!)
+          if(this.battingTeamDetails.name==this.match_player.teamHomeName!)
           {
-            this.battingTeamDetails.players=this.teamAPlayers; 
+            this.battingTeamDetails.players=this.teamHomePlayers; 
           }
-          else if(this.battingTeamDetails.name==this.match_player.teamBName!)
+          else if(this.battingTeamDetails.name==this.match_player.teamVisitingName!)
           {
-            this.battingTeamDetails.players=this.teamBPlayers;
+            this.battingTeamDetails.players=this.teamVisitingPlayers;
           }
-          if(this.bowlingTeamDetails.name==this.match_player.teamAName!)
+          if(this.bowlingTeamDetails.name==this.match_player.teamHomeName!)
           {
-            this.bowlingTeamDetails.players=this.teamAPlayers;
+            this.bowlingTeamDetails.players=this.teamHomePlayers;
           }
-          else if(this.bowlingTeamDetails.name==this.match_player.teamBName!)
+          else if(this.bowlingTeamDetails.name==this.match_player.teamVisitingName!)
           {
-            this.bowlingTeamDetails.players=this.teamBPlayers;
+            this.bowlingTeamDetails.players=this.teamVisitingPlayers;
           }
       }
       if(this.battingTeamDetails.strikerDetails.name=="")

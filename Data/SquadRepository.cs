@@ -23,7 +23,7 @@ namespace CricketApp.Data
             _tblPlayers = _mongoDatabase.GetCollection<tblPlayers>(nameof(tblPlayers));
 
         }
-        public async Task<List<SquadDto>> GetSquad(int seriesId)
+        public async Task<List<squadDto>> GetSquad(int seriesId)
         {
 
             return await Task.FromResult((from ser in _tblSeries.AsQueryable().ToEnumerable()
@@ -34,7 +34,7 @@ namespace CricketApp.Data
                           on sqdtm.teamId equals sqdply.teamId into tmp_sqdply
                           from tmp_sqdpl in tmp_sqdply.DefaultIfEmpty()
                           where ser.SeriesId==seriesId
-                          select new SquadDto
+                          select new squadDto
                           {
                               SeriesId = ser.SeriesId,
                               Series = ser.SeriesName,

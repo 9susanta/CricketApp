@@ -1,3 +1,21 @@
-.select {
-    border: 3px solid rgb(6, 196, 6);
+div {
+    font-size: 0.98em;
+}
+.card-body{padding: 0.4em;font-size: 0.9em;}
+.top-right-pos {
+    position: absolute;
+    top: -3px;
+    right: -5px;
+}
+.top-right-pos-1 {
+    position: absolute;
+    top: -1px;
+    right: 2px;
+}
+.btn {
+    padding: 0.1rem 0.5rem;
+}
+.top-right-pos-2{position: absolute;top: -2px;right: -5px;}
+.btn-link{
+    padding: 1px 4px;
 }

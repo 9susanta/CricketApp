@@ -68,13 +68,13 @@ namespace CricketApp.Data
             throw new NotImplementedException();
         }
 
-        public async Task<PagedList<PlayerDto>> GetPlayersList(playerParam seriesParam)
+        public async Task<PagedList<playerDto>> GetPlayersList(playerParam seriesParam)
         {
             var item =await Task.FromResult((from pl in _tblPlayers.AsQueryable().AsEnumerable()
                                              join tm in _tblTeams.AsQueryable().AsEnumerable()
                                              on pl.InternationalTeam equals tm.TeamId into tmp_team
                                              from tmp_tem in tmp_team.DefaultIfEmpty()
-                                             select new PlayerDto
+                                             select new playerDto
                                              {
                                                 PlayersId = pl.PlayersId,
                                                 Name = pl.Name,
@@ -86,7 +86,7 @@ namespace CricketApp.Data
                                                 TeamName = tmp_tem?.TeamName
                                              }).ToList());
 
-            return PagedList<PlayerDto>.CreateAsyc(item.AsQueryable(), seriesParam.PageNumber, seriesParam.PageSize); ;
+            return PagedList<playerDto>.CreateAsyc(item.AsQueryable(), seriesParam.PageNumber, seriesParam.PageSize); 
         }
 
         public async Task<bool> IsExist(string Name)

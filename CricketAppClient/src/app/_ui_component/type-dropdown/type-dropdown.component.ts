@@ -11,7 +11,7 @@ export class TypeDropdownComponent implements ControlValueAccessor  {
   matchTypes = [
     { Id: 1, name: 'International' },
     { Id: 2, name: 'Domestic' },
-    { Id: 3, name: 'Club' }
+    { Id: 3, name: 'Leagues' }
   ];
 
   @Input() cssClass:string="";

@@ -1,18 +1,12 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CricketApp.Entity
+namespace CricketApp._helpers
 {
-    public class tblMatch
+    public class seriesMatchDto
     {
-        public tblMatch()
-        {
-            this.Created = DateTime.Now;
-        }
-        [BsonId]
         public int matchId { get; set; }
 
         public string matchName { get; set; }
@@ -35,14 +29,10 @@ namespace CricketApp.Entity
 
         public DateTime toDate { get; set; }
 
-        public int seriesId { get; set; }
-
         public string StatusName { get; set; }
 
-        public bool? IsDeleated { get; set; }
-
-        public DateTime? Created { get; set; }
-
-        public DateTime? LastUpdated { get; set; }
+        public int seriesId { get; set; }
+        public string hmteamplrDetails { get; set; }
+        public string visitteamplrDetails { get; set; }
     }
 }

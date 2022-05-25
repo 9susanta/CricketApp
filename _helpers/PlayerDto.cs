@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CricketApp._helpers
 {
-    public class PlayerDto
+    public class playerDto
     {
         public int PlayersId { get; set; }
         public string Name { get; set; }

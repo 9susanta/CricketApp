@@ -11,7 +11,7 @@ namespace CricketApp.Interfaces
     {
         Task<tblPlayers> GetPlayers(int objectId);
         Task<int> Create(tblPlayers tblPlayers);
-        Task<PagedList<PlayerDto>> GetPlayersList(playerParam seriesParam);
+        Task<PagedList<playerDto>> GetPlayersList(playerParam seriesParam);
         Task<bool> Update(int objectId, tblPlayers tblPlayers);
         Task<bool> Delete(int objectId);
         Task<bool> IsExist(string Name);
